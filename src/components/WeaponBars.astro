@@ -1,0 +1,40 @@
+---
+import type { WeaponData, WeaponMetricId } from '../data/weapons/types';
+import { weaponMetrics } from '../data/weapons/taxonomy';
+import { eraColor } from '../data/taxonomy';
+import { formatNumber } from '../lib/data';
+import { weaponEra, weaponUrl } from '../lib/weapons';
+
+interface Props {
+  items: WeaponData[];
+  metric: WeaponMetricId;
+  highlight?: string;
+}
+
+const { items, metric, highlight } = Astro.props;
+const info = weaponMetrics[metric];
+const rows = items
+  .filter((item) => item.specs[metric] !== undefined)
+  .map((item) => ({ item, value: item.specs[metric] as number, era: weaponEra(item) }));
+const max = Math.max(...rows.map((row) => row.value), 1);
+---
+{rows.length > 0 && (
+  <section class="chart-card" aria-labelledby={`wb-${metric}-${items[0]?.category}`}>
+    <h3 id={`wb-${metric}-${items[0]?.category}`}>{info.label}</h3>
+    <p class="sub">{info.unit}, по годам принятия на вооружение</p>
+    <div class="bars" data-reveal>
+      {rows.map(({ item, value, era }) => (
+        <a
+          class={`bar-row${highlight && item.id !== highlight ? ' dim' : ''}`}
+          href={weaponUrl(item)}
+          style={`--c:${eraColor[era.id]}`}
+          aria-label={`${item.name}, ${item.year}: ${formatNumber(value)} ${info.unit}`}
+        >
+          <span class="bar-label">{item.name}<small>{item.year} · {item.country}</small></span>
+          <span class="bar-track"><span class="bar-fill" style={`--w:${(value / max) * 100}%`} /></span>
+          <span class="bar-val">≈{formatNumber(value)} <small>{info.unit}</small></span>
+        </a>
+      ))}
+    </div>
+  </section>
+)}

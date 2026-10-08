@@ -6,6 +6,8 @@ import ArmamentMap from '../../components/ArmamentMap.astro';
 import DefenseDemo from '../../components/DefenseDemo.astro';
 import StorySection from '../../components/StorySection.astro';
 import { stories } from '../../data/stories';
+import { weaponsForPlatform, weaponUrl } from '../../lib/weapons';
+import { weaponMetrics } from '../../data/weapons/taxonomy';
 import { defenseByItem, kindName } from '../../data/defense';
 import { armament } from '../../data/armament';
 import { aircraftRadar } from '../../data/radar';
@@ -33,12 +35,14 @@ const others = peers.filter((p) => p.id !== item.id);
 const radar = aircraftRadar[item.id];
 const arms = armament[item.id];
 const story = stories[item.id];
+const usedWeapons = weaponsForPlatform(item.id);
 const defense = defenseByItem[item.id];
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
 const tocItems = [
   story && { id: 'story', label: 'История' },
   { id: 'specs', label: 'Характеристики' },
   arms && { id: 'armament', label: 'Вооружение' },
+  usedWeapons.length > 0 && { id: 'weapons-used', label: 'Применяемое оружие' },
   defense && { id: 'defense', label: 'Защита' },
   radar && { id: 'radar', label: 'Радар' },
   specRows.length > 0 && { id: 'compare', label: 'Аналоги' },
@@ -115,6 +119,27 @@ const tocItems = [
           <p class="lead">Наведите курсор на строку или номер на фото, чтобы увидеть, где что расположено.</p>
         </div>
         <ArmamentMap entry={arms} />
+      </div>
+    </section>
+  )}
+
+  {usedWeapons.length > 0 && (
+    <section class="section" id="weapons-used">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Применяемое вооружение</h2>
+          <p class="lead">Образцы из каталога, которые используются этой машиной. На странице каждого образца есть принцип работы и модификации.</p>
+        </div>
+        <div class="cards">
+          {usedWeapons.map((w) => (
+            <a class="card" href={weaponUrl(w)} style={`--c:var(--era-${eraOf(w.year).id}`}>
+              <span class="stripe"></span>
+              <h3>{w.name}</h3>
+              <span class="meta num">{w.year} · {w.country}</span>
+              <span class="desc">{w.type}</span>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   )}

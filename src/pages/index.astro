@@ -5,6 +5,7 @@ import Pictogram from '../components/Pictogram.astro';
 import { eras, domains, groups } from '../data/taxonomy';
 import { equipment } from '../data/equipment';
 import { countIn } from '../lib/data';
+import { weapons, weaponCategories } from '../lib/weapons';
 ---
 <Base title="Арсенал">
   <section class="hero">
@@ -63,6 +64,17 @@ import { countIn } from '../lib/data';
             <span class="meta num">{groups.filter((g) => g.domain === domain.id).length} групп</span>
           </div>
         ))}
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Каталог вооружения</h2>
+        <p class="lead">{weapons.length} образцов в {weaponCategories.length} категориях: ракеты, пушки, торпеды и управляемые бомбы. У каждого своя страница с принципом работы и модификациями.</p>
+      </div>
+      <div class="cards">
+        {weaponCategories.map((c) => (<a class="card" href={`/weapons/#${c.id}`}><h3>{c.name}</h3><span class="desc">{c.lead}</span></a>))}
       </div>
     </div>
   </section>

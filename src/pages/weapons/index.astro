@@ -1,0 +1,58 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeaponBars from '../../components/WeaponBars.astro';
+import { weaponCategories, weapons, weaponsOfCategory, weaponUrl } from '../../lib/weapons';
+import { weaponMetrics } from '../../data/weapons/taxonomy';
+import { formatNumber } from '../../lib/data';
+---
+<Base title="Вооружение" description="Каталог вооружения: ракеты, пушки, торпеды и управляемые бомбы с характеристиками, принципом работы и модификациями." noPhoto>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Каталог</span>
+        <h1>Вооружение</h1>
+        <p class="lead">{weapons.length} образцов в {weaponCategories.length} категориях. У каждого образца своя страница: характеристики, принцип работы, устройство, модификации и носители.</p>
+      </div>
+      <div class="cards">
+        {weaponCategories.map((category) => (
+          <a class="card" href={`#${category.id}`}>
+            <h3>{category.name}</h3>
+            <span class="meta num">{weaponsOfCategory(category.id).length} образцов</span>
+            <span class="desc">{category.lead}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  {weaponCategories.map((category) => {
+    const items = weaponsOfCategory(category.id);
+    const key = category.metrics[0];
+    return (
+      <section class="section" id={category.id}>
+        <div class="wrap">
+          <div class="section-head">
+            <h2>{category.name}</h2>
+            <p class="lead">{category.lead}</p>
+          </div>
+          <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); margin-bottom: 32px;">
+            <WeaponBars items={items} metric={key} />
+            {category.metrics[1] && <WeaponBars items={items} metric={category.metrics[1]} />}
+          </div>
+          <div class="cards">
+            {items.map((weapon) => (
+              <a class="card" href={weaponUrl(weapon)}>
+                <span class="meta num">{weapon.year} · {weapon.country}</span>
+                <h3>{weapon.name}</h3>
+                <span class="desc">{weapon.type}</span>
+                {weapon.specs[key] !== undefined && (
+                  <span class="meta num">{weaponMetrics[key].label}: ≈{formatNumber(weapon.specs[key] as number)} {weaponMetrics[key].unit}</span>
+                )}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+  })}
+</Base>

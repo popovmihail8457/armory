@@ -1,0 +1,186 @@
+---
+import Base from '../../layouts/Base.astro';
+import WeaponScatter from '../../components/WeaponScatter.astro';
+import { equipment } from '../../data/equipment';
+import { weaponMetrics } from '../../data/weapons/taxonomy';
+import { formatNumber, itemUrl, eraOf } from '../../lib/data';
+import { weapons, categoryById, weaponText, weaponsOfCategory, weaponEra, rankInCategory, weaponUrl } from '../../lib/weapons';
+
+export function getStaticPaths() {
+  return weapons.map((weapon) => ({ params: { id: weapon.id }, props: { weapon } }));
+}
+
+const { weapon } = Astro.props;
+const era = weaponEra(weapon);
+const category = categoryById(weapon.category);
+const text = weaponText(weapon.id);
+const peers = weaponsOfCategory(category.id);
+const platforms = weapon.platforms
+  .map((id) => equipment.find((item) => item.id === id))
+  .filter((item): item is NonNullable<typeof item> => Boolean(item));
+const specRows = category.metrics
+  .filter((metric) => weapon.specs[metric] !== undefined)
+  .map((metric) => {
+    const value = weapon.specs[metric] as number;
+    const max = Math.max(...peers.map((p) => p.specs[metric] ?? 0), 1);
+    return { metric, value, share: (value / max) * 100, rank: rankInCategory(weapon, metric) };
+  });
+const others = peers.filter((p) => p.id !== weapon.id);
+const tocItems = [
+  { id: 'principle', label: 'Принцип работы' },
+  { id: 'specs', label: 'Характеристики' },
+  { id: 'design', label: 'Устройство' },
+  { id: 'features', label: 'Особенности' },
+  { id: 'history', label: 'История' },
+  platforms.length > 0 && { id: 'platforms', label: 'Носители' },
+  specRows.length > 0 && others.length > 0 && { id: 'compare', label: 'Сравнение' },
+].filter(Boolean) as { id: string; label: string }[];
+---
+<Base title={weapon.name} era={era.id} noPhoto description={`${weapon.name} (${weapon.country}, ${weapon.year}): ${text.summary}`}>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Навигация">
+      <a href="/">Главная</a><span>/</span>
+      <a href="/weapons/">Вооружение</a><span>/</span>
+      <a href={`/weapons/#${category.id}`}>{category.name}</a><span>/</span>
+      <span>{weapon.name}</span>
+    </nav>
+  </div>
+
+  <section class="section" style={`--c:var(--era-${era.id})`}>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="stripe"></span>
+        <span class="eyebrow">{category.name}</span>
+        <h1>{weapon.name}</h1>
+        <p class="lead">{text.summary}</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Страна</dt><dd>{weapon.country}</dd></div>
+        <div><dt>Принято на вооружение</dt><dd class="num">{weapon.year}</dd></div>
+        <div><dt>Период</dt><dd>{era.name}</dd></div>
+        <div><dt>Тип</dt><dd>{weapon.type}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Разделы страницы">
+    <div class="wrap">
+      {tocItems.map((t) => <a href={'#' + t.id}>{t.label}</a>)}
+    </div>
+  </nav>
+
+  <section class="section" id="principle" style={`--c:var(--era-${era.id})`}>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Принцип работы</h2>
+      </div>
+      <p class="principle lead">{text.principle}</p>
+    </div>
+  </section>
+
+  <section class="section" id="specs">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Характеристики</h2>
+        <p class="lead">Шкала показывает значение относительно самого большого в категории «{category.name}». Значения округлены и приведены по открытым данным.</p>
+      </div>
+      <div class="specs" data-reveal style={`--c:var(--era-${era.id})`}>
+        {specRows.map(({ metric, value, share, rank }) => (
+          <div class="spec">
+            <span class="eyebrow">{weaponMetrics[metric].label}</span>
+            <span class="value">≈{formatNumber(value)}<small>{weaponMetrics[metric].unit}</small></span>
+            <span class="gauge"><i style={`--w:${share}%`}></i></span>
+            {rank && <span class="rank">{rank.rank}-е место из {rank.total} в категории</span>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="design" style={`--c:var(--era-${era.id})`}>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Устройство</h2>
+      </div>
+      <div class="cards">
+        <div class="card"><span class="stripe"></span><span class="eyebrow">Наведение</span><p>{weapon.guidance}</p></div>
+        <div class="card"><span class="stripe"></span><span class="eyebrow">Двигатель</span><p>{weapon.propulsion}</p></div>
+        <div class="card"><span class="stripe"></span><span class="eyebrow">Боевая часть</span><p>{weapon.warheadType}</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="features" style={`--c:var(--era-${era.id})`}>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Особенности</h2>
+      </div>
+      <ul class="feature-list">
+        {text.features.map((f) => <li>{f}</li>)}
+      </ul>
+      <blockquote class="fact" style="margin-top: 28px;">
+        <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 20c0-6 3-10 9-12l1 2c-3 1-5 3-5 6h4v8H6zm12 0c0-6 3-10 9-12l1 2c-3 1-5 3-5 6h4v8h-9z" /></svg>
+        <span class="eyebrow">Интересный факт</span>
+        <p>{text.fact}</p>
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="section" id="history">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>История</h2>
+      </div>
+      <p class="principle">{text.history}</p>
+    </div>
+  </section>
+
+  {platforms.length > 0 && (
+    <section class="section" id="platforms">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Носители</h2>
+          <p class="lead">Техника из справочника, на которой применяется это вооружение.</p>
+        </div>
+        <div class="cards">
+          {platforms.map((item) => (
+            <a class="card" href={itemUrl(item)} style={`--c:var(--era-${eraOf(item.year).id})`}>
+              <span class="stripe"></span>
+              <h3>{item.name}</h3>
+              <span class="meta num">{item.year} · {item.country}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+
+  {specRows.length > 0 && others.length > 0 && (
+    <section class="section" id="compare">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Сравнение с аналогами</h2>
+        </div>
+        <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));">
+          {category.metrics.filter((m) => weapon.specs[m] !== undefined).slice(0, 2).map((metric) => (
+            <WeaponScatter items={peers} metric={metric} highlight={weapon.id} />
+          ))}
+        </div>
+        <h3 style="margin: 32px 0 12px;">Другие образцы категории</h3>
+        <div class="cards">
+          {others.map((o) => (
+            <a class="card" href={weaponUrl(o)} style={`--c:var(--era-${eraOf(o.year).id})`}>
+              <span class="stripe"></span>
+              <h3>{o.name}</h3>
+              <span class="meta num">{o.year} · {o.country}</span>
+            </a>
+          ))}
+        </div>
+        <p class="notice" style="margin-top: 32px;">
+          Данные приведены по открытым источникам. Страница в Википедии: <a href={`https://en.wikipedia.org/wiki/${weapon.wiki}`} rel="noopener" target="_blank">открыть</a>.
+          Подробности: <a href="/sources/">источники и методика</a>.
+        </p>
+      </div>
+    </section>
+  )}
+</Base>
