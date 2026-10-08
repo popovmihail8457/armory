@@ -1,0 +1,69 @@
+---
+import { kindLabel, stateLabel, type ArmamentEntry } from '../data/armament';
+import { bgManifest } from '../lib/bg';
+
+interface Props {
+  entry: ArmamentEntry;
+}
+
+const { entry } = Astro.props;
+const photo = bgManifest[entry.photoKey];
+const src = photo?.file ? `/bg/${photo.file}` : undefined;
+const credit = photo ? `${(photo.title ?? '').replace(/^File:/, '')}. ${photo.author ?? ''}. ${photo.license ?? ''}` : '';
+
+let counter = 0;
+const numbered = entry.weapons.map((weapon) => ({ ...weapon, n: ++counter }));
+---
+{src && (
+  <div class="amap" data-amap>
+    <figure class="amap-fig">
+      <img src={src} alt={entry.alt} loading="lazy" decoding="async" />
+      {numbered.flatMap((weapon) =>
+        (weapon.pins ?? []).map((pin) => (
+          <button
+            type="button"
+            class={`pin pin-${weapon.state}`}
+            data-w={weapon.id}
+            style={`left:${pin.x}%;top:${pin.y}%`}
+            aria-label={`${weapon.n}. ${weapon.name}`}
+          >{weapon.n}</button>
+        )),
+      )}
+      <figcaption>{entry.caption}</figcaption>
+    </figure>
+    <ol class="amap-list">
+      {numbered.map((weapon) => (
+        <li data-w={weapon.id} tabindex="0">
+          <span class="amap-n num">{weapon.n}</span>
+          <div>
+            <strong>{weapon.name}</strong>
+            <span class="amap-kind">{kindLabel[weapon.kind]} · {stateLabel[weapon.state]}</span>
+            <p>{weapon.where}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+    <div class="amap-legend">
+      <span><i class="pin-sample pin-visible"></i>видно на фото</span>
+      <span><i class="pin-sample pin-approx"></i>приблизительное положение</span>
+      <span><i class="pin-sample pin-hidden"></i>внутри или с другой стороны</span>
+    </div>
+    <p class="amap-credit">Фото: {credit}</p>
+  </div>
+)}
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-amap]').forEach((root) => {
+    const set = (id: string | null, on: boolean) => {
+      if (!id) return;
+      root.querySelectorAll<HTMLElement>(`[data-w="${id}"]`).forEach((el) => el.classList.toggle('active', on));
+    };
+    root.querySelectorAll<HTMLElement>('[data-w]').forEach((el) => {
+      const id = el.dataset.w ?? null;
+      el.addEventListener('mouseenter', () => set(id, true));
+      el.addEventListener('mouseleave', () => set(id, false));
+      el.addEventListener('focus', () => set(id, true));
+      el.addEventListener('blur', () => set(id, false));
+    });
+  });
+</script>

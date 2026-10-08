@@ -1,6 +1,10 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Scatter from '../../components/Scatter.astro';
+import RadarDemo from '../../components/RadarDemo.astro';
+import ArmamentMap from '../../components/ArmamentMap.astro';
+import { armament } from '../../data/armament';
+import { aircraftRadar } from '../../data/radar';
 import { equipment } from '../../data/equipment';
 import { metrics, domains } from '../../data/taxonomy';
 import { eraOf, groupById, groupUrl, itemsOfGroup, itemUrl, formatNumber, rankInGroup } from '../../lib/data';
@@ -22,6 +26,8 @@ const specRows = group.metrics
     return { metric, value, share: (value / max) * 100, rank: rankInGroup(item, metric) };
   });
 const others = peers.filter((p) => p.id !== item.id);
+const radar = aircraftRadar[item.id];
+const arms = armament[item.id];
 ---
 <Base title={item.name} era={era.id} domain={domain.id} group={group.id} description={`${item.name} (${item.country}, ${item.year}): ${item.text}`}>
   <div class="wrap">
@@ -70,6 +76,18 @@ const others = peers.filter((p) => p.id !== item.id);
     </div>
   </section>
 
+  {arms && (
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Вооружение</h2>
+          <p class="lead">Наведите курсор на строку или номер на фото, чтобы увидеть, где что расположено.</p>
+        </div>
+        <ArmamentMap entry={arms} />
+      </div>
+    </section>
+  )}
+
   {specRows.length > 0 && (
     <section class="section">
       <div class="wrap">
@@ -82,6 +100,18 @@ const others = peers.filter((p) => p.id !== item.id);
             <Scatter items={peers} metric={metric} highlight={item.id} />
           ))}
         </div>
+      </div>
+    </section>
+  )}
+
+  {radar && (
+    <section class="section">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Радиолокатор</h2>
+          <p class="lead">{radar.name}. Антенна: {radar.antenna === 'aesa' ? 'АФАР (электронное сканирование)' : 'механическое сканирование'}. Анимации показывают общий принцип режимов, <a href="/radar/">подробнее на странице о радарах</a>.</p>
+        </div>
+        <RadarDemo aesa={radar.antenna === 'aesa'} />
       </div>
     </section>
   )}

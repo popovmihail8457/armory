@@ -204,7 +204,7 @@ const modes = radarModes.filter((mode) => aesa || !mode.aesaOnly);
     }
 
     function readout() {
-      const beams = mode === 'aesa' ? 'до 4 одновременно' : mode === 'stt' ? '1 узкий' : 'сканирующий';
+      const beams = mode === 'aesa' ? 'до 4 одновременно' : mode === 'stt' ? '1 узкий' : mode === 'sar' ? 'направлен на землю' : 'сканирующий';
       const rate = mode === 'stt' ? 'много раз в секунду' : mode === 'aesa' ? 'доли секунды' : mode === 'sar' ? 'по мере полёта' : 'раз в несколько секунд';
       const count = mode === 'sar' ? 'неподвижные объекты' : mode === 'stt' ? '1 в захвате' : `${targets.length} в секторе`;
       root.querySelector('.r-beams')!.textContent = beams;

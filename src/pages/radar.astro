@@ -1,0 +1,45 @@
+---
+import Base from '../layouts/Base.astro';
+import RadarDemo from '../components/RadarDemo.astro';
+import { aircraftRadar } from '../data/radar';
+import { equipment } from '../data/equipment';
+import { itemUrl } from '../lib/data';
+
+const rows = equipment
+  .filter((item) => aircraftRadar[item.id])
+  .map((item) => ({ item, radar: aircraftRadar[item.id] }));
+---
+<Base title="Радар: режимы работы" description="Анимации режимов работы бортового радиолокатора: обзор, сопровождение, захват, картографирование и АФАР.">
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Авиация</span>
+        <h1>Как работает бортовой радар</h1>
+        <p class="lead">Выберите режим и посмотрите, как луч просматривает пространство. Анимации упрощены и показывают принцип, а не характеристики конкретной системы.</p>
+      </div>
+      <RadarDemo />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Тип антенны в справочнике</h2>
+        <p class="lead">Механическая антенна поворачивает всё полотно, АФАР формирует луч электронно, и режимы можно менять почти мгновенно.</p>
+      </div>
+      <div class="cards">
+        {rows.map(({ item, radar }) => (
+          <a class="card" href={itemUrl(item)}>
+            <span class="meta num">{item.year} · {item.country}</span>
+            <h3>{item.name}</h3>
+            <span class="desc">{radar.name}</span>
+            <span class="meta">{radar.antenna === 'aesa' ? 'АФАР' : 'Механическое сканирование'}</span>
+          </a>
+        ))}
+      </div>
+      <p class="notice" style="margin-top: 32px;">
+        Названия радиолокаторов приведены по открытым источникам для основных серийных модификаций. Реальные режимы и параметры зависят от версии, поэтому здесь показан общий принцип.
+      </p>
+    </div>
+  </section>
+</Base>
