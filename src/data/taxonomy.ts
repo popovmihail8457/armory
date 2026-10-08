@@ -3,7 +3,7 @@ export type DomainId = 'fleet' | 'aviation' | 'ground';
 export type MetricId =
   | 'speed' | 'range' | 'mtow' | 'endurance'
   | 'displacement' | 'length' | 'speedKn'
-  | 'mass' | 'caliber';
+  | 'mass' | 'caliber' | 'launchMass';
 
 export interface Era {
   id: EraId;
@@ -49,17 +49,22 @@ export const groups: Group[] = [
   { id: 'carriers', domain: 'fleet', name: 'Авианосцы', lead: 'Плавучие аэродромы: основа морской авиации.', metrics: ['displacement', 'length', 'speedKn'] },
   { id: 'submarines', domain: 'fleet', name: 'Подводные лодки', lead: 'Атомные ударные и ракетные подводные лодки.', metrics: ['displacement', 'length', 'speedKn'] },
   { id: 'surface', domain: 'fleet', name: 'Эсминцы и крейсеры', lead: 'Надводные корабли с ракетным вооружением.', metrics: ['displacement', 'length', 'speedKn'] },
+  { id: 'frigates', domain: 'fleet', name: 'Фрегаты и корветы', lead: 'Многоцелевые корабли охранения и борьбы с подводными лодками.', metrics: ['displacement', 'length', 'speedKn'] },
   { id: 'amphibious', domain: 'fleet', name: 'Десантные корабли', lead: 'Корабли для высадки морской пехоты и техники.', metrics: ['displacement', 'length', 'speedKn'] },
   { id: 'fighters', domain: 'aviation', name: 'Истребители', lead: 'Самолёты завоевания превосходства в воздухе.', metrics: ['speed', 'range', 'mtow'] },
   { id: 'bombers', domain: 'aviation', name: 'Бомбардировщики и штурмовики', lead: 'Ударная авиация дальнего и фронтового действия.', metrics: ['speed', 'range', 'mtow'] },
   { id: 'transport', domain: 'aviation', name: 'Транспортная авиация', lead: 'Переброска войск и грузов.', metrics: ['speed', 'range', 'mtow'] },
+  { id: 'recon', domain: 'aviation', name: 'Разведка и ДРЛО', lead: 'Разведывательные самолёты и самолёты дальнего радиолокационного обнаружения.', metrics: ['speed', 'range', 'mtow'] },
   { id: 'helicopters', domain: 'aviation', name: 'Вертолёты', lead: 'Ударные и многоцелевые винтокрылые машины.', metrics: ['speed', 'mtow'] },
   { id: 'uav', domain: 'aviation', name: 'Беспилотники', lead: 'Разведывательные и ударные БПЛА.', metrics: ['speed', 'mtow', 'endurance'] },
   { id: 'tanks', domain: 'ground', name: 'Танки', lead: 'Основные боевые танки.', metrics: ['mass', 'speed', 'caliber'] },
   { id: 'ifv', domain: 'ground', name: 'БМП и БТР', lead: 'Бронированные машины для перевозки и поддержки пехоты.', metrics: ['mass', 'speed'] },
   { id: 'artillery', domain: 'ground', name: 'Самоходная артиллерия', lead: 'Самоходные гаубицы и орудия.', metrics: ['mass', 'speed', 'caliber'] },
   { id: 'mlrs', domain: 'ground', name: 'Реактивные системы залпового огня', lead: 'РСЗО: массированный огонь по площадям.', metrics: ['mass', 'caliber', 'range'] },
-  { id: 'airdef', domain: 'ground', name: 'Противовоздушная оборона', lead: 'Зенитные ракетные комплексы.', metrics: ['range'] },
+  { id: 'otrk', domain: 'ground', name: 'ОТРК и тактические ракеты', lead: 'Оперативно-тактические ракетные комплексы: баллистические ракеты малой и средней дальности.', metrics: ['range', 'launchMass'] },
+  { id: 'airdef', domain: 'ground', name: 'Противовоздушная оборона', lead: 'Зенитные ракетные комплексы средней и большой дальности.', metrics: ['range'] },
+  { id: 'manpads', domain: 'ground', name: 'ПЗРК и ЗРК малой дальности', lead: 'Переносные зенитные ракетные комплексы и системы ближней обороны.', metrics: ['range'] },
+  { id: 'atgm', domain: 'ground', name: 'Противотанковые комплексы', lead: 'Противотанковые ракетные комплексы и их ракеты.', metrics: ['range', 'caliber'] },
 ];
 
 export const metrics: Record<MetricId, Metric> = {
@@ -72,6 +77,7 @@ export const metrics: Record<MetricId, Metric> = {
   speedKn: { label: 'Скорость хода', unit: 'уз' },
   mass: { label: 'Боевая масса', unit: 'т' },
   caliber: { label: 'Калибр', unit: 'мм' },
+  launchMass: { label: 'Стартовая масса ракеты', unit: 'т' },
 };
 
 export const eraColor: Record<EraId, string> = {
