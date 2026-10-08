@@ -2,6 +2,8 @@
 import Base from '../../layouts/Base.astro';
 import WeaponScatter from '../../components/WeaponScatter.astro';
 import TrajectoryDemo from '../../components/TrajectoryDemo.astro';
+import ModTabs from '../../components/ModTabs.astro';
+import { weaponMods } from '../../data/weapons/mods';
 import { equipment } from '../../data/equipment';
 import { weaponMetrics } from '../../data/weapons/taxonomy';
 import { formatNumber, itemUrl, eraOf } from '../../lib/data';
@@ -27,12 +29,14 @@ const specRows = category.metrics
     return { metric, value, share: (value / max) * 100, rank: rankInCategory(weapon, metric) };
   });
 const others = peers.filter((p) => p.id !== weapon.id);
+const mods = weaponMods[weapon.id] ?? [];
 const tocItems = [
   { id: 'principle', label: 'Принцип работы' },
   { id: 'specs', label: 'Характеристики' },
   { id: 'design', label: 'Устройство' },
   { id: 'features', label: 'Особенности' },
   { id: 'history', label: 'История' },
+  mods.length > 0 && { id: 'mods', label: 'Модификации' },
   platforms.length > 0 && { id: 'platforms', label: 'Носители' },
   specRows.length > 0 && others.length > 0 && { id: 'compare', label: 'Сравнение' },
 ].filter(Boolean) as { id: string; label: string }[];
@@ -136,6 +140,18 @@ const tocItems = [
       <p class="principle">{text.history}</p>
     </div>
   </section>
+
+  {mods.length > 0 && (
+    <section class="section" id="mods" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Модификации</h2>
+          <p class="lead">{mods.length > 1 ? 'Выберите версию, чтобы увидеть, чем она отличается от предыдущей.' : 'Для этого образца в справочнике одна серийная версия.'}</p>
+        </div>
+        <ModTabs mods={mods} />
+      </div>
+    </section>
+  )}
 
   {platforms.length > 0 && (
     <section class="section" id="platforms">

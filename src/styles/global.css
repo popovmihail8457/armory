@@ -384,3 +384,26 @@ html { scroll-padding-top: 116px; }
 .principle { max-width: 72ch; color: var(--text-2); font-size: 1.1rem; line-height: 1.75; }
 .feature-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: var(--gap); }
 .feature-list li { padding: 16px 18px 16px 22px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--c, var(--line-strong)); border-radius: var(--radius); color: var(--text-2); }
+/* Модификации */
+.mods { display: grid; gap: 20px; }
+.mod-tabs { display: flex; gap: 0; overflow-x: auto; scrollbar-width: thin; padding-bottom: 6px; position: relative; }
+.mod-tab {
+  flex: none; display: grid; gap: 2px; justify-items: start; position: relative;
+  font: inherit; color: var(--text-2); background: transparent; border: 0; cursor: pointer;
+  padding: 26px 22px 12px; min-height: 64px;
+}
+.mod-tab::before { content: ''; position: absolute; left: 0; right: 0; top: 11px; height: 2px; background: var(--line-strong); }
+.mod-dot { position: absolute; left: 22px; top: 5px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 3px solid var(--line-strong); z-index: 1; }
+.mod-tab.past::before, .mod-tab[aria-selected='true']::before { background: var(--c, var(--era-modern)); }
+.mod-tab.past .mod-dot { border-color: var(--c, var(--era-modern)); }
+.mod-tab[aria-selected='true'] .mod-dot { background: var(--c, var(--era-modern)); border-color: var(--c, var(--era-modern)); }
+.mod-tab[aria-selected='true'] { color: var(--text); }
+.mod-tab:hover { color: var(--text); }
+.mod-name { font-weight: 600; font-size: 0.98rem; }
+.mod-years { font-size: 0.75rem; color: var(--text-3); }
+.mod-panel { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--c, var(--era-modern)); border-radius: var(--radius); padding: 24px; display: grid; gap: 14px; max-width: 78ch; }
+.mod-panel header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+.mod-summary { color: var(--text); font-size: 1.1rem; }
+.mod-diff { display: grid; gap: 6px; padding-top: 14px; border-top: 1px solid var(--line); }
+.mod-diff p { color: var(--text-2); line-height: 1.7; }
+.mod-panel[hidden] { display: none; }

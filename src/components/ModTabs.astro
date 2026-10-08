@@ -1,0 +1,59 @@
+---
+import type { WeaponMod } from '../data/weapons/mods';
+
+interface Props {
+  mods: WeaponMod[];
+}
+
+const { mods } = Astro.props;
+---
+<div class="mods" data-mods>
+  <div class="mod-tabs" role="tablist" aria-label="Модификации">
+    {mods.map((mod, i) => (
+      <button type="button" role="tab" id={`mod-tab-${i}`} class="mod-tab" data-i={i} aria-controls={`mod-panel-${i}`} aria-selected={i === 0} tabindex={i === 0 ? 0 : -1}>
+        <span class="mod-dot" aria-hidden="true"></span>
+        <span class="mod-name">{mod.name}</span>
+        {mod.years && <span class="mod-years num">{mod.years}</span>}
+      </button>
+    ))}
+  </div>
+  <div class="mod-panels">
+    {mods.map((mod, i) => (
+      <article class="mod-panel" role="tabpanel" id={`mod-panel-${i}`} aria-labelledby={`mod-tab-${i}`} hidden={i !== 0}>
+        <header>
+          <h3>{mod.name}</h3>
+          {mod.years && <span class="meta num">{mod.years}</span>}
+        </header>
+        <p class="mod-summary">{mod.summary}</p>
+        <div class="mod-diff">
+          <span class="eyebrow">{i === 0 ? 'Что принципиально нового' : `Чем отличается от ${mods[i - 1].name}`}</span>
+          <p>{mod.diff}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-mods]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.mod-tab')];
+    const panels = [...root.querySelectorAll<HTMLElement>('.mod-panel')];
+    const select = (index: number, focus = false) => {
+      tabs.forEach((tab, i) => {
+        const on = i === index;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        tab.classList.toggle('past', i < index);
+        panels[i].hidden = !on;
+      });
+      if (focus) tabs[index].focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown') { event.preventDefault(); select((i + 1) % tabs.length, true); }
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') { event.preventDefault(); select((i - 1 + tabs.length) % tabs.length, true); }
+      });
+    });
+  });
+</script>
