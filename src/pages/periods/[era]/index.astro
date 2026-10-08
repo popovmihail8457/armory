@@ -11,7 +11,7 @@ export function getStaticPaths() {
 const { era } = Astro.props;
 const range = `${era.from}–${era.to === 2026 ? 'н. в.' : era.to}`;
 ---
-<Base title={era.name} description={`${era.name}, ${range}: ${era.lead}`}>
+<Base title={era.name} era={era.id} description={`${era.name}, ${range}: ${era.lead}`}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация"><a href="/">Главная</a><span>/</span><span>{era.name}</span></nav>
   </div>

@@ -23,7 +23,7 @@ const specRows = group.metrics
   });
 const others = peers.filter((p) => p.id !== item.id);
 ---
-<Base title={item.name} description={`${item.name} (${item.country}, ${item.year}): ${item.text}`}>
+<Base title={item.name} era={era.id} description={`${item.name} (${item.country}, ${item.year}): ${item.text}`}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
       <a href="/">Главная</a><span>/</span>

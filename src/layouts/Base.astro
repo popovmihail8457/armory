@@ -1,13 +1,16 @@
 ---
 import '../styles/global.css';
-import { eras } from '../data/taxonomy';
+import { eras, type EraId } from '../data/taxonomy';
 
 interface Props {
   title: string;
   description?: string;
+  era?: EraId;
 }
 
-const { title, description = 'Справочник военной техники с 1947 года до наших дней: флот, авиация и наземная техника.' } = Astro.props;
+const { title, description = 'Справочник военной техники с 1947 года до наших дней: флот, авиация и наземная техника.', era } = Astro.props;
+const activeEra = eras.find((item) => item.id === era);
+const eraLabel = activeEra ? `${activeEra.from}–${activeEra.to === 2026 ? 'н. в.' : activeEra.to}` : '';
 const pathname = Astro.url.pathname;
 const fullTitle = title === 'Арсенал' ? 'Арсенал: справочник военной техники' : `${title} | Арсенал`;
 ---
@@ -22,6 +25,11 @@ const fullTitle = title === 'Арсенал' ? 'Арсенал: справочн
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
+    <div class="bg" data-era={era ?? 'none'} aria-hidden="true">
+      <div class="bg-glow"></div>
+      <div class="bg-pattern"></div>
+      {eraLabel && <div class="bg-year num">{eraLabel}</div>}
+    </div>
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href="/">Арсенал</a>
@@ -45,6 +53,21 @@ const fullTitle = title === 'Арсенал' ? 'Арсенал: справочн
       </div>
     </footer>
     <script is:inline>
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        let ticking = false;
+        const root = document.documentElement;
+        const update = () => {
+          root.style.setProperty('--py', String(window.scrollY));
+          ticking = false;
+        };
+        window.addEventListener('scroll', () => {
+          if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(update);
+          }
+        }, { passive: true });
+        update();
+      }
       const charts = document.querySelectorAll('[data-reveal]');
       const blocks = document.querySelectorAll('.section, .hero-inner, .site-footer');
       const show = (el) => el.classList.add(el.hasAttribute('data-reveal') ? 'in' : 'in-view');
