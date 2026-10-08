@@ -14,7 +14,10 @@ description: Работа с сайтом «Арсенал» (справочни
 - `src/data/stories/{aviation,fleet,ground}.ts` - расширенное описание модели: `history`, `design`, `service`, `fact`, `variants`. Запись есть у каждой модели.
 - `src/data/armament.ts` - вооружение на фото (метки в процентах от фото, состояние `visible|approx|hidden`).
 - `src/data/defense.ts` и `src/data/radar.ts` - системы защиты, режимы радара и привязка к моделям.
-- `src/data/weapons/` - каталог вооружения (ракеты, пушки, торпеды и т.д.) со своими характеристиками и описанием.
+- `src/data/weapons/` - каталог вооружения: `data.ts` (характеристики, носители), `texts.ts` (описание, принцип работы, особенности), `mods.ts` (модификации и отличия от предыдущей версии), `taxonomy.ts` (категории и метрики). Страницы: `/weapons/`, `/weapons/<id>/`, ссылки на технику строятся по `platforms`.
+- `src/data/trajectory.ts` - сцены траекторий и карта группа техники -> сцена (`groupScene`); компонент `TrajectoryDemo`.
+- `src/data/coverage.ts` - углы обзора радара, СПО и датчиков пуска ракет самолётов (`half` это полуугол, 180 означает круг); для машин без данных `status: none|undisclosed`. Схема: `CoverageDiagram`.
+- `src/data/operations.ts` и `src/data/videos.ts` - участие в операциях и видеоролики Commons (встраиваются ссылкой, только PD/CC0); компонент `OperationsReel` (закреплённый видеофон).
 - `src/lib/data.ts`, `src/lib/bg.ts` - выборки, ранги, выбор фото-фона из `public/bg/manifest.json`.
 - `src/components/` - `BarChart`, `Scatter`, `Timeline`, `ArmamentMap`, `RadarDemo`, `DefenseDemo`, `TrajectoryDemo`, `StorySection`.
 - `src/pages/` - главная, `periods/[era]/[domain]/[group]`, `equipment/[slug]`, `weapons/`, `radar`, `defense`, `sources`.

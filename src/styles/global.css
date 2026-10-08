@@ -423,3 +423,18 @@ html { scroll-padding-top: 116px; }
 .js [data-reveal].in .cov-layer { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) { .js [data-reveal] .cov-layer { opacity: 1; transform: none; } }
 @media (max-width: 800px) { .cov { grid-template-columns: 1fr; } }
+/* Видеофон операций */
+.reel-section { padding-bottom: 0; }
+.reel { position: relative; }
+.reel-stage { position: sticky; top: 0; height: 100vh; margin-bottom: -100vh; overflow: hidden; z-index: 0; background-size: cover; background-position: center; background-color: #101010; }
+.reel-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85; }
+.reel-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(18, 18, 17, 0.88) 0%, rgba(18, 18, 17, 0.55) 55%, rgba(18, 18, 17, 0.2) 100%); }
+.reel-cards { position: relative; z-index: 1; padding: 18vh 0 22vh; width: min(1120px, 100% - 32px); margin-inline: auto; }
+.reel-card { min-height: 70vh; display: flex; align-items: center; }
+.reel-box { max-width: 520px; padding: 24px 26px; background: rgba(26, 26, 25, 0.82); backdrop-filter: blur(6px); border: 1px solid var(--line); border-left: 4px solid var(--c, var(--era-modern)); border-radius: var(--radius); display: grid; gap: 10px; }
+.reel-box h3 { font-size: 1.5rem; }
+.reel-box p { color: var(--text-2); line-height: 1.7; }
+.reel-credit { position: relative; z-index: 1; width: min(1120px, 100% - 32px); margin: 0 auto; padding: 0 0 28px; color: var(--text-3); font-size: 0.8rem; }
+.reel-credit a { color: var(--text-2); }
+@media (max-width: 720px) { .reel-stage { height: 70vh; margin-bottom: -70vh; } .reel-card { min-height: 55vh; } }
+@media (prefers-reduced-motion: reduce) { .reel-stage { position: absolute; inset: 0; height: 100%; margin: 0; } }

@@ -7,6 +7,10 @@ import DefenseDemo from '../../components/DefenseDemo.astro';
 import StorySection from '../../components/StorySection.astro';
 import TrajectoryDemo from '../../components/TrajectoryDemo.astro';
 import CoverageDiagram from '../../components/CoverageDiagram.astro';
+import OperationsReel from '../../components/OperationsReel.astro';
+import { operations } from '../../data/operations';
+import { videos } from '../../data/videos';
+import { bgFor } from '../../lib/bg';
 import { coverageFor } from '../../data/coverage';
 import { groupScene } from '../../data/trajectory';
 import { stories } from '../../data/stories';
@@ -41,12 +45,16 @@ const arms = armament[item.id];
 const story = stories[item.id];
 const usedWeapons = weaponsForPlatform(item.id);
 const trajScene = groupScene[item.group];
+const ops = operations[item.id] ?? [];
+const clips = videos[item.id] ?? [];
+const poster = bgFor(era.id, domain.id, group.id);
 const isAircraft = domain.id === 'aviation';
 const cov = isAircraft ? coverageFor(item.id) : undefined;
 const defense = defenseByItem[item.id];
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
 const tocItems = [
   story && { id: 'story', label: 'История' },
+  ops.length > 0 && { id: 'operations', label: 'Операции' },
   { id: 'specs', label: 'Характеристики' },
   arms && { id: 'armament', label: 'Вооружение' },
   trajScene && { id: 'trajectory', label: 'Траектория' },
@@ -98,6 +106,18 @@ const tocItems = [
         </div>
         <StorySection story={story} year={item.year} country={item.country} eraId={era.id} />
       </div>
+    </section>
+  )}
+
+  {ops.length > 0 && (
+    <section class="section reel-section" id="operations" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Участие в операциях</h2>
+          <p class="lead">{clips.length > 0 ? 'Прокручивайте вниз: за карточками идёт видео с применением техники.' : 'Основные операции, в которых применялась эта техника.'}</p>
+        </div>
+      </div>
+      <OperationsReel ops={ops} clips={clips} poster={poster} />
     </section>
   )}
 

@@ -1,0 +1,67 @@
+---
+import type { Operation } from '../data/operations';
+import type { VideoClip } from '../data/videos';
+
+interface Props {
+  ops: Operation[];
+  clips: VideoClip[];
+  poster?: string;
+}
+
+const { ops, clips, poster } = Astro.props;
+---
+<div class="reel" data-reel data-clips={JSON.stringify(clips.map((c) => c.src))}>
+  <div class="reel-stage" aria-hidden="true" style={poster ? `background-image:url('${poster}')` : undefined}>
+    {clips.length > 0 && <video class="reel-video" muted loop playsinline preload="none" tabindex="-1"></video>}
+    <div class="reel-shade"></div>
+  </div>
+  <div class="reel-cards">
+    {ops.map((op, i) => (
+      <article class="reel-card" data-video={op.video ?? ''}>
+        <div class="reel-box">
+          <span class="chapter-n num">{String(i + 1).padStart(2, '0')} · {op.years}</span>
+          <h3>{op.name}</h3>
+          <p>{op.text}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+  {clips.length > 0 && (
+    <p class="reel-credit">
+      Видео: {clips.map((c, i) => (<><a href={c.page} rel="noopener" target="_blank">{c.title}</a> ({c.author}, {c.license}){i < clips.length - 1 ? '; ' : ''}</>))}.
+    </p>
+  )}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-reel]').forEach((root) => {
+    const video = root.querySelector<HTMLVideoElement>('.reel-video');
+    const clips = JSON.parse(root.dataset.clips ?? '[]') as string[];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const small = window.matchMedia('(max-width: 720px)').matches;
+    const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData === true;
+    if (!video || clips.length === 0 || reduce || small || saveData) return;
+    let visible = false;
+    let currentSrc = '';
+    const show = (index: number) => {
+      const src = clips[index];
+      if (!src || src === currentSrc) return;
+      currentSrc = src;
+      video.src = src;
+      if (visible) video.play().catch(() => {});
+    };
+    show(0);
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible) video.play().catch(() => {}); else video.pause();
+    }, { threshold: 0.05 }).observe(root);
+    const cards = root.querySelectorAll<HTMLElement>('.reel-card');
+    const cardObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        const raw = (entry.target as HTMLElement).dataset.video;
+        if (entry.isIntersecting && raw) show(Number(raw));
+      });
+    }, { threshold: 0.5 });
+    cards.forEach((card) => cardObserver.observe(card));
+  });
+</script>
