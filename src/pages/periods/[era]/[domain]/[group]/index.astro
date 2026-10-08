@@ -1,0 +1,70 @@
+---
+import Base from '../../../../../layouts/Base.astro';
+import BarChart from '../../../../../components/BarChart.astro';
+import { eras, groups, metrics, domains } from '../../../../../data/taxonomy';
+import { itemsIn, itemsOfGroup, itemUrl, formatNumber } from '../../../../../lib/data';
+
+export function getStaticPaths() {
+  return eras.flatMap((era) =>
+    groups
+      .filter((group) => itemsIn(era.id, group.id).length > 0)
+      .map((group) => ({
+        params: { era: era.id, domain: group.domain, group: group.id },
+        props: { era, group, domain: domains.find((d) => d.id === group.domain)! },
+      })),
+  );
+}
+
+const { era, group, domain } = Astro.props;
+const here = itemsIn(era.id, group.id);
+const all = itemsOfGroup(group.id);
+const firstMetric = group.metrics[0];
+---
+<Base title={`${group.name}: ${era.name}`} description={`${group.name} периода «${era.name}»: ${here.map((i) => i.name).join(', ')}.`}>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Навигация">
+      <a href="/">Главная</a><span>/</span>
+      <a href={`/periods/${era.id}/`}>{era.name}</a><span>/</span>
+      <a href={`/periods/${era.id}/${domain.id}/`}>{domain.name}</a><span>/</span>
+      <span>{group.name}</span>
+    </nav>
+  </div>
+
+  <section class="section" style={`--c:var(--era-${era.id})`}>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="stripe"></span>
+        <span class="eyebrow">{era.name} · {domain.name}</span>
+        <h1>{group.name}</h1>
+        <p class="lead">{group.lead}</p>
+      </div>
+      <div class="cards">
+        {here.map((item) => (
+          <a class="card" href={itemUrl(item)}>
+            <span class="meta num">{item.year} · {item.country}</span>
+            <h3>{item.name}</h3>
+            <span class="desc">{item.text}</span>
+            {item.specs[firstMetric] !== undefined && (
+              <span class="meta num">{metrics[firstMetric].label}: ≈{formatNumber(item.specs[firstMetric] as number)} {metrics[firstMetric].unit}</span>
+            )}
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Сравнение по всем периодам</h2>
+        <p class="lead">Модели выбранного периода выделены цветом, остальные приглушены. Нажмите на строку, чтобы открыть карточку.</p>
+        <div class="legend">
+          {eras.map((e) => (<span style={`--c:var(--era-${e.id})`}><i class="swatch"></i>{e.name}</span>))}
+        </div>
+      </div>
+      <div class="cards" style="grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));">
+        {group.metrics.map((metric) => <BarChart items={all} metric={metric} currentEra={era.id} />)}
+      </div>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,58 @@
+---
+import { equipment } from '../data/equipment';
+import { eras, domains, eraColor } from '../data/taxonomy';
+import { eraOf, groupById, YEAR_MIN, YEAR_MAX } from '../lib/data';
+
+const W = 1000, L = 140, R = 16, TOP = 48, LANE_H = 92, DOT = 6, STEP = 13;
+const x = (year: number) => L + ((year - YEAR_MIN) / (YEAR_MAX - YEAR_MIN)) * (W - L - R);
+
+interface Dot { id: string; name: string; year: number; cx: number; cy: number; era: string; i: number }
+
+let counter = 0;
+const lanes = domains.map((domain, laneIndex) => {
+  const laneTop = TOP + laneIndex * LANE_H;
+  const baseline = laneTop + LANE_H - 14;
+  const items = equipment
+    .filter((item) => groupById(item.group).domain === domain.id)
+    .sort((a, b) => a.year - b.year || a.name.localeCompare(b.name));
+  const placed: Dot[] = [];
+  for (const item of items) {
+    const cx = x(item.year);
+    let level = 0;
+    while (placed.some((p) => Math.abs(p.cx - cx) < DOT * 2 + 1 && p.cy === baseline - level * STEP)) level += 1;
+    placed.push({ id: item.id, name: item.name, year: item.year, cx, cy: baseline - level * STEP, era: eraOf(item.year).id, i: counter++ });
+  }
+  return { domain, laneTop, baseline, dots: placed };
+});
+const H = TOP + domains.length * LANE_H + 28;
+const ticks = [1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020];
+---
+<svg class="timeline" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Хронология принятия техники на вооружение по разделам и периодам" data-reveal>
+  {eras.map((era) => {
+    const x1 = x(era.from);
+    const x2 = x(Math.min(era.to, YEAR_MAX) + 1);
+    return (
+      <g style={`--c:${eraColor[era.id]}`}>
+        <rect class="band" x={x1} y={TOP - 8} width={x2 - x1} height={domains.length * LANE_H + 8} />
+        <line class="band-line" x1={x1} x2={x2 - 4} y1={TOP - 14} y2={TOP - 14} />
+        <text class="band-label" x={x1} y={TOP - 22}>{era.name}</text>
+      </g>
+    );
+  })}
+  {lanes.map(({ domain, laneTop, baseline, dots }) => (
+    <g>
+      <line class="lane-line" x1={L} x2={W - R} y1={baseline + 8} y2={baseline + 8} />
+      <text class="lane-label" x="0" y={baseline + 4}>{domain.name}</text>
+      {dots.map((dot) => (
+        <a href={`/equipment/${dot.id}/`} aria-label={`${dot.name}, ${dot.year}`}>
+          <circle class="tl-dot" cx={dot.cx} cy={dot.cy} r={DOT} fill={eraColor[dot.era as keyof typeof eraColor]} style={`--i:${dot.i}`}>
+            <title>{dot.name}, {dot.year}</title>
+          </circle>
+        </a>
+      ))}
+    </g>
+  ))}
+  {ticks.map((yr) => (
+    <text x={x(yr)} y={H - 6} text-anchor="middle">{yr}</text>
+  ))}
+</svg>

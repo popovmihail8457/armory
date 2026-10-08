@@ -1,0 +1,69 @@
+---
+import Base from '../layouts/Base.astro';
+import Timeline from '../components/Timeline.astro';
+import Pictogram from '../components/Pictogram.astro';
+import { eras, domains, groups } from '../data/taxonomy';
+import { equipment } from '../data/equipment';
+import { countIn } from '../lib/data';
+---
+<Base title="Арсенал">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-inner">
+        <span class="eyebrow">Справочник военной техники с 1947 года</span>
+        <h1>Флот, авиация и наземная техника холодной войны и современности</h1>
+        <p>Характеристики, сравнения и хронология принятия на вооружение. Выберите период, затем раздел и группу техники.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Хронология</h2>
+        <p class="lead">Каждая точка это модель, принятая на вооружение в указанный год. Цвет показывает период, нажатие открывает карточку.</p>
+      </div>
+      <div class="chart-card">
+        <Timeline />
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Периоды</h2>
+        <p class="lead">Техника разделена на четыре периода. Внутри каждого три раздела, а в них группы по типам.</p>
+      </div>
+      <div class="cards">
+        {eras.map((era) => (
+          <a class="card" href={`/periods/${era.id}/`} style={`--c:var(--era-${era.id})`}>
+            <span class="stripe"></span>
+            <h3>{era.name}</h3>
+            <span class="meta num">{era.from}–{era.to === 2026 ? 'н. в.' : era.to} · {countIn(era.id)} моделей</span>
+            <span class="desc">{era.lead}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Разделы</h2>
+        <p class="lead">Три сферы действия, в сумме {groups.length} групп техники и {equipment.length} моделей.</p>
+      </div>
+      <div class="cards">
+        {domains.map((domain) => (
+          <div class="card">
+            <Pictogram kind={domain.id} />
+            <h3>{domain.name}</h3>
+            <span class="desc">{domain.lead}</span>
+            <span class="meta num">{groups.filter((g) => g.domain === domain.id).length} групп</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

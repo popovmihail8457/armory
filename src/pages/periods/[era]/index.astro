@@ -1,0 +1,45 @@
+---
+import Base from '../../../layouts/Base.astro';
+import Pictogram from '../../../components/Pictogram.astro';
+import { eras, domains } from '../../../data/taxonomy';
+import { countIn, groupsOfDomain, itemsIn } from '../../../lib/data';
+
+export function getStaticPaths() {
+  return eras.map((era) => ({ params: { era: era.id }, props: { era } }));
+}
+
+const { era } = Astro.props;
+const range = `${era.from}–${era.to === 2026 ? 'н. в.' : era.to}`;
+---
+<Base title={era.name} description={`${era.name}, ${range}: ${era.lead}`}>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Навигация"><a href="/">Главная</a><span>/</span><span>{era.name}</span></nav>
+  </div>
+  <section class="section" style={`--c:var(--era-${era.id})`}>
+    <div class="wrap">
+      <div class="section-head">
+        <span class="stripe"></span>
+        <span class="eyebrow num">{range}</span>
+        <h1>{era.name}</h1>
+        <p class="lead">{era.lead}</p>
+      </div>
+      <div class="cards">
+        {domains.map((domain) => {
+          const total = countIn(era.id, domain.id);
+          const filled = groupsOfDomain(domain.id).filter((g) => itemsIn(era.id, g.id).length > 0);
+          const body = (
+            <>
+              <Pictogram kind={domain.id} />
+              <h3>{domain.name}</h3>
+              <span class="meta num">{total} моделей · {filled.length} групп</span>
+              <span class="desc">{filled.length ? filled.map((g) => g.name).join(', ') : 'В этом периоде записей пока нет.'}</span>
+            </>
+          );
+          return total > 0
+            ? <a class="card" href={`/periods/${era.id}/${domain.id}/`}>{body}</a>
+            : <div class="card disabled">{body}</div>;
+        })}
+      </div>
+    </div>
+  </section>
+</Base>

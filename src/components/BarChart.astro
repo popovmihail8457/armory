@@ -1,0 +1,39 @@
+---
+import type { Equipment } from '../data/equipment';
+import { eraOf, formatNumber, itemUrl } from '../lib/data';
+import { metrics, eraColor, type MetricId } from '../data/taxonomy';
+
+interface Props {
+  items: Equipment[];
+  metric: MetricId;
+  currentEra?: string;
+}
+
+const { items, metric, currentEra } = Astro.props;
+const info = metrics[metric];
+const rows = items
+  .filter((item) => item.specs[metric] !== undefined)
+  .map((item) => ({ item, value: item.specs[metric] as number, era: eraOf(item.year) }));
+const max = Math.max(...rows.map((row) => row.value), 1);
+---
+<section class="chart-card" aria-labelledby={`chart-${metric}`}>
+  <h3 id={`chart-${metric}`}>{info.label}</h3>
+  <p class="sub">{info.unit}, по годам принятия на вооружение</p>
+  <div class="bars" data-reveal>
+    {rows.map(({ item, value, era }) => {
+      const dim = currentEra !== undefined && era.id !== currentEra;
+      return (
+        <a
+          class={`bar-row${dim ? ' dim' : ''}`}
+          href={itemUrl(item)}
+          style={`--c:${eraColor[era.id]}`}
+          aria-label={`${item.name}, ${item.year}: ${formatNumber(value)} ${info.unit}`}
+        >
+          <span class="bar-label">{item.name}<small>{item.year} · {item.country}</small></span>
+          <span class="bar-track"><span class="bar-fill" style={`--w:${(value / max) * 100}%`} /></span>
+          <span class="bar-val">≈{formatNumber(value)} <small>{info.unit}</small></span>
+        </a>
+      );
+    })}
+  </div>
+</section>

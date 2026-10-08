@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+import { eras } from '../data/taxonomy';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'Справочник военной техники с 1947 года до наших дней: флот, авиация и наземная техника.' } = Astro.props;
+const pathname = Astro.url.pathname;
+const fullTitle = title === 'Арсенал' ? 'Арсенал: справочник военной техники' : `${title} | Арсенал`;
+---
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{fullTitle}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <script is:inline>document.documentElement.classList.add('js');</script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href="/">Арсенал</a>
+        <nav class="nav" aria-label="Периоды">
+          {eras.map((era) => (
+            <a href={`/periods/${era.id}/`} aria-current={pathname.startsWith(`/periods/${era.id}/`) ? 'page' : undefined}>
+              {era.from}–{era.to === 2026 ? 'н. в.' : era.to}
+            </a>
+          ))}
+          <a href="/sources/" aria-current={pathname.startsWith('/sources') ? 'page' : undefined}>О данных</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>Арсенал: справочник по открытым источникам</span>
+        <a href="/sources/">Источники и методика</a>
+      </div>
+    </footer>
+    <script is:inline>
+      const targets = document.querySelectorAll('[data-reveal]');
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('in');
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.15 });
+        targets.forEach((el) => observer.observe(el));
+      } else {
+        targets.forEach((el) => el.classList.add('in'));
+      }
+    </script>
+  </body>
+</html>

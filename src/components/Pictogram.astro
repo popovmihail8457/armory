@@ -1,0 +1,29 @@
+---
+interface Props {
+  kind: 'fleet' | 'aviation' | 'ground';
+}
+const { kind } = Astro.props;
+---
+<svg class="pictogram" viewBox="0 0 40 40" aria-hidden="true">
+  {kind === 'fleet' && (
+    <>
+      <path d="M4 26 H36 L31 33 H9 Z" />
+      <path d="M12 26 V20 H22 V26" />
+      <path d="M16 20 V14 H20 V20" />
+      <path d="M26 26 V16 L32 26" />
+    </>
+  )}
+  {kind === 'aviation' && (
+    <>
+      <path d="M20 4 L23 16 L36 24 V27 L23 23 L22 31 L26 34 V36 L20 35 L14 36 V34 L18 31 L17 23 L4 27 V24 L17 16 Z" />
+    </>
+  )}
+  {kind === 'ground' && (
+    <>
+      <rect x="6" y="26" width="28" height="7" rx="3.5" />
+      <path d="M10 26 V20 H26 V26" />
+      <path d="M16 20 V15 H25 V20" />
+      <path d="M25 17.5 H37" />
+    </>
+  )}
+</svg>

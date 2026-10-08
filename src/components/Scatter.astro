@@ -1,0 +1,56 @@
+---
+import type { Equipment } from '../data/equipment';
+import { eraOf, formatNumber, YEAR_MIN, YEAR_MAX } from '../lib/data';
+import { metrics, eraColor, type MetricId } from '../data/taxonomy';
+
+interface Props {
+  items: Equipment[];
+  metric: MetricId;
+  highlight: string;
+}
+
+const { items, metric, highlight } = Astro.props;
+const info = metrics[metric];
+const pts = items.filter((item) => item.specs[metric] !== undefined);
+const W = 640, H = 300, L = 54, R = 20, T = 20, B = 36;
+const rawMax = Math.max(...pts.map((p) => p.specs[metric] as number), 1);
+const stepUnit = 10 ** Math.floor(Math.log10(rawMax)) / 2;
+const maxV = Math.ceil((rawMax * 1.05) / stepUnit) * stepUnit;
+const x = (year: number) => L + ((year - YEAR_MIN) / (YEAR_MAX - YEAR_MIN)) * (W - L - R);
+const y = (v: number) => T + (1 - v / maxV) * (H - T - B);
+const yearTicks = [1950, 1970, 1990, 2010, 2025];
+const valueTicks = [0, 0.25, 0.5, 0.75, 1].map((t) => Math.round(maxV * t * 10) / 10);
+---
+<section class="chart-card">
+  <h3>{info.label} по годам</h3>
+  <p class="sub">{info.unit}; крупная точка с подписью: выбранная модель</p>
+  <svg class="scatter" viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`Диаграмма: ${info.label} в зависимости от года принятия на вооружение`}>
+    {valueTicks.map((v) => (
+      <g>
+        <line class="grid" x1={L} x2={W - R} y1={y(v)} y2={y(v)} />
+        <text x={L - 8} y={y(v) + 4} text-anchor="end">{formatNumber(v)}</text>
+      </g>
+    ))}
+    {yearTicks.map((yr) => (
+      <text x={x(yr)} y={H - 12} text-anchor="middle">{yr}</text>
+    ))}
+    {pts.filter((p) => p.id !== highlight).map((p) => (
+      <circle class="dot" cx={x(p.year)} cy={y(p.specs[metric] as number)} r="6" fill={eraColor[eraOf(p.year).id]} opacity="0.55">
+        <title>{p.name}, {p.year}: ≈{formatNumber(p.specs[metric] as number)} {info.unit}</title>
+      </circle>
+    ))}
+    {pts.filter((p) => p.id === highlight).map((p) => {
+      const cx = x(p.year);
+      const cy = y(p.specs[metric] as number);
+      const anchor = cx > W * 0.7 ? 'end' : 'start';
+      return (
+        <g>
+          <circle class="dot" cx={cx} cy={cy} r="9" fill={eraColor[eraOf(p.year).id]}>
+            <title>{p.name}, {p.year}: ≈{formatNumber(p.specs[metric] as number)} {info.unit}</title>
+          </circle>
+          <text class="lbl" x={anchor === 'end' ? cx - 14 : cx + 14} y={cy + 4} text-anchor={anchor}>{p.name}</text>
+        </g>
+      );
+    })}
+  </svg>
+</section>
