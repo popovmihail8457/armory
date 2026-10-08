@@ -5,13 +5,12 @@ import type { VideoClip } from '../data/videos';
 interface Props {
   ops: Operation[];
   clips: VideoClip[];
-  poster?: string;
 }
 
-const { ops, clips, poster } = Astro.props;
+const { ops, clips } = Astro.props;
 ---
 <div class="reel" data-reel data-clips={JSON.stringify(clips.map((c) => c.src))}>
-  <div class="reel-stage" aria-hidden="true" style={poster ? `background-image:url('${poster}')` : undefined}>
+  <div class="reel-stage" aria-hidden="true">
     {clips.length > 0 && <video class="reel-video" muted loop playsinline preload="none" tabindex="-1"></video>}
     <div class="reel-shade"></div>
   </div>

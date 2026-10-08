@@ -10,7 +10,7 @@ import CoverageDiagram from '../../components/CoverageDiagram.astro';
 import OperationsReel from '../../components/OperationsReel.astro';
 import { operations } from '../../data/operations';
 import { videos } from '../../data/videos';
-import { bgFor } from '../../lib/bg';
+import { bgForItem } from '../../lib/bg';
 import { coverageFor } from '../../data/coverage';
 import { groupScene } from '../../data/trajectory';
 import { stories } from '../../data/stories';
@@ -47,7 +47,7 @@ const usedWeapons = weaponsForPlatform(item.id);
 const trajScene = groupScene[item.group];
 const ops = operations[item.id] ?? [];
 const clips = videos[item.id] ?? [];
-const poster = bgFor(era.id, domain.id, group.id);
+const itemPhoto = bgForItem(item.id);
 const isAircraft = domain.id === 'aviation';
 const cov = isAircraft ? coverageFor(item.id) : undefined;
 const defense = defenseByItem[item.id];
@@ -64,7 +64,7 @@ const tocItems = [
   radar && { id: 'radar', label: 'Радар' },
   specRows.length > 0 && { id: 'compare', label: 'Аналоги' },
 ].filter(Boolean) as { id: string; label: string }[];---
-<Base title={item.name} era={era.id} domain={domain.id} group={group.id} description={`${item.name} (${item.country}, ${item.year}): ${item.text}`}>
+<Base title={item.name} era={era.id} photoUrl={itemPhoto} noPhoto={!itemPhoto} description={`${item.name} (${item.country}, ${item.year}): ${item.text}`}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
       <a href="/">Главная</a><span>/</span>
@@ -117,7 +117,7 @@ const tocItems = [
           <p class="lead">{clips.length > 0 ? 'Прокручивайте вниз: за карточками идёт видео с применением техники.' : 'Основные операции, в которых применялась эта техника.'}</p>
         </div>
       </div>
-      <OperationsReel ops={ops} clips={clips} poster={poster} />
+      <OperationsReel ops={ops} clips={clips} />
     </section>
   )}
 
