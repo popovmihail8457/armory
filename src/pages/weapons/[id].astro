@@ -7,7 +7,7 @@ import { weaponMods } from '../../data/weapons/mods';
 import { equipment } from '../../data/equipment';
 import { weaponMetrics } from '../../data/weapons/taxonomy';
 import { formatNumber, itemUrl, eraOf } from '../../lib/data';
-import { weapons, categoryById, weaponText, weaponsOfCategory, weaponEra, rankInCategory, weaponUrl } from '../../lib/weapons';
+import { weapons, categoryById, weaponText, weaponsOfCategory, weaponEra, rankInCategory, weaponUrl, classesOf } from '../../lib/weapons';
 
 export function getStaticPaths() {
   return weapons.map((weapon) => ({ params: { id: weapon.id }, props: { weapon } }));
@@ -58,6 +58,7 @@ const tocItems = [
         <span class="eyebrow">{category.name}</span>
         <h1>{weapon.name}</h1>
         <p class="lead">{text.summary}</p>
+        <div class="chips">{classesOf(weapon).map((c) => <a class="chip" href={`/weapons/#${c.id}`}>{c.name}</a>)}</div>
       </div>
       <dl class="facts">
         <div><dt>Страна</dt><dd>{weapon.country}</dd></div>

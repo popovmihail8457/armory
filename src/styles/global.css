@@ -438,3 +438,6 @@ html { scroll-padding-top: 116px; }
 .reel-credit a { color: var(--text-2); }
 @media (max-width: 720px) { .reel-stage { height: 70vh; margin-bottom: -70vh; } .reel-card { min-height: 55vh; } }
 @media (prefers-reduced-motion: reduce) { .reel-stage { position: absolute; inset: 0; height: 100%; margin: 0; } }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-2); font-size: 0.9rem; padding: 8px 14px; min-height: 40px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius); transition: border-color 0.2s ease, color 0.2s ease; }
+.chip:hover { color: var(--text); border-color: var(--text-2); }

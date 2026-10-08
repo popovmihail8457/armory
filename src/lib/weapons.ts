@@ -25,7 +25,10 @@ export const weaponText = (id: string): WeaponText => {
 };
 
 export const weaponsOfCategory = (categoryId: string): WeaponData[] =>
-  weapons.filter((weapon) => weapon.category === categoryId).sort((a, b) => a.year - b.year);
+  weapons.filter((weapon) => weapon.category === categoryId || weapon.also?.includes(categoryId as WeaponCategory['id'])).sort((a, b) => a.year - b.year);
+
+export const classesOf = (weapon: WeaponData): WeaponCategory[] =>
+  [weapon.category, ...(weapon.also ?? [])].map((id) => categoryById(id));
 
 export const weaponsForPlatform = (itemId: string): WeaponData[] =>
   weapons.filter((weapon) => weapon.platforms.includes(itemId)).sort((a, b) => a.year - b.year);
