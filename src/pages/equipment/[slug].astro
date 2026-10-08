@@ -5,6 +5,8 @@ import RadarDemo from '../../components/RadarDemo.astro';
 import ArmamentMap from '../../components/ArmamentMap.astro';
 import DefenseDemo from '../../components/DefenseDemo.astro';
 import StorySection from '../../components/StorySection.astro';
+import TrajectoryDemo from '../../components/TrajectoryDemo.astro';
+import { groupScene } from '../../data/trajectory';
 import { stories } from '../../data/stories';
 import { weaponsForPlatform, weaponUrl } from '../../lib/weapons';
 import { weaponMetrics } from '../../data/weapons/taxonomy';
@@ -36,12 +38,14 @@ const radar = aircraftRadar[item.id];
 const arms = armament[item.id];
 const story = stories[item.id];
 const usedWeapons = weaponsForPlatform(item.id);
+const trajScene = groupScene[item.group];
 const defense = defenseByItem[item.id];
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
 const tocItems = [
   story && { id: 'story', label: 'История' },
   { id: 'specs', label: 'Характеристики' },
   arms && { id: 'armament', label: 'Вооружение' },
+  trajScene && { id: 'trajectory', label: 'Траектория' },
   usedWeapons.length > 0 && { id: 'weapons-used', label: 'Применяемое оружие' },
   defense && { id: 'defense', label: 'Защита' },
   radar && { id: 'radar', label: 'Радар' },
@@ -119,6 +123,18 @@ const tocItems = [
           <p class="lead">Наведите курсор на строку или номер на фото, чтобы увидеть, где что расположено.</p>
         </div>
         <ArmamentMap entry={arms} />
+      </div>
+    </section>
+  )}
+
+  {trajScene && (
+    <section class="section" id="trajectory">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Траектория</h2>
+          <p class="lead">Упрощённая анимация показывает принцип полёта и наведения. Реальные профили зависят от версии и условий применения.</p>
+        </div>
+        <TrajectoryDemo only={[trajScene]} initial={trajScene} />
       </div>
     </section>
   )}

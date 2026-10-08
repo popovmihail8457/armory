@@ -66,3 +66,11 @@ export const trajectoryScenes: TrajectoryInfo[] = [
     readout: ['Свободное падение', 'Планирование на рулях', 'Точность по координатам'],
   },
 ];
+
+/** Сцена траектории по группе техники */
+export const groupScene: Partial<Record<string, TrajectoryScene>> = {
+  otrk: 'ballistic',
+  airdef: 'sam',
+  manpads: 'sam',
+  atgm: 'atgm',
+};

@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import WeaponScatter from '../../components/WeaponScatter.astro';
+import TrajectoryDemo from '../../components/TrajectoryDemo.astro';
 import { equipment } from '../../data/equipment';
 import { weaponMetrics } from '../../data/weapons/taxonomy';
 import { formatNumber, itemUrl, eraOf } from '../../lib/data';
@@ -75,6 +76,7 @@ const tocItems = [
         <h2>Принцип работы</h2>
       </div>
       <p class="principle lead">{text.principle}</p>
+      {category.scene && <div style="margin-top: 28px;"><TrajectoryDemo only={[category.scene]} initial={category.scene} /></div>}
     </div>
   </section>
 
