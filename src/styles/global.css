@@ -192,7 +192,24 @@ a.bar-row:hover { background: var(--surface-2); }
 .js [data-reveal] .tl-dot { opacity: 0; transition: opacity 0.5s ease; transition-delay: calc(var(--i, 0) * 12ms); }
 .js [data-reveal].in .tl-dot { opacity: 1; }
 
+/* Появление блоков при прокрутке: только прозрачность, как плавное проявление секций */
+.js .section, .js .hero-inner, .js .site-footer { opacity: 0; transition: opacity 0.9s ease; }
+.js .section.in-view, .js .hero-inner.in-view, .js .site-footer.in-view { opacity: 1; }
+
+/* Переходы между страницами: шапка остаётся на месте, содержимое плавно сменяется */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+  @view-transition { navigation: auto; }
+  .site-header { view-transition-name: site-header; }
+  ::view-transition-group(site-header) { animation-duration: 0s; }
+  ::view-transition-old(root) { animation: vt-out 0.22s ease both; }
+  ::view-transition-new(root) { animation: vt-in 0.5s ease 0.08s both; }
+  @keyframes vt-out { to { opacity: 0; } }
+  @keyframes vt-in { from { opacity: 0; } }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .js .section, .js .hero-inner, .js .site-footer { opacity: 1; }
   * { transition: none !important; animation: none !important; }
   .js [data-reveal] .bar-fill, .js [data-reveal] .gauge i { transform: none; }
   .js [data-reveal] .tl-dot { opacity: 1; }
