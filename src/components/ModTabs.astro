@@ -1,11 +1,19 @@
 ---
 import type { WeaponMod } from '../data/weapons/mods';
+import { basisLabel, type WeaponCost } from '../data/weapons/costs';
+import { moneyRange } from '../lib/money';
 
 interface Props {
   mods: WeaponMod[];
+  cost?: WeaponCost;
 }
 
-const { mods } = Astro.props;
+const { mods, cost } = Astro.props;
+const hasCost = cost && cost.ranges.length === mods.length;
+const allValues = hasCost ? cost!.ranges.flat() : [];
+const logMin = hasCost ? Math.log10(Math.max(0.1, Math.min(...allValues))) : 0;
+const logMax = hasCost ? Math.log10(Math.max(...allValues)) : 1;
+const pos = (v: number) => (logMax === logMin ? 50 : ((Math.log10(Math.max(0.1, v)) - logMin) / (logMax - logMin)) * 92 + 4);
 ---
 <div class="mods" data-mods>
   <div class="mod-tabs" role="tablist" aria-label="Модификации">
@@ -29,15 +37,37 @@ const { mods } = Astro.props;
           <span class="eyebrow">{i === 0 ? 'Что принципиально нового' : `Чем отличается от ${mods[i - 1].name}`}</span>
           <p>{mod.diff}</p>
         </div>
+        {hasCost && (
+          <div class="mod-cost">
+            <span class="eyebrow">Стоимость единицы</span>
+            <strong class="num">{moneyRange(cost!.ranges[i][0], cost!.ranges[i][1])}</strong>
+            <small>Оценка, не прайс. Цены порядка {cost!.year} года, {basisLabel[cost!.basis]}.</small>
+          </div>
+        )}
       </article>
     ))}
   </div>
+  {hasCost && (
+    <figure class="cost-chart" aria-label="Стоимость по версиям, логарифмическая шкала">
+      <figcaption class="eyebrow">Стоимость по версиям (логарифмическая шкала, тыс. $)</figcaption>
+      <ul>
+        {mods.map((mod, i) => (
+          <li data-i={i} class={i === 0 ? 'active' : ''}>
+            <span class="cost-name">{mod.name}</span>
+            <span class="cost-track"><i style={`left:${pos(cost!.ranges[i][0])}%;width:${Math.max(1.5, pos(cost!.ranges[i][1]) - pos(cost!.ranges[i][0]))}%`}></i></span>
+            <span class="cost-val num">{moneyRange(cost!.ranges[i][0], cost!.ranges[i][1])}</span>
+          </li>
+        ))}
+      </ul>
+    </figure>
+  )}
 </div>
 
 <script>
   document.querySelectorAll<HTMLElement>('[data-mods]').forEach((root) => {
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('.mod-tab')];
     const panels = [...root.querySelectorAll<HTMLElement>('.mod-panel')];
+    const rows = [...root.querySelectorAll<HTMLElement>('.cost-chart li')];
     const select = (index: number, focus = false) => {
       tabs.forEach((tab, i) => {
         const on = i === index;
@@ -46,6 +76,8 @@ const { mods } = Astro.props;
         tab.classList.toggle('past', i < index);
         panels[i].hidden = !on;
       });
+      rows.forEach((row, i) => row.classList.toggle('active', i === index));
+      root.dispatchEvent(new CustomEvent('modselect', { detail: { index }, bubbles: true }));
       if (focus) tabs[index].focus();
     };
     tabs.forEach((tab, i) => {
@@ -55,5 +87,6 @@ const { mods } = Astro.props;
         if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') { event.preventDefault(); select((i - 1 + tabs.length) % tabs.length, true); }
       });
     });
+    rows.forEach((row, i) => row.addEventListener('click', () => select(i)));
   });
 </script>

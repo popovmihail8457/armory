@@ -4,6 +4,9 @@ import WeaponScatter from '../../components/WeaponScatter.astro';
 import TrajectoryDemo from '../../components/TrajectoryDemo.astro';
 import ModTabs from '../../components/ModTabs.astro';
 import { weaponMods } from '../../data/weapons/mods';
+import { weaponCosts } from '../../data/weapons/costs';
+import WarheadDemo from '../../components/WarheadDemo.astro';
+import { warheadScenes } from '../../data/weapons/warheads';
 import { equipment } from '../../data/equipment';
 import { weaponMetrics } from '../../data/weapons/taxonomy';
 import { formatNumber, itemUrl, eraOf } from '../../lib/data';
@@ -30,10 +33,13 @@ const specRows = category.metrics
   });
 const others = peers.filter((p) => p.id !== weapon.id);
 const mods = weaponMods[weapon.id] ?? [];
+const cost = weaponCosts[weapon.id];
+const scenes = warheadScenes(weapon.id, Math.max(1, mods.length));
 const tocItems = [
   { id: 'principle', label: 'Принцип работы' },
   { id: 'specs', label: 'Характеристики' },
   { id: 'design', label: 'Устройство' },
+  { id: 'warhead', label: 'Боевая часть' },
   { id: 'features', label: 'Особенности' },
   { id: 'history', label: 'История' },
   mods.length > 0 && { id: 'mods', label: 'Модификации' },
@@ -117,6 +123,16 @@ const tocItems = [
     </div>
   </section>
 
+  <section class="section" id="warhead" style={`--c:var(--era-${era.id})`}>
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Работа боевой части</h2>
+        <p class="lead">Схематичная анимация принципа действия. При выборе другой версии во вкладках модификаций сцена меняется, если у версии другая боевая часть.</p>
+      </div>
+      <WarheadDemo perMod={scenes} initial={scenes[0]} />
+    </div>
+  </section>
+
   <section class="section" id="features" style={`--c:var(--era-${era.id})`}>
     <div class="wrap">
       <div class="section-head">
@@ -149,7 +165,7 @@ const tocItems = [
           <h2>Модификации</h2>
           <p class="lead">{mods.length > 1 ? 'Выберите версию, чтобы увидеть, чем она отличается от предыдущей.' : 'Для этого образца в справочнике одна серийная версия.'}</p>
         </div>
-        <ModTabs mods={mods} />
+        <ModTabs mods={mods} cost={cost} />
       </div>
     </section>
   )}

@@ -441,3 +441,20 @@ html { scroll-padding-top: 116px; }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-2); font-size: 0.9rem; padding: 8px 14px; min-height: 40px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius); transition: border-color 0.2s ease, color 0.2s ease; }
 .chip:hover { color: var(--text); border-color: var(--text-2); }
+
+/* Стоимость */
+.mod-cost { display: grid; gap: 4px; padding-top: 14px; border-top: 1px solid var(--line); }
+.mod-cost strong { font-size: 1.4rem; font-weight: 600; color: var(--text); }
+.mod-cost small { color: var(--text-3); }
+.cost-chart { margin: 0; max-width: 78ch; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; display: grid; gap: 10px; }
+.cost-chart ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.cost-chart li { display: grid; grid-template-columns: minmax(110px, 190px) 1fr minmax(120px, 160px); gap: 12px; align-items: center; padding: 4px 6px; border-radius: 4px; cursor: pointer; min-height: 32px; }
+.cost-chart li:hover { background: var(--surface-2); }
+.cost-chart li.active { background: var(--surface-2); box-shadow: inset 3px 0 0 var(--c, var(--era-modern)); }
+.cost-name { font-size: 0.9rem; color: var(--text-2); }
+.cost-chart li.active .cost-name { color: var(--text); }
+.cost-track { position: relative; height: 12px; background: rgba(255, 255, 255, 0.06); border-radius: 3px; }
+.cost-track i { position: absolute; top: 0; bottom: 0; background: var(--c, var(--era-modern)); border-radius: 3px; opacity: 0.6; }
+.cost-chart li.active .cost-track i { opacity: 1; }
+.cost-val { font-size: 0.82rem; text-align: right; color: var(--text-2); }
+@media (max-width: 640px) { .cost-chart li { grid-template-columns: 1fr; gap: 4px; } .cost-val { text-align: left; } }

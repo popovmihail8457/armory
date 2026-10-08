@@ -1,0 +1,311 @@
+---
+import { warheadInfo } from '../data/weapons/warheads';
+import type { WarheadScene } from '../data/weapons/types';
+
+interface Props {
+  /** Сцены по версиям (из warheads.ts). Меняются по событию modselect от ModTabs. */
+  perMod?: WarheadScene[];
+  initial?: WarheadScene;
+  /** Показывать вкладки выбора сцены вручную */
+  tabs?: boolean;
+}
+
+const { perMod, initial, tabs = false } = Astro.props;
+const start = initial ?? perMod?.[0] ?? 'frag';
+const used = tabs ? warheadInfo : warheadInfo.filter((w) => perMod?.includes(w.id) || w.id === start);
+---
+<section class="radar defense warhead" data-warhead data-initial={start} data-per-mod={JSON.stringify(perMod ?? [])}>
+  {tabs && used.length > 1 && (
+    <div class="radar-tabs" role="tablist" aria-label="Типы боевых частей">
+      {used.map((w) => (
+        <button type="button" role="tab" class="radar-tab" data-scene={w.id} aria-selected={w.id === start}>
+          <span class="num">{w.short}</span>
+        </button>
+      ))}
+    </div>
+  )}
+  <div class="radar-body">
+    <div class="radar-stage">
+      <canvas class="radar-canvas" width="720" height="520" role="img" aria-label="Схема действия боевой части"></canvas>
+      <button type="button" class="radar-toggle" aria-pressed="false">Пауза</button>
+    </div>
+    <div class="radar-info">
+      <h3 class="radar-title"></h3>
+      <p class="radar-text"></p>
+      <dl class="radar-readout">
+        <div><dt>Этап 1</dt><dd class="d-1">-</dd></div>
+        <div><dt>Этап 2</dt><dd class="d-2">-</dd></div>
+        <div><dt>Этап 3</dt><dd class="d-3">-</dd></div>
+      </dl>
+    </div>
+  </div>
+  <script type="application/json" class="warhead-data" set:html={JSON.stringify(warheadInfo)} />
+</section>
+
+<script>
+  type Id = 'frag' | 'shaped' | 'tandem' | 'kinetic' | 'blast' | 'penetrator' | 'cluster';
+  interface Info { id: Id; name: string; short: string; text: string; readout: [string, string, string] }
+
+  const W = 720, H = 520, G = 440;
+  const TAU = Math.PI * 2;
+  const clamp = (v: number, a: number, b: number) => Math.min(b, Math.max(a, v));
+  const rnd = (n: number) => { const x = Math.sin(n * 91.345 + 7.1) * 43758.5453; return x - Math.floor(x); };
+
+  function init(root: HTMLElement) {
+    const canvas = root.querySelector<HTMLCanvasElement>('.radar-canvas')!;
+    const ctx = canvas.getContext('2d')!;
+    const infos = JSON.parse(root.querySelector('.warhead-data')!.textContent ?? '[]') as Info[];
+    const perMod = JSON.parse(root.dataset.perMod ?? '[]') as Id[];
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.radar-tab')];
+    const toggle = root.querySelector<HTMLButtonElement>('.radar-toggle')!;
+    const css = getComputedStyle(root);
+    const accent = css.getPropertyValue('--era-modern').trim() || '#c98500';
+    const blue = css.getPropertyValue('--era-early').trim() || '#3987e5';
+    const orange = css.getPropertyValue('--era-late').trim() || '#d95926';
+    const ink = css.getPropertyValue('--text').trim() || '#f2f1ec';
+    const faint = 'rgba(255,255,255,0.5)';
+    const dim = 'rgba(255,255,255,0.14)';
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let current: Id = (root.dataset.initial as Id) || 'frag';
+    let paused = reduce;
+    let t = 0;
+    let last = performance.now();
+
+    const text = (s: string, x: number, y: number, color = faint, size = 13, align: CanvasTextAlign = 'left') => {
+      ctx.fillStyle = color; ctx.font = `${size}px Consolas, monospace`; ctx.textAlign = align; ctx.fillText(s, x, y);
+    };
+    const line = (x1: number, y1: number, x2: number, y2: number, color = dim, w = 1, alpha = 1) => {
+      ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.globalAlpha = alpha; ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke(); ctx.restore();
+    };
+    const ring = (x: number, y: number, r: number, color = dim, w = 1, alpha = 1) => {
+      ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = w; ctx.globalAlpha = alpha; ctx.beginPath(); ctx.arc(x, y, Math.max(0.1, r), 0, TAU); ctx.stroke(); ctx.restore();
+    };
+    const dot = (x: number, y: number, r: number, color: string, alpha = 1) => {
+      ctx.save(); ctx.fillStyle = color; ctx.globalAlpha = alpha; ctx.beginPath(); ctx.arc(x, y, Math.max(0.1, r), 0, TAU); ctx.fill(); ctx.restore();
+    };
+    const rect = (x: number, y: number, w: number, h: number, color: string, alpha = 1) => {
+      ctx.save(); ctx.fillStyle = color; ctx.globalAlpha = alpha; ctx.fillRect(x, y, w, h); ctx.restore();
+    };
+    const caption = (s: string) => text(s, 16, 28, faint, 13);
+    const flash = (x: number, y: number, k: number, size = 40) => {
+      if (k <= 0 || k >= 1) return;
+      dot(x, y, size * (0.4 + k), '#ffd27a', 0.55 * (1 - k)); ring(x, y, size * (0.6 + k * 1.6), accent, 2, 1 - k);
+    };
+    const plane = (x: number, y: number, s = 1.4) => {
+      ctx.save(); ctx.translate(x, y); ctx.scale(s, s); ctx.fillStyle = ink;
+      ctx.beginPath(); ctx.moveTo(-22, 0); ctx.lineTo(-6, -4); ctx.lineTo(10, -4); ctx.lineTo(16, -14); ctx.lineTo(22, -14); ctx.lineTo(20, -2); ctx.lineTo(22, 4); ctx.lineTo(8, 5); ctx.lineTo(-8, 4); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(2, 2); ctx.lineTo(14, 14); ctx.lineTo(8, 14); ctx.lineTo(-6, 2); ctx.fill(); ctx.restore();
+    };
+
+    // ===== осколочная =====
+    function sceneFrag(time: number) {
+      const T = 8, s = time % T, tx = 560 - 14 * s, ty = 250, det = 3.0;
+      const mx = s < det ? 70 + (s / det) * 330 : 400, my = 262;
+      plane(tx, ty);
+      if (s < det) {
+        ctx.save(); ctx.translate(mx, my); ctx.fillStyle = ink; ctx.fillRect(-18, -3, 36, 6); ctx.fillStyle = accent; ctx.fillRect(-26, -2, 8, 4); ctx.restore();
+        if (s > 1.6) { ring(mx, my, 95, accent, 1, 0.5); text('радиус датчика взрывателя', mx, my + 120, faint, 12, 'center'); }
+      } else {
+        const k = s - det;
+        flash(400, 262, k / 0.6);
+        for (let i = 0; i < 60; i++) {
+          const a = (i / 60) * TAU, r = Math.min(300, k * 300), sp = 0.7 + rnd(i) * 0.5;
+          const x1 = 400 + Math.cos(a) * r * sp, y1 = 262 + Math.sin(a) * r * sp;
+          const x2 = 400 + Math.cos(a) * Math.max(0, r * sp - 18), y2 = 262 + Math.sin(a) * Math.max(0, r * sp - 18);
+          line(x2, y2, x1, y1, '#ffd27a', 1.4, clamp(1 - k / 1.8, 0, 1));
+        }
+        if (k > 0.5) { for (let i = 0; i < 9; i++) dot(tx - 25 + i * 6 + rnd(i + 3) * 8, ty - 8 + rnd(i + 9) * 18, 2.4, orange, clamp((k - 0.5) * 2, 0, 1)); text('пробоины от осколков', tx, ty + 60, orange, 13, 'center'); }
+      }
+      caption('Подрыв рядом с целью: осколки разлетаются и поражают конструкцию');
+    }
+
+    // ===== кумулятивная и тандемная =====
+    function sceneShaped(time: number, tandem: boolean) {
+      const T = 9, s = time % T;
+      const armorX = 400, armorW = 120, ay = 190, ah = 160;
+      // броня
+      rect(armorX, ay, armorW, ah, '#5a5a55'); ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.strokeRect(armorX, ay, armorW, ah);
+      text('броня', armorX + armorW / 2, ay + ah + 22, faint, 12, 'center');
+      if (tandem) {
+        rect(armorX - 36, ay + 40, 22, 80, '#8a6a30'); text('динамическая защита', armorX - 70, ay + 24, faint, 11, 'center');
+      }
+      // боевая часть: корпус и воронка
+      const cy = 270;
+      rect(60, cy - 55, 170, 110, '#3a3a36'); ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.strokeRect(60, cy - 55, 170, 110);
+      rect(70, cy - 48, 100, 96, '#b8873a', 0.7);
+      ctx.save(); ctx.fillStyle = '#c9c4b0'; ctx.beginPath(); ctx.moveTo(170, cy - 48); ctx.lineTo(220, cy - 40); ctx.lineTo(220, cy + 40); ctx.lineTo(170, cy + 48); ctx.lineTo(120, cy); ctx.closePath(); ctx.restore();
+      ctx.save(); ctx.strokeStyle = '#d6d0ba'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(170, cy - 48); ctx.lineTo(120, cy); ctx.lineTo(170, cy + 48); ctx.stroke(); ctx.restore();
+      text('облицовка', 150, cy - 70, faint, 12, 'center'); text('заряд', 100, cy + 75, faint, 12, 'center');
+      const t0 = 1.0;
+      if (s > t0 && s < t0 + 0.7) { const k = (s - t0) / 0.7; line(70 + k * 100, cy - 48, 70 + k * 100, cy + 48, '#ffd27a', 4, 0.9); }
+      let holeLen = 0;
+      const jetStart = t0 + 0.7;
+      if (tandem) {
+        // первый заряд
+        const j1 = clamp((s - jetStart) * 520, 0, 1000), x1 = 222 + j1;
+        if (s > jetStart && j1 < armorX - 14 - 222 + 40) line(222, cy, x1, cy, '#ffd27a', 3);
+        if (s > jetStart && x1 >= armorX - 36) {
+          const k = (s - (jetStart + (armorX - 36 - 222) / 520)) / 0.7;
+          flash(armorX - 25, cy, k, 30);
+        }
+        const j2s = jetStart + 0.9;
+        if (s > j2s) {
+          const j2 = clamp((s - j2s) * 560, 0, 1000), xs = 222;
+          const reach = xs + j2;
+          line(xs, cy, Math.min(reach, armorX + armorW), cy, '#ffe9b0', 4);
+          holeLen = clamp(reach - armorX, 0, armorW);
+        }
+      } else {
+        const j = clamp((s - jetStart) * 560, 0, 1000), reach = 222 + j;
+        if (s > jetStart) line(222, cy, Math.min(reach, armorX + armorW + 90), cy, '#ffe9b0', 4);
+        holeLen = clamp(reach - armorX, 0, armorW);
+      }
+      if (holeLen > 0) {
+        rect(armorX, cy - 6, holeLen, 12, '#1a1a19');
+        for (let i = 0; i < 8; i++) dot(armorX + holeLen + rnd(i) * 14, cy + (rnd(i + 4) - 0.5) * 20, 1.8, orange, 0.8);
+        if (holeLen >= armorW) for (let i = 0; i < 14; i++) dot(armorX + armorW + 10 + rnd(i + 11) * 80, cy + (rnd(i + 20) - 0.5) * 70, 2, orange, clamp(1 - (s - jetStart - 1.4) * 0.5, 0, 1));
+      }
+      caption(tandem ? 'Первый заряд подрывает защиту, второй пробивает броню' : 'Металлическая струя пробивает броню под давлением');
+    }
+
+    // ===== кинетическая =====
+    function sceneKinetic(time: number) {
+      const T = 8, s = time % T, plateX = 470;
+      rect(plateX, 190, 70, 170, '#5a5a55'); ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.strokeRect(plateX, 190, 70, 170);
+      text('броня', plateX + 35, 385, faint, 12, 'center');
+      const y = 275, speed = 330, x = clamp(60 + s * speed, 0, 1000);
+      const hitT = (plateX - 60 - 150) / speed;
+      const sabotOut = clamp((s - 0.7) / 0.8, 0, 1);
+      if (s < hitT + 0.1) {
+        const rodLen = 150;
+        rect(x, y - 4, rodLen, 8, '#d9d6c8');
+        if (s < 1.6) {
+          for (let i = -1; i <= 1; i += 2) { ctx.save(); ctx.fillStyle = '#8a6a30'; ctx.translate(x + 30, y + i * (14 + sabotOut * 70)); ctx.rotate(i * sabotOut * 0.8); ctx.fillRect(-10, -4, 60, 8); ctx.restore(); }
+          if (s > 0.7) text('поддон отделяется', 150, 150, faint, 12, 'center');
+        }
+      } else {
+        const k = clamp((s - hitT) / 1.4, 0, 1);
+        const rodLeft = Math.max(0, 150 * (1 - k * 0.9));
+        rect(plateX - rodLeft + 30 * k, y - 4, rodLeft, 8, '#d9d6c8', 1 - k * 0.5);
+        rect(plateX, y - 7, clamp(k * 80, 0, 70), 14, '#1a1a19');
+        for (let i = 0; i < 24; i++) { const a = (rnd(i) - 0.5) * 2.4; dot(plateX + Math.cos(a) * k * 90 * rnd(i + 2), y + Math.sin(a) * k * 60 * rnd(i + 5), 2, accent, 1 - k); }
+        flash(plateX, y, k * 1.2, 26);
+        text('стержень разрушается вместе с бронёй', 360, 140, faint, 12, 'center');
+      }
+      caption('Поражение энергией удара: плотный стержень на высокой скорости');
+    }
+
+    // ===== фугасная =====
+    function sceneBlast(time: number) {
+      const T = 8, s = time % T, bx = 300, by = 400, det = 1.2;
+      ctx.fillStyle = '#242421'; ctx.fillRect(0, G, W, H - G); line(0, G, W, G, 'rgba(255,255,255,0.3)', 1);
+      rect(470, 290, 180, 150, '#4a4a46'); ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.strokeRect(470, 290, 180, 150);
+      for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) rect(488 + i * 56, 310 + j * 56, 32, 36, '#1a1a19');
+      if (s < det) { const k = s / det; dot(bx, 120 + k * (by - 120), 6, ink); text('заряд', bx + 14, 120 + k * (by - 120), faint, 12); }
+      else {
+        const k = s - det;
+        flash(bx, by - 10, k / 0.5, 38);
+        const r = Math.min(360, k * 250);
+        ring(bx, by - 10, r, orange, 3, clamp(1 - k / 2.4, 0, 1));
+        ring(bx, by - 10, r * 0.7, accent, 2, clamp(1 - k / 2.0, 0, 1));
+        ring(bx, by - 10, r * 0.4, '#ffd27a', 2, clamp(1 - k / 1.6, 0, 1));
+        if (r > 170) { const hit = clamp((r - 170) / 120, 0, 1); for (let i = 0; i < 3; i++) for (let j = 0; j < 2; j++) rect(488 + i * 56, 310 + j * 56, 32, 36, orange, hit * 0.5); line(520, 300, 560 + hit * 20, 380, '#1a1a19', 2, hit); line(600, 296, 590 - hit * 20, 400, '#1a1a19', 2, hit); }
+        text('чем ближе, тем выше давление', bx, 150, faint, 12, 'center');
+      }
+      caption('Ударная волна разрушает конструкции, давление падает с расстоянием');
+    }
+
+    // ===== проникающая =====
+    function scenePenetrator(time: number) {
+      const T = 9, s = time % T, y = 270, plates = [380, 460, 540];
+      plates.forEach((px, i) => { rect(px, 190, 36, 160, ['#5b5b52', '#6a6a60', '#4a4a44'][i]); });
+      rect(600, 210, 90, 120, '#2c2c29'); ctx.strokeStyle = 'rgba(255,255,255,0.3)'; ctx.strokeRect(600, 210, 90, 120); text('помещение', 645, 360, faint, 12, 'center');
+      let x = 60 + clamp(s, 0, 2.4) * 200;
+      if (s > 2.4) x += (clamp(s, 2.4, 2.9) - 2.4) * 140;
+      if (s > 2.9) x += (clamp(s, 2.9, 3.4) - 2.9) * 100;
+      if (s > 3.4) x += (clamp(s, 3.4, 4.6) - 3.4) * 70;
+      const detT = 4.8;
+      plates.forEach((px) => { if (x + 40 > px) rect(px, y - 7, clamp(x + 40 - px, 0, 36), 14, '#1a1a19'); });
+      if (s < detT) { ctx.save(); ctx.fillStyle = ink; ctx.beginPath(); ctx.moveTo(x + 40, y); ctx.quadraticCurveTo(x + 20, y - 10, x - 30, y - 10); ctx.lineTo(x - 30, y + 10); ctx.quadraticCurveTo(x + 20, y + 10, x + 40, y); ctx.fill(); ctx.restore(); }
+      else { flash(x + 20, y, (s - detT) / 0.8, 46); rect(600, 210, 90, 120, orange, clamp((s - detT) * 0.4, 0, 0.35)); text('подрыв внутри после замедления', 530, 150, faint, 12, 'center'); }
+      if (s > 1.0 && s < 4.0) text('замедляется, проходя преграды', 280, 150, faint, 12, 'center');
+      caption('Прочный корпус пробивает преграды, взрыв происходит внутри');
+    }
+
+    // ===== кассетная =====
+    function sceneCluster(time: number) {
+      const T = 10, s = time % T, openT = 2.6, N = 16;
+      ctx.fillStyle = '#242421'; ctx.fillRect(0, G, W, H - G); line(0, G, W, G, 'rgba(255,255,255,0.3)', 1);
+      const fall = (tt: number) => ({ x: 90 + tt * 120, y: 50 + tt * 55 + 0.5 * 20 * tt * tt });
+      const p0 = fall(openT);
+      if (s < openT) {
+        const p = fall(s); ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(0.45); ctx.fillStyle = ink; ctx.fillRect(-30, -8, 60, 16); ctx.fillStyle = accent; ctx.fillRect(-34, -5, 6, 10); ctx.restore();
+        return caption('Боевая часть снижается к цели');
+      }
+      const k = s - openT;
+      // створки корпуса
+      for (let h = -1; h <= 1; h += 2) { ctx.save(); ctx.translate(p0.x + h * k * 40, p0.y - k * 8 * h * h + k * k * 30); ctx.rotate(0.45 + h * k * 1.4); ctx.fillStyle = '#8a8a82'; ctx.fillRect(-28, -4, 56, 4); ctx.restore(); }
+      text('раскрытие над целью', p0.x, p0.y - 36, faint, 12, 'center');
+      for (let i = 0; i < N; i++) {
+        const vx = (i - N / 2) * 26 + (rnd(i) - 0.5) * 16 + 70, vy = 10 + rnd(i + 3) * 40;
+        // время падения до земли с учётом g = 120
+        const c0 = p0.y - (G - 4), disc = Math.sqrt(Math.max(0, vy * vy - 2 * 120 * c0));
+        const tl = (-vy + disc) / 120;
+        const x = p0.x + vx * Math.min(k, tl), age = k - tl;
+        if (age < 0) dot(x, p0.y + vy * k + 60 * k * k, 4, '#d9d6c8');
+        else { dot(x, G - 4, 2.5, '#555', age < 0.8 ? 0 : 1); flash(x, G - 8, age / 0.8, 26); }
+      }
+      const wlen = Math.min(1, k / 2.4);
+      ctx.save(); ctx.strokeStyle = accent; ctx.globalAlpha = 0.6; ctx.setLineDash([6, 6]); ctx.beginPath(); ctx.ellipse(p0.x + 170, G + 22, 190 * wlen + 20, 14, 0, 0, TAU); ctx.stroke(); ctx.restore();
+      if (k > 2.2) text('площадь поражения', p0.x + 170, G + 56, accent, 12, 'center');
+      caption('Над целью боевая часть раскрывается и рассыпает малые боеприпасы');
+    }
+    function frame() {
+      ctx.fillStyle = '#1a1a19'; ctx.fillRect(0, 0, W, H);
+      switch (current) {
+        case 'frag': sceneFrag(t); break;
+        case 'shaped': sceneShaped(t, false); break;
+        case 'tandem': sceneShaped(t, true); break;
+        case 'kinetic': sceneKinetic(t); break;
+        case 'blast': sceneBlast(t); break;
+        case 'penetrator': scenePenetrator(t); break;
+        case 'cluster': sceneCluster(t); break;
+      }
+    }
+
+    function setScene(id: Id) {
+      current = id; t = 0;
+      tabs.forEach((b) => b.setAttribute('aria-selected', String(b.dataset.scene === id)));
+      const info = infos.find((w) => w.id === id)!;
+      root.querySelector('.radar-title')!.textContent = info.name;
+      root.querySelector('.radar-text')!.textContent = info.text;
+      (['d-1', 'd-2', 'd-3'] as const).forEach((c, i) => { root.querySelector('.' + c)!.textContent = info.readout[i]; });
+      if (paused) { t = 4; frame(); }
+    }
+
+    function loop(now: number) {
+      const dt = Math.min(0.05, (now - last) / 1000); last = now;
+      if (!paused) { t += dt; frame(); }
+      requestAnimationFrame(loop);
+    }
+
+    tabs.forEach((b) => b.addEventListener('click', () => setScene(b.dataset.scene as Id)));
+    document.addEventListener('modselect', (event) => {
+      const index = (event as CustomEvent<{ index: number }>).detail.index;
+      const next = perMod[index];
+      if (next && next !== current) setScene(next);
+    });
+    toggle.textContent = paused ? 'Запустить' : 'Пауза';
+    toggle.setAttribute('aria-pressed', String(paused));
+    toggle.addEventListener('click', () => {
+      paused = !paused;
+      toggle.textContent = paused ? 'Запустить' : 'Пауза';
+      toggle.setAttribute('aria-pressed', String(paused));
+    });
+    setScene(current);
+    requestAnimationFrame(loop);
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-warhead]').forEach(init);
+</script>
