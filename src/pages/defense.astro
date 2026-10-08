@@ -1,0 +1,43 @@
+---
+import Base from '../layouts/Base.astro';
+import DefenseDemo from '../components/DefenseDemo.astro';
+import { defenseByItem, kindName } from '../data/defense';
+import { equipment } from '../data/equipment';
+import { itemUrl } from '../lib/data';
+
+const rows = equipment
+  .filter((item) => defenseByItem[item.id])
+  .map((item) => ({ item, systems: defenseByItem[item.id] }));
+---
+<Base title="Системы защиты" description="Анимации работы СПО, бортового комплекса обороны, ловушек, РЭБ, активной защиты танка и эшелонированной обороны корабля.">
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="eyebrow">Защита и противодействие</span>
+        <h1>Как техника защищает себя</h1>
+        <p class="lead">Семь сцен показывают принцип работы систем предупреждения, помех, ловушек и активной защиты. Анимации упрощены и объясняют идею, а не параметры конкретных образцов.</p>
+      </div>
+      <DefenseDemo />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Какие системы стоят на технике в справочнике</h2>
+        <p class="lead">Перечислены только открытые данные по основным серийным вариантам. Составы отличаются от страны к стране и от версии к версии.</p>
+      </div>
+      <div class="cards">
+        {rows.map(({ item, systems }) => (
+          <a class="card" href={itemUrl(item)}>
+            <span class="meta num">{item.year} · {item.country}</span>
+            <h3>{item.name}</h3>
+            <ul class="mini-list">
+              {systems.map((s) => <li><strong>{s.name}</strong> <span>{kindName[s.kind]}</span></li>)}
+            </ul>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</Base>

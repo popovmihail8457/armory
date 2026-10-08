@@ -3,6 +3,10 @@ import Base from '../../layouts/Base.astro';
 import Scatter from '../../components/Scatter.astro';
 import RadarDemo from '../../components/RadarDemo.astro';
 import ArmamentMap from '../../components/ArmamentMap.astro';
+import DefenseDemo from '../../components/DefenseDemo.astro';
+import StorySection from '../../components/StorySection.astro';
+import { stories } from '../../data/stories';
+import { defenseByItem, kindName } from '../../data/defense';
 import { armament } from '../../data/armament';
 import { aircraftRadar } from '../../data/radar';
 import { equipment } from '../../data/equipment';
@@ -28,7 +32,17 @@ const specRows = group.metrics
 const others = peers.filter((p) => p.id !== item.id);
 const radar = aircraftRadar[item.id];
 const arms = armament[item.id];
----
+const story = stories[item.id];
+const defense = defenseByItem[item.id];
+const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
+const tocItems = [
+  story && { id: 'story', label: 'История' },
+  { id: 'specs', label: 'Характеристики' },
+  arms && { id: 'armament', label: 'Вооружение' },
+  defense && { id: 'defense', label: 'Защита' },
+  radar && { id: 'radar', label: 'Радар' },
+  specRows.length > 0 && { id: 'compare', label: 'Аналоги' },
+].filter(Boolean) as { id: string; label: string }[];---
 <Base title={item.name} era={era.id} domain={domain.id} group={group.id} description={`${item.name} (${item.country}, ${item.year}): ${item.text}`}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
@@ -57,7 +71,24 @@ const arms = armament[item.id];
     </div>
   </section>
 
-  <section class="section">
+  <nav class="toc" aria-label="Разделы страницы">
+    <div class="wrap">
+      {tocItems.map((t) => <a href={'#' + t.id}>{t.label}</a>)}
+    </div>
+  </nav>
+
+  {story && (
+    <section class="section" id="story">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>О машине</h2>
+        </div>
+        <StorySection story={story} year={item.year} country={item.country} eraId={era.id} />
+      </div>
+    </section>
+  )}
+
+  <section class="section" id="specs">
     <div class="wrap">
       <div class="section-head">
         <h2>Характеристики</h2>
@@ -77,7 +108,7 @@ const arms = armament[item.id];
   </section>
 
   {arms && (
-    <section class="section">
+    <section class="section" id="armament">
       <div class="wrap">
         <div class="section-head">
           <h2>Вооружение</h2>
@@ -89,7 +120,7 @@ const arms = armament[item.id];
   )}
 
   {specRows.length > 0 && (
-    <section class="section">
+    <section class="section" id="compare">
       <div class="wrap">
         <div class="section-head">
           <h2>Место среди аналогов</h2>
@@ -104,8 +135,23 @@ const arms = armament[item.id];
     </section>
   )}
 
+  {defense && (
+    <section class="section" id="defense">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Системы защиты</h2>
+          <p class="lead">Состав по открытым источникам для основных серийных вариантов. Анимации показывают общий принцип, <a href="/defense/">больше на странице о защите</a>.</p>
+        </div>
+        <ul class="defense-list">
+          {defense.map((d) => (<li><div><strong>{d.name}</strong><div class="kind">{kindName[d.kind]}</div></div><span>{d.note}</span></li>))}
+        </ul>
+        <DefenseDemo only={defenseScenes} initial={defenseScenes[0]} />
+      </div>
+    </section>
+  )}
+
   {radar && (
-    <section class="section">
+    <section class="section" id="radar">
       <div class="wrap">
         <div class="section-head">
           <h2>Радиолокатор</h2>

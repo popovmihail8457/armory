@@ -1,0 +1,47 @@
+---
+import type { Story } from '../data/stories';
+
+interface Props {
+  story: Story;
+  year: number;
+  country: string;
+  eraId: string;
+}
+
+const { story, year, country, eraId } = Astro.props;
+const chapters = [
+  { n: '01', title: 'История создания', text: story.history },
+  { n: '02', title: 'Конструкция и особенности', text: story.design },
+  { n: '03', title: 'Служба и применение', text: story.service },
+];
+---
+<div class="story" data-reveal style={`--c:var(--era-${eraId})`}>
+  <aside class="story-aside">
+    <span class="eyebrow">Досье</span>
+    <div class="story-year num">{year}</div>
+    <p class="story-country">{country}</p>
+    {story.variants && story.variants.length > 0 && (
+      <div class="variants">
+        <span class="eyebrow">Модификации</span>
+        <ul>
+          {story.variants.map((v) => <li>{v}</li>)}
+        </ul>
+      </div>
+    )}
+  </aside>
+  <div class="chapters">
+    <span class="rail" aria-hidden="true"></span>
+    {chapters.map((c) => (
+      <article class="chapter">
+        <span class="chapter-n num">{c.n}</span>
+        <h3>{c.title}</h3>
+        <p>{c.text}</p>
+      </article>
+    ))}
+    <blockquote class="fact">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M6 20c0-6 3-10 9-12l1 2c-3 1-5 3-5 6h4v8H6zm12 0c0-6 3-10 9-12l1 2c-3 1-5 3-5 6h4v8h-9z" /></svg>
+      <span class="eyebrow">Интересный факт</span>
+      <p>{story.fact}</p>
+    </blockquote>
+  </div>
+</div>
