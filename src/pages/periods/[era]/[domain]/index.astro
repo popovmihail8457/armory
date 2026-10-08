@@ -14,7 +14,7 @@ export function getStaticPaths() {
 const { era, domain } = Astro.props;
 const list = groupsOfDomain(domain.id);
 ---
-<Base title={`${domain.name}: ${era.name}`} era={era.id} description={`${domain.name}, ${era.name}. ${domain.lead}`}>
+<Base title={`${domain.name}: ${era.name}`} era={era.id} domain={domain.id} description={`${domain.name}, ${era.name}. ${domain.lead}`}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
       <a href="/">Главная</a><span>/</span><a href={`/periods/${era.id}/`}>{era.name}</a><span>/</span><span>{domain.name}</span>

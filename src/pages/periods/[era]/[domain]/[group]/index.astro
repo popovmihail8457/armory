@@ -20,7 +20,7 @@ const here = itemsIn(era.id, group.id);
 const all = itemsOfGroup(group.id);
 const firstMetric = group.metrics[0];
 ---
-<Base title={`${group.name}: ${era.name}`} era={era.id} description={`${group.name} периода «${era.name}»: ${here.map((i) => i.name).join(', ')}.`}>
+<Base title={`${group.name}: ${era.name}`} era={era.id} domain={domain.id} group={group.id} description={`${group.name} периода «${era.name}»: ${here.map((i) => i.name).join(', ')}.`}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
       <a href="/">Главная</a><span>/</span>

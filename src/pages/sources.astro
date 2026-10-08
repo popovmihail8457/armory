@@ -2,6 +2,23 @@
 import Base from '../layouts/Base.astro';
 import { metrics } from '../data/taxonomy';
 import { equipment } from '../data/equipment';
+import { eras, domains, groups } from '../data/taxonomy';
+import { bgManifest } from '../lib/bg';
+
+const photoRows = Object.entries(bgManifest)
+  .filter(([, entry]) => entry.file)
+  .map(([key, entry]) => {
+    const [eraId, domainId, groupId] = key.split('/');
+    return {
+      era: eras.find((e) => e.id === eraId)?.name ?? eraId,
+      domain: domains.find((d) => d.id === domainId)?.name ?? domainId,
+      group: groups.find((g) => g.id === groupId)?.name ?? groupId,
+      title: (entry.title ?? '').replace(/^File:/, ''),
+      author: entry.author ?? 'не указан',
+      license: entry.license ?? '',
+      page: entry.page ?? '#',
+    };
+  });
 ---
 <Base title="О данных" description="Источники, правила округления и определения характеристик в справочнике Арсенал.">
   <section class="section">
@@ -28,6 +45,13 @@ import { equipment } from '../data/equipment';
         <p>Для самолётов дальность это максимальная перегоночная дальность, для РСЗО максимальная дальность стрельбы, для зенитных комплексов максимальная дальность поражения. Для разных модификаций значения могут отличаться.</p>
         <h2>Объём справочника</h2>
         <p>Сейчас в справочнике {equipment.length} моделей. Это выборка наиболее известных образцов, а не полный каталог. Раздел будет расширяться.</p>
+        <h2>Фотографии на фоне</h2>
+        <p>Фоновые фотографии взяты с Wikimedia Commons и находятся в общественном достоянии или опубликованы под лицензией CC0. Они приглушены и затемнены для читаемости текста.</p>
+        <ul>
+          {photoRows.map((row) => (
+            <li>{row.era}, {row.domain}, {row.group}: <a href={row.page} rel="noopener" target="_blank">{row.title}</a>. Автор: {row.author}. Лицензия: {row.license}.</li>
+          ))}
+        </ul>
         <h2>Исправления</h2>
         <p>Если вы заметили неточность, укажите модель, значение и источник. Исправления вносятся после сверки.</p>
       </div>
