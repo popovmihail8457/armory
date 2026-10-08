@@ -6,6 +6,8 @@ import ArmamentMap from '../../components/ArmamentMap.astro';
 import DefenseDemo from '../../components/DefenseDemo.astro';
 import StorySection from '../../components/StorySection.astro';
 import TrajectoryDemo from '../../components/TrajectoryDemo.astro';
+import CoverageDiagram from '../../components/CoverageDiagram.astro';
+import { coverageFor } from '../../data/coverage';
 import { groupScene } from '../../data/trajectory';
 import { stories } from '../../data/stories';
 import { weaponsForPlatform, weaponUrl } from '../../lib/weapons';
@@ -39,6 +41,8 @@ const arms = armament[item.id];
 const story = stories[item.id];
 const usedWeapons = weaponsForPlatform(item.id);
 const trajScene = groupScene[item.group];
+const isAircraft = domain.id === 'aviation';
+const cov = isAircraft ? coverageFor(item.id) : undefined;
 const defense = defenseByItem[item.id];
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
 const tocItems = [
@@ -47,6 +51,7 @@ const tocItems = [
   arms && { id: 'armament', label: 'Вооружение' },
   trajScene && { id: 'trajectory', label: 'Траектория' },
   usedWeapons.length > 0 && { id: 'weapons-used', label: 'Применяемое оружие' },
+  isAircraft && { id: 'coverage', label: 'Углы обзора' },
   defense && { id: 'defense', label: 'Защита' },
   radar && { id: 'radar', label: 'Радар' },
   specRows.length > 0 && { id: 'compare', label: 'Аналоги' },
@@ -172,6 +177,18 @@ const tocItems = [
             <Scatter items={peers} metric={metric} highlight={item.id} />
           ))}
         </div>
+      </div>
+    </section>
+  )}
+
+  {cov && (
+    <section class="section" id="coverage">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Углы работы радара и систем обороны</h2>
+          <p class="lead">Схема сверху показывает, в каких секторах работают радар, станция предупреждения об облучении и датчики обнаружения пуска ракет.</p>
+        </div>
+        <CoverageDiagram data={cov} />
       </div>
     </section>
   )}

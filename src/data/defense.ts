@@ -133,4 +133,25 @@ export const defenseByItem: Record<string, DefenseItem[]> = {
     { name: 'Дымовые гранатомёты M250', kind: 'decoy', scene: 'aps', note: 'Установлены на всех версиях' },
     { name: 'Trophy', kind: 'aps', scene: 'aps', note: 'Устанавливается на M1A2 SEPv3, на базовом M1 отсутствует' },
   ],
+  'a-10': [
+    { name: 'AN/ALR-69', kind: 'rwr', scene: 'rwr', note: 'Станция предупреждения об облучении' },
+    { name: 'AN/ALQ-131', kind: 'jammer', scene: 'ew', note: 'Контейнер станции помех на подвеске' },
+    { name: 'AN/ALE-40 / ALE-47', kind: 'dispenser', scene: 'flare', note: 'Выброс тепловых и дипольных ловушек' },
+  ],
+  'ah-64': [
+    { name: 'AN/APR-39', kind: 'rwr', scene: 'rwr', note: 'Станция предупреждения об облучении' },
+    { name: 'AN/ALQ-144', kind: 'jammer', scene: 'flare', note: 'Инфракрасная станция помех' },
+    { name: 'AN/ALE-47', kind: 'dispenser', scene: 'flare', note: 'Выброс ловушек' },
+  ],
+  'uh-60': [
+    { name: 'AN/APR-39', kind: 'rwr', scene: 'rwr', note: 'Станция предупреждения об облучении' },
+    { name: 'AN/ALQ-144', kind: 'jammer', scene: 'flare', note: 'Инфракрасная станция помех' },
+    { name: 'M130', kind: 'dispenser', scene: 'flare', note: 'Выброс тепловых и дипольных ловушек' },
+  ],
+  'b-52': [
+    { name: 'AN/ALQ-172', kind: 'jammer', scene: 'ew', note: 'Станция радиоэлектронного противодействия' },
+  ],
+  'su-34': [
+    { name: '«Хибины»', kind: 'jammer', scene: 'ew', note: 'Контейнер станции радиоэлектронной борьбы на законцовках крыла' },
+  ],
 };

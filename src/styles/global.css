@@ -407,3 +407,19 @@ html { scroll-padding-top: 116px; }
 .mod-diff { display: grid; gap: 6px; padding-top: 14px; border-top: 1px solid var(--line); }
 .mod-diff p { color: var(--text-2); line-height: 1.7; }
 .mod-panel[hidden] { display: none; }
+
+/* Углы обзора */
+.cov { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 32px; align-items: center; }
+.cov svg { width: 100%; height: auto; max-height: 520px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.cov-grid { fill: none; stroke: var(--line); stroke-width: 1; }
+.cov-tick { fill: var(--text-3); font-family: var(--mono); font-size: 12px; }
+.cov-legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.cov-legend li { display: grid; grid-template-columns: 14px 1fr; gap: 12px; padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.cov-chip { width: 14px; height: 14px; border-radius: 3px; background: var(--c); margin-top: 4px; }
+.cov-angle { margin-left: 10px; color: var(--c); }
+.cov-legend p { color: var(--text-2); font-size: 0.92rem; }
+.cov-foot { display: block !important; color: var(--text-3); font-size: 0.85rem; background: transparent !important; border-style: dashed !important; }
+.js [data-reveal] .cov-layer { opacity: 0; transform-origin: 240px 235px; transform: scale(0.8); transition: opacity 0.8s ease var(--d, 0s), transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0s); }
+.js [data-reveal].in .cov-layer { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) { .js [data-reveal] .cov-layer { opacity: 1; transform: none; } }
+@media (max-width: 800px) { .cov { grid-template-columns: 1fr; } }

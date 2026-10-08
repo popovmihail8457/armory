@@ -4,10 +4,15 @@ import RadarDemo from '../components/RadarDemo.astro';
 import { aircraftRadar } from '../data/radar';
 import { equipment } from '../data/equipment';
 import { itemUrl } from '../lib/data';
+import { coverage } from '../data/coverage';
 
 const rows = equipment
   .filter((item) => aircraftRadar[item.id])
   .map((item) => ({ item, radar: aircraftRadar[item.id] }));
+const sectors = equipment
+  .filter((item) => coverage[item.id]?.radar)
+  .map((item) => ({ item, radar: coverage[item.id].radar! }))
+  .sort((a, b) => b.radar.half - a.radar.half);
 ---
 <Base title="Радар: режимы работы" description="Анимации режимов работы бортового радиолокатора: обзор, сопровождение, захват, картографирование и АФАР.">
   <section class="section">
@@ -40,6 +45,25 @@ const rows = equipment
       <p class="notice" style="margin-top: 32px;">
         Названия радиолокаторов приведены по открытым источникам для основных серийных модификаций. Реальные режимы и параметры зависят от версии, поэтому здесь показан общий принцип.
       </p>
+    </div>
+  </section>
+  <section class="section">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Угол обзора радаров</h2>
+        <p class="lead">Ширина сектора обзора по азимуту. Самолёты ДРЛО с вращающимся обтекателем смотрят по кругу, а у истребителей сектор ограничен поворотом антенны или электронным сканированием.</p>
+      </div>
+      <div class="chart-card">
+        <div class="bars" data-reveal>
+          {sectors.map(({ item, radar }) => (
+            <a class="bar-row" href={itemUrl(item)} style="--c:var(--era-modern)">
+              <span class="bar-label">{item.name}<small>{radar.name}</small></span>
+              <span class="bar-track"><span class="bar-fill" style={`--w:${(Math.min(radar.half * 2, 360) / 360) * 100}%`} /></span>
+              <span class="bar-val">{radar.half >= 180 ? '360' : radar.half * 2}<small>°</small></span>
+            </a>
+          ))}
+        </div>
+      </div>
     </div>
   </section>
 </Base>
