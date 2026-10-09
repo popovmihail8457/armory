@@ -600,11 +600,11 @@ a.card:active { transform: translateY(-1px) scale(0.985); }
 }
 
 /* Схема корабля с выбором систем */
-.ship { display: grid; gap: var(--gap); --k-radar: #3987e5; --k-missile: #d95926; --k-gun: #c98500; --k-ciws: #d7d6cd; --k-torpedo: #199e70; --k-aviation: #8fb8d8; --k-sonar: #7f8f84; }
+.ship { display: grid; gap: var(--gap); --k-radar: #3987e5; --k-missile: #d95926; --k-gun: #c98500; --k-ciws: #d7d6cd; --k-torpedo: #199e70; --k-aviation: #8fb8d8; --k-sonar: #7f8f84; --k-special: #b9a27a; }
 .ship-filters { display: flex; flex-wrap: wrap; gap: 8px; }
 .ship-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--k); display: inline-block; }
 .k-radar { --k: var(--k-radar); } .k-missile { --k: var(--k-missile); } .k-gun { --k: var(--k-gun); } .k-ciws { --k: var(--k-ciws); }
-.k-torpedo { --k: var(--k-torpedo); } .k-aviation { --k: var(--k-aviation); } .k-sonar { --k: var(--k-sonar); }
+.k-torpedo { --k: var(--k-torpedo); } .k-aviation { --k: var(--k-aviation); } .k-sonar { --k: var(--k-sonar); } .k-special { --k: var(--k-special); }
 .ship-stage { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; overflow-x: auto; }
 .ship-svg { display: block; width: 100%; min-width: 640px; height: auto; }
 .ship-water { stroke: rgba(57, 135, 229, 0.6); stroke-width: 1.5; stroke-dasharray: 8 6; }
@@ -711,3 +711,45 @@ a.card:active { transform: translateY(-1px) scale(0.985); }
 .hangar-readout dd { margin: 0; font-size: 1.4rem; color: var(--text); }
 .hangar-list { color: var(--text-2); }
 @media (max-width: 640px) { .hangar-readout { grid-template-columns: repeat(2, minmax(0, 1fr)); } .hangar-readout div:nth-child(2) { border-right: 0; } .hangar-readout div:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
+
+/* Версии техники */
+.variants { display: grid; gap: var(--gap); }
+.variant-year { font-size: 0.74rem; color: var(--text-3); margin-left: 8px; }
+.variant-panel { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: var(--gap); align-items: start; }
+.variant-panel[hidden] { display: none; }
+.variant-main { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--c, var(--era-modern)); border-radius: var(--radius); padding: 22px; display: grid; gap: 14px; }
+.variant-main header { display: grid; gap: 4px; }
+.variant-text { color: var(--text-2); line-height: 1.7; }
+.variant-radar { display: grid; gap: 4px; padding-top: 12px; border-top: 1px solid var(--line); color: var(--text); }
+.variant-specs { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.variant-specs div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); align-items: baseline; }
+.variant-specs div:last-child { border-bottom: 0; }
+.variant-specs dt { color: var(--text-3); font-family: var(--mono); font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.variant-specs dd { margin: 0; font-size: 1.15rem; color: var(--text); text-align: right; }
+.variant-specs small { color: var(--text-3); font-size: 0.78rem; }
+.variant-specs em { font-style: normal; font-size: 0.8rem; margin-left: 8px; padding: 2px 6px; border-radius: 4px; background: var(--surface-2); }
+.variant-specs em.up { color: #6fcfa9; } .variant-specs em.down { color: #e79a78; }
+.variant-arms { grid-column: 1 / -1; display: grid; gap: 10px; }
+.chip-new { border-color: var(--era-post); color: var(--text); }
+.chip-mark { font-family: var(--mono); font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; color: #6fcfa9; }
+.variant-removed { color: var(--text-3); font-size: 0.9rem; }
+@media (max-width: 800px) { .variant-panel { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) { .variant-panel:not([hidden]) { animation: ship-panel-in 0.3s ease both; } }
+
+/* Состав брони по машине */
+.armor-own-note { display: grid; gap: 4px; padding: 10px 14px; border-left: 3px solid var(--era-modern); background: var(--surface); border-radius: 0 var(--radius) var(--radius) 0; color: var(--text); }
+.armor-has-own { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--era-modern); margin-left: 8px; vertical-align: middle; }
+.armor-layer-own { display: grid; gap: 4px; padding: 10px 14px; border: 1px solid var(--line-strong); border-radius: var(--radius); background: var(--surface-2); color: var(--text); }
+.armor-layer-own[hidden] { display: none; }
+
+/* Опрос */
+.survey { display: grid; gap: var(--gap); }
+.survey-bar { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+.survey-search { display: grid; gap: 6px; flex: 1 1 240px; }
+.survey input[type='search'], .survey-table input, .survey-out { font: inherit; color: var(--text); background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 8px 10px; min-height: 40px; width: 100%; }
+.survey-count { color: var(--text-2); padding-bottom: 10px; }
+.survey-table thead span { display: block; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); padding: 12px 14px; }
+.survey-table tbody th small { display: block; font-weight: 400; color: var(--text-3); font-size: 0.78rem; }
+.survey-table td { min-width: 150px; }
+.survey-status { color: var(--text-2); min-height: 1.5em; }
+.survey-out[hidden] { display: none; }

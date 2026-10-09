@@ -64,10 +64,23 @@ gunPlatforms.forEach((id) => { if (!equipmentIds.has(id)) errors.push(`shells: �
 ids(shellsText, /weaponId: '([a-z0-9-]+)'/g).forEach((id) => { if (!weaponIds.has(id)) errors.push(`shells: weaponId ${id} не найден`); });
 ids(read('src/data/ships.ts'), /weaponId: '([a-z0-9-]+)'/g).forEach((id) => { if (!weaponIds.has(id)) errors.push(`ships: weaponId ${id} не найден`); });
 
+const variantsText = read('src/data/variants.ts');
+keysOf(variantsText).forEach((id) => { if (!equipmentIds.has(id)) errors.push(`variants: ключ ${id} не найден в технике`); });
+[...variantsText.matchAll(/(?:add|remove): \[([^\]]*)\]/g)].flatMap((m) => ids(m[1], /'([a-z0-9-]+)'/g)).forEach((id) => { if (!weaponIds.has(id)) errors.push(`variants: образец ${id} не найден в вооружении`); });
+const detailText = read('src/data/armor-details.ts');
+keysOf(detailText).forEach((id) => { if (!armorIds.has(id)) errors.push(`armor-details: у ${id} нет модели брони`); });
+
 // Покрытие
 const armed = new Set(platformRefs);
 const sensorIds = new Set(keysOf(read('src/data/sensors.ts')));
-const shipIds = new Set(keysOf(read('src/data/ships.ts')));
+const shipsText = read('src/data/ships.ts');
+const schemeKeys = (text) => [...text.matchAll(/^\s{2}'([a-z0-9-]+)': \{\n\s+shapes:/gm)].map((m) => m[1]);
+const fleetText = read('src/data/ships-fleet.ts');
+const shipIds = new Set([...schemeKeys(shipsText), ...schemeKeys(fleetText)]);
+schemeKeys(fleetText).forEach((id) => { if (!equipmentIds.has(id)) errors.push(`ships-fleet: ключ ${id} не найден в технике`); });
+ids(fleetText, /weaponId: '([a-z0-9-]+)'/g).forEach((id) => { if (!weaponIds.has(id)) errors.push(`ships-fleet: weaponId ${id} не найден`); });
+for (const text of [shipsText, fleetText]) for (const block of text.split(/\n\s{2}'[a-z0-9-]+': \{\n\s+shapes:/).slice(1)) { const seen = new Set(); for (const mod of block.matchAll(/\bm\('([a-z0-9-]+)'|P\.([a-zA-Z0-9]+)\((?:'([a-z0-9-]+)')?/g)) { const key = mod[1] ?? mod[3] ?? mod[2]; if (['helo', 'sonar'].includes(key)) continue; if (seen.has(key)) info.push(`схема корабля: возможный повтор модуля ${key}`); seen.add(key); } }
+const launchKeys = new Set(ids(shipsText.slice(shipsText.indexOf('export const launchScenes')), /'([a-z0-9-]+)': \[/g));
 const hangarIds = new Set(keysOf(read('src/data/hangars.ts')));
 const photoIds = existsSync(join(root, 'public/bg/items/manifest.json')) ? new Set(Object.entries(JSON.parse(read('public/bg/items/manifest.json'))).filter(([, v]) => v.file).map(([k]) => k)) : new Set();
 const weaponPhotoIds = existsSync(join(root, 'public/bg/weapons/manifest.json')) ? new Set(Object.entries(JSON.parse(read('public/bg/weapons/manifest.json'))).filter(([, v]) => v.file).map(([k]) => k)) : new Set();
@@ -77,6 +90,7 @@ missing('Бронетехника без модели брони', inGroup('tank
 missing('Танки, БМП и артиллерия без снарядов', inGroup('tanks', 'ifv', 'artillery').filter((id) => !gunPlatforms.has(id)));
 missing('ЗРК и РЛС без схемы радаров', inGroup('airdef', 'sensors').filter((id) => !sensorIds.has(id)));
 missing('Корабли без схемы систем', inGroup('carriers', 'surface', 'frigates', 'amphibious').filter((id) => !shipIds.has(id)));
+missing('Корабли и подлодки без схемы пуска ракет', inGroup('carriers', 'surface', 'frigates', 'amphibious', 'submarines').filter((id) => !launchKeys.has(id)));
 missing('Авианосцы без ангара', inGroup('carriers').filter((id) => !hangarIds.has(id)));
 missing('Техника без привязанного вооружения', equipment.map((item) => item.id).filter((id) => !armed.has(id) && !gunPlatforms.has(id)));
 missing('Техника без своего фото', equipment.map((item) => item.id).filter((id) => !photoIds.has(id)));

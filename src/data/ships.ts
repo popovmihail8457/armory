@@ -5,7 +5,7 @@ import { sensor, type Sensor } from './sensors';
  * Силуэт собран из простых фигур и показывает расположение систем, а не точные обводы.
  * Характеристики приведены по открытым источникам для основных серийных вариантов.
  */
-export type ModuleKind = 'radar' | 'missile' | 'gun' | 'ciws' | 'torpedo' | 'aviation' | 'sonar';
+export type ModuleKind = 'radar' | 'missile' | 'gun' | 'ciws' | 'torpedo' | 'aviation' | 'sonar' | 'special';
 export type LaunchScene = 'vls-hot' | 'vls-cold' | 'cruise' | 'canister' | 'rail' | 'sub';
 
 export type Shape =
@@ -40,28 +40,29 @@ export const moduleKindName: Record<ModuleKind, string> = {
   torpedo: 'Противолодочное вооружение',
   aviation: 'Авиация',
   sonar: 'Гидроакустика',
+  special: 'Особенности конструкции',
 };
 
-const DECK = 200;
-const hull = (): Shape => ({ t: 'poly', p: `18,${DECK - 6} 96,248 936,248 974,${DECK} 60,${DECK}` });
-const block = (x0: number, x1: number, h: number, base = DECK): Shape => ({ t: 'rect', x: x0, y: base - h, w: x1 - x0, h });
-const mast = (x: number, h: number, base = DECK): Shape[] => [
+export const DECK = 200;
+export const hull = (): Shape => ({ t: 'poly', p: `18,${DECK - 6} 96,248 936,248 974,${DECK} 60,${DECK}` });
+export const block = (x0: number, x1: number, h: number, base = DECK): Shape => ({ t: 'rect', x: x0, y: base - h, w: x1 - x0, h });
+export const mast = (x: number, h: number, base = DECK): Shape[] => [
   { t: 'line', x1: x, y1: base, x2: x, y2: base - h },
   { t: 'line', x1: x - 14, y1: base - h + 16, x2: x + 14, y2: base - h + 16 },
 ];
-const tower = (x0: number, x1: number, h: number, base = DECK): Shape => ({ t: 'poly', p: `${x0},${base} ${x0 + 14},${base - h} ${x1 - 14},${base - h} ${x1},${base}` });
-const funnel = (x0: number, x1: number, h: number): Shape => ({ t: 'poly', p: `${x0},${DECK} ${x0 + 10},${DECK - h} ${x1 + 10},${DECK - h} ${x1},${DECK}` });
-const gun = (x: number, aft = false, base = DECK): Shape[] => [
+export const tower = (x0: number, x1: number, h: number, base = DECK): Shape => ({ t: 'poly', p: `${x0},${base} ${x0 + 14},${base - h} ${x1 - 14},${base - h} ${x1},${base}` });
+export const funnel = (x0: number, x1: number, h: number): Shape => ({ t: 'poly', p: `${x0},${DECK} ${x0 + 10},${DECK - h} ${x1 + 10},${DECK - h} ${x1},${DECK}` });
+export const gun = (x: number, aft = false, base = DECK): Shape[] => [
   { t: 'rect', x: x - 15, y: base - 15, w: 30, h: 15 },
   { t: 'line', x1: aft ? x + 15 : x - 15, y1: base - 10, x2: aft ? x + 52 : x - 52, y2: base - 15 },
 ];
-const hatch = (x0: number, x1: number, base = DECK): Shape => ({ t: 'rect', x: x0, y: base - 5, w: x1 - x0, h: 5 });
-const CARRIER_DECK = 172;
-const carrierHull = (ramp = false): Shape => ({ t: 'poly', p: ramp
+export const hatch = (x0: number, x1: number, base = DECK): Shape => ({ t: 'rect', x: x0, y: base - 5, w: x1 - x0, h: 5 });
+export const CARRIER_DECK = 172;
+export const carrierHull = (ramp = false): Shape => ({ t: 'poly', p: ramp
   ? `6,${CARRIER_DECK - 26} 150,${CARRIER_DECK} 990,${CARRIER_DECK} 990,${CARRIER_DECK + 10} 955,${CARRIER_DECK + 16} 925,248 115,248 70,${CARRIER_DECK + 14} 6,${CARRIER_DECK - 14}`
   : `8,${CARRIER_DECK} 992,${CARRIER_DECK} 992,${CARRIER_DECK + 10} 955,${CARRIER_DECK + 16} 925,248 115,248 78,${CARRIER_DECK + 16} 8,${CARRIER_DECK + 10}` });
 
-const m = (id: string, kind: ModuleKind, name: string, x: number, y: number, text: string, specs: [string, string][], extra: Partial<ShipModule> = {}): ShipModule =>
+export const m = (id: string, kind: ModuleKind, name: string, x: number, y: number, text: string, specs: [string, string][], extra: Partial<ShipModule> = {}): ShipModule =>
   ({ id, kind, name, x, y, text, specs, ...extra });
 
 export const shipSchemes: Record<string, ShipScheme> = {
@@ -209,6 +210,29 @@ export const launchScenes: Record<string, LaunchScene[]> = {
   'visby': ['canister'],
   'wasp': ['rail'],
   'america': ['rail'],
+  'forrestal': ['rail'],
+  'kitty-hawk': ['rail'],
+  'enterprise': ['rail'],
+  'invincible': ['rail'],
+  'kiev': ['canister', 'rail'],
+  'iwo-jima': ['rail'],
+  'tarawa': ['rail'],
+  'forrest-sherman': ['rail'],
+  'charles-f-adams': ['rail'],
+  'long-beach': ['rail', 'cruise'],
+  'ticonderoga': ['vls-hot', 'cruise', 'canister'],
+  'slava': ['canister', 'vls-cold'],
+  'sovremenny': ['canister', 'rail'],
+  'udaloy': ['vls-cold', 'canister'],
+  'type-052d': ['vls-cold', 'cruise'],
+  'zumwalt': ['vls-hot', 'cruise'],
+  'krivak': ['canister', 'rail'],
+  'komar': ['canister'],
+  'osa-boat': ['canister'],
+  'los-angeles': ['sub', 'cruise'],
+  'akula': ['sub'],
+  'astute': ['sub', 'cruise'],
+  'yasen': ['sub', 'cruise'],
   'ohio': ['sub'],
   'virginia': ['sub', 'cruise'],
   'typhoon': ['sub'],

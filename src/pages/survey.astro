@@ -1,0 +1,150 @@
+---
+import Base from '../layouts/Base.astro';
+import { equipment } from '../data/equipment';
+import { coverage } from '../data/coverage';
+import { variants } from '../data/variants';
+import { groupById } from '../lib/data';
+
+const aircraft = equipment
+  .filter((item) => groupById(item.group).domain === 'aviation')
+  .map((item) => {
+    const known = coverage[item.id];
+    const missing = [
+      !known?.radar && known?.status !== 'none' && 'radar',
+      !known?.rwr && known?.status !== 'none' && 'rwr',
+      !known?.maws && known?.status !== 'none' && 'maws',
+    ].filter(Boolean) as string[];
+    const names = variants[item.id]?.map((variant) => variant.name) ?? [];
+    return { id: item.id, name: item.name, year: item.year, group: groupById(item.group).name, missing, names };
+  })
+  .filter((row) => row.missing.length > 0)
+  .sort((a, b) => a.year - b.year);
+const fields = [
+  { key: 'radar', label: 'Радар', hint: 'например 60 x 60' },
+  { key: 'rwr', label: 'СПО', hint: 'например 360' },
+  { key: 'maws', label: 'Датчики пуска ракет', hint: 'например 360 или нет' },
+];
+---
+<Base title="Опрос: углы обзора самолётов" era="post" noPhoto description="Опрос по углам обзора радаров, станций предупреждения об облучении и датчиков пуска ракет для самолётов и вертолётов справочника.">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Навигация">
+      <a href="/">Главная</a><span>/</span>
+      <a href="/sources/">О данных</a><span>/</span>
+      <span>Опрос</span>
+    </nav>
+  </div>
+
+  <section class="section" style="--c:var(--era-post)">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="stripe"></span>
+        <span class="eyebrow">Машин без данных: {aircraft.length}</span>
+        <h1>Опрос: углы обзора самолётов</h1>
+        <p class="lead">Для этих самолётов и вертолётов в справочнике нет уверенных данных об углах работы бортовых систем. Заполните то, что знаете: углы в градусах в каждую сторону от оси, по азимуту и углу места. Пустые поля останутся без изменений.</p>
+      </div>
+      <p class="notice">
+        Ответы сохраняются только в этом браузере. Нажмите «Скопировать ответы» и вставьте текст в чат: данные будут внесены в справочник с пометкой источника.
+      </p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="wrap">
+      <form class="survey" data-survey>
+        <div class="survey-bar">
+          <label class="survey-search"><span class="eyebrow">Поиск</span><input type="search" placeholder="Название самолёта" /></label>
+          <span class="survey-count num" aria-live="polite">Заполнено: 0</span>
+          <button type="button" class="ball-btn" data-action="copy">Скопировать ответы</button>
+          <button type="button" class="ball-btn" data-action="clear">Очистить</button>
+        </div>
+        <div class="heat-wrap">
+          <table class="heat survey-table">
+            <thead>
+              <tr>
+                <th scope="col"><span>Самолёт</span></th>
+                {fields.map((field) => <th scope="col"><span>{field.label}, ± градусов</span></th>)}
+                <th scope="col"><span>Версия или источник</span></th>
+              </tr>
+            </thead>
+            <tbody>
+              {aircraft.map((row) => (
+                <tr data-id={row.id} data-name={row.name}>
+                  <th scope="row">{row.name}<small>{row.year} · {row.group}</small></th>
+                  {fields.map((field) => (
+                    <td>
+                      {row.missing.includes(field.key)
+                        ? <input type="text" inputmode="numeric" data-field={field.key} placeholder={field.hint} aria-label={`${row.name}: ${field.label}`} />
+                        : <span class="heat-none">уже есть</span>}
+                    </td>
+                  ))}
+                  <td><input type="text" data-field="note" placeholder={row.names.length ? row.names.slice(0, 2).join(', ') : 'версия, источник'} aria-label={`${row.name}: версия или источник`} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <output class="survey-status" aria-live="polite"></output>
+        <textarea class="survey-out" rows="6" readonly aria-label="Текст ответов для копирования" hidden></textarea>
+      </form>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const KEY = 'armory-coverage-survey';
+  document.querySelectorAll<HTMLFormElement>('[data-survey]').forEach((form) => {
+    const rows = [...form.querySelectorAll<HTMLTableRowElement>('tbody tr')];
+    const status = form.querySelector<HTMLOutputElement>('.survey-status')!;
+    const out = form.querySelector<HTMLTextAreaElement>('.survey-out')!;
+    const count = form.querySelector<HTMLElement>('.survey-count')!;
+    const search = form.querySelector<HTMLInputElement>('input[type="search"]')!;
+    let saved: Record<string, Record<string, string>> = {};
+    try { saved = JSON.parse(localStorage.getItem(KEY) ?? '{}'); } catch { saved = {}; }
+
+    const collect = () => {
+      const answers: Record<string, Record<string, string>> = {};
+      rows.forEach((row) => {
+        const entry: Record<string, string> = {};
+        row.querySelectorAll<HTMLInputElement>('input[data-field]').forEach((input) => { if (input.value.trim()) entry[input.dataset.field!] = input.value.trim(); });
+        if (Object.keys(entry).length) answers[row.dataset.id!] = entry;
+      });
+      return answers;
+    };
+    const persist = () => {
+      const answers = collect();
+      count.textContent = `Заполнено: ${Object.keys(answers).length}`;
+      try { localStorage.setItem(KEY, JSON.stringify(answers)); } catch { /* хранилище недоступно: ответы останутся только на странице */ }
+    };
+    const asText = () => {
+      const labels: Record<string, string> = { radar: 'радар', rwr: 'СПО', maws: 'датчики пуска', note: 'примечание' };
+      return rows
+        .filter((row) => collect()[row.dataset.id!])
+        .map((row) => `${row.dataset.name} (${row.dataset.id}): ` + Object.entries(collect()[row.dataset.id!]).map(([key, value]) => `${labels[key]} ${value}`).join('; '))
+        .join('\n');
+    };
+
+    rows.forEach((row) => row.querySelectorAll<HTMLInputElement>('input[data-field]').forEach((input) => {
+      input.value = saved[row.dataset.id!]?.[input.dataset.field!] ?? '';
+      input.addEventListener('input', persist);
+    }));
+    persist();
+    search.addEventListener('input', () => {
+      const needle = search.value.trim().toLowerCase();
+      rows.forEach((row) => { row.hidden = Boolean(needle) && !row.dataset.name!.toLowerCase().includes(needle); });
+    });
+    form.querySelector('[data-action="copy"]')!.addEventListener('click', async () => {
+      const text = asText();
+      if (!text) { status.textContent = 'Пока нет ни одного ответа.'; return; }
+      out.hidden = false;
+      out.value = text;
+      try { await navigator.clipboard.writeText(text); status.textContent = 'Ответы скопированы. Вставьте их в чат.'; }
+      catch { out.select(); status.textContent = 'Не удалось скопировать автоматически. Текст ниже выделен: скопируйте его вручную.'; }
+    });
+    form.querySelector('[data-action="clear"]')!.addEventListener('click', () => {
+      rows.forEach((row) => row.querySelectorAll<HTMLInputElement>('input[data-field]').forEach((input) => { input.value = ''; }));
+      out.hidden = true;
+      status.textContent = 'Ответы очищены.';
+      persist();
+    });
+  });
+</script>

@@ -1,0 +1,108 @@
+---
+import type { Equipment } from '../data/equipment';
+import type { Variant } from '../data/variants';
+import type { WeaponData } from '../data/weapons/types';
+import { metrics, type MetricId } from '../data/taxonomy';
+import { weapons } from '../data/weapons/data';
+import { formatNumber } from '../lib/data';
+import { weaponUrl } from '../lib/weapons';
+
+interface Props {
+  item: Equipment;
+  list: Variant[];
+  /** Метрики группы техники в порядке показа. */
+  metricIds: MetricId[];
+  /** Вооружение базовой записи. */
+  baseWeapons: WeaponData[];
+}
+
+const { item, list, metricIds, baseWeapons } = Astro.props;
+const byId = (id: string) => weapons.find((weapon) => weapon.id === id);
+const baseIds = baseWeapons.map((weapon) => weapon.id);
+const baseSpec = (metric: MetricId) => list[0].specs?.[metric] ?? item.specs[metric];
+const rows = list.map((variant) => {
+  const ids = [...new Set([...baseIds.filter((id) => !variant.remove?.includes(id)), ...(variant.add ?? [])])];
+  return {
+    variant,
+    specs: metricIds
+      .map((metric) => ({ metric, value: variant.specs?.[metric] ?? item.specs[metric], base: baseSpec(metric) }))
+      .filter((row): row is { metric: MetricId; value: number; base: number | undefined } => row.value !== undefined),
+    arms: ids.map(byId).filter((weapon): weapon is WeaponData => Boolean(weapon)).sort((a, b) => a.year - b.year),
+    added: new Set((variant.add ?? []).filter((id) => !baseIds.includes(id))),
+    removed: (variant.remove ?? []).filter((id) => baseIds.includes(id)).map(byId).filter((weapon): weapon is WeaponData => Boolean(weapon)),
+  };
+});
+const delta = (value: number, base?: number) => {
+  if (base === undefined || value === base) return '';
+  const diff = value - base;
+  return `${diff > 0 ? '+' : '-'}${formatNumber(Math.abs(Math.round(diff * 10) / 10))}`;
+};
+---
+<div class="variants" data-variants>
+  <div class="radar-tabs" role="tablist" aria-label="Версии">
+    {list.map((variant, i) => (
+      <button type="button" role="tab" class="radar-tab" id={`variant-tab-${i}`} aria-controls={`variant-panel-${i}`} aria-selected={i === 0} tabindex={i === 0 ? 0 : -1}>
+        <span>{variant.name}</span><span class="num variant-year">{variant.year}</span>
+      </button>
+    ))}
+  </div>
+  {rows.map(({ variant, specs, arms, added, removed }, i) => (
+    <article class="variant-panel" role="tabpanel" id={`variant-panel-${i}`} aria-labelledby={`variant-tab-${i}`} hidden={i !== 0}>
+      <div class="variant-main">
+        <header>
+          <span class="eyebrow num">{variant.year}</span>
+          <h3>{variant.name}</h3>
+        </header>
+        <p class="variant-text">{variant.text}</p>
+        {variant.changes && (
+          <ul class="feature-list">
+            {variant.changes.map((change) => <li>{change}</li>)}
+          </ul>
+        )}
+        {variant.radar && (
+          <p class="variant-radar"><span class="eyebrow">Радиолокатор</span>{variant.radar}</p>
+        )}
+      </div>
+      <dl class="variant-specs">
+        {specs.map(({ metric, value, base }) => (
+          <div>
+            <dt>{metrics[metric].label}</dt>
+            <dd class="num">≈{formatNumber(value)} <small>{metrics[metric].unit}</small>{i > 0 && delta(value, base) && <em class={value > (base ?? value) ? 'up' : 'down'}>{delta(value, base)}</em>}</dd>
+          </div>
+        ))}
+      </dl>
+      <div class="variant-arms">
+        <span class="eyebrow">Вооружение этой версии: {arms.length}</span>
+        <div class="chips">
+          {arms.map((weapon) => (
+            <a class:list={['chip', { 'chip-new': added.has(weapon.id) }]} href={weaponUrl(weapon)}>
+              {weapon.name}{added.has(weapon.id) && <span class="chip-mark">новое</span>}
+            </a>
+          ))}
+        </div>
+        {removed.length > 0 && (
+          <p class="variant-removed">Не применяется на этой версии: {removed.map((weapon) => weapon.name).join(', ')}.</p>
+        )}
+      </div>
+    </article>
+  ))}
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-variants]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = [...root.querySelectorAll<HTMLElement>('.variant-panel')];
+    const select = (index: number, focus = false) => {
+      tabs.forEach((tab, i) => { tab.setAttribute('aria-selected', String(i === index)); tab.tabIndex = i === index ? 0 : -1; });
+      panels.forEach((panel, i) => { panel.hidden = i !== index; });
+      if (focus) tabs[index].focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowRight') { event.preventDefault(); select((i + 1) % tabs.length, true); }
+        if (event.key === 'ArrowLeft') { event.preventDefault(); select((i - 1 + tabs.length) % tabs.length, true); }
+      });
+    });
+  });
+</script>

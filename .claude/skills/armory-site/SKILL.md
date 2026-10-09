@@ -28,6 +28,12 @@ description: Работа с сайтом «Арсенал» (справочни
 - `scripts/fetch-photos.mjs` и `scripts/photo-queries.json` - загрузка фото с Commons (наборы `items`, `weapons`, `pages`); после загрузки каждое фото просмотреть глазами.
 - `src/data/hangars.ts` и `HangarDemo` - ангары авианесущих кораблей, подробности в скилле `armory-hangar`.
 - `src/data/armor.ts` и `ArmorDemo` - качественная модель брони: типы слоёв, угрозы, схемы бронирования и привязка к технике `armorOf`. Пока тестовый набор машин.
+- `src/data/variants.ts` и `VariantSwitch` - версии техники (первая версия совпадает с записью в `equipment.ts`; `specs` только отличия, `add` и `remove` это id вооружения относительно базового списка, `radar` одной строкой).
+- `src/data/ships-fleet.ts` - схемы остальных кораблей и заготовки систем `P`; порядок работы в скилле `armory-ships`.
+- `src/data/armor-details.ts` - состав слоёв брони по машинам; порядок работы в скилле `armory-armor`.
+- `src/data/weapons/catalog-extra.ts` - записи вооружения сокращённого формата (характеристики, носители, краткое описание).
+- `src/data/conflicts.ts` и `/vietnam/` - подборки по конфликтам. `/survey/` - опрос по углам обзора самолётов без данных в `coverage.ts`.
+- `scripts/check-data.mjs` - проверка связности и покрытия; запускать после каждой партии данных.
 - `public/bg/items/` - фото отдельных моделей и их `manifest.json`; на странице модели показывается только её фото (`bgForItem`).
 - `src/lib/data.ts`, `src/lib/bg.ts` - выборки, ранги, выбор фото-фона из `public/bg/manifest.json`.
 - `src/components/` - `BarChart`, `Scatter`, `Timeline`, `ArmamentMap`, `RadarDemo`, `DefenseDemo`, `TrajectoryDemo`, `StorySection`.

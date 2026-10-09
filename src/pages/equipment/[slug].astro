@@ -16,7 +16,11 @@ import ArmorDemo from '../../components/ArmorDemo.astro';
 import HangarDemo from '../../components/HangarDemo.astro';
 import { armorOf, armorSchemes } from '../../data/armor';
 import { hangars } from '../../data/hangars';
+import { armorDetails } from '../../data/armor-details';
+import VariantSwitch from '../../components/VariantSwitch.astro';
+import { variants } from '../../data/variants';
 import { shipSchemes, launchScenes } from '../../data/ships';
+import { fleetSchemes } from '../../data/ships-fleet';
 import { samSensors, type Sensor } from '../../data/sensors';
 import { gunsOfPlatform, shellsOfGun, shellTypeById } from '../../data/shells';
 import { operations } from '../../data/operations';
@@ -63,15 +67,17 @@ const isAircraft = domain.id === 'aviation';
 const cov = isAircraft ? coverageFor(item.id) : undefined;
 const defense = defenseByItem[item.id];
 const itemGuns = gunsOfPlatform(item.id);
-const ship = shipSchemes[item.id];
+const ship = shipSchemes[item.id] ?? fleetSchemes[item.id];
 const shipSensors = ship ? ship.modules.map((module) => module.sensor).filter((sensor): sensor is Sensor => Boolean(sensor)) : [];
 const sensors = shipSensors.length > 0 ? shipSensors : samSensors[item.id] ?? [];
 const launches = launchScenes[item.id] ?? [];
 const armor = armorSchemes.find((scheme) => scheme.id === armorOf[item.id]);
 const hangar = hangars[item.id];
+const variantList = variants[item.id] ?? [];
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
 const placeWord = { aviation: 'Ангар', fleet: 'Док', ground: 'Бокс' }[domain.id];
 const tocItems = [
+  variantList.length > 0 && { id: 'variants', label: 'Версии' },
   story && { id: 'story', label: 'История' },
   ops.length > 0 && { id: 'operations', label: 'Операции' },
   { id: 'specs', label: 'Характеристики' },
@@ -123,6 +129,18 @@ const tocItems = [
     </div>
   </nav>
 
+  {variantList.length > 0 && (
+    <section class="section" id="variants" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>{variantList.length > 1 ? 'Версии' : 'Основная версия'}</h2>
+          <p class="lead">{variantList.length > 1 ? 'Выберите версию: изменятся описание, характеристики, радиолокатор и состав вооружения. Числа рядом со значением показывают разницу с первой версией.' : 'Радиолокатор и состав вооружения серийной версии.'}</p>
+        </div>
+        <VariantSwitch item={item} list={variantList} metricIds={group.metrics} baseWeapons={usedWeapons} />
+      </div>
+    </section>
+  )}
+
   {story && (
     <section class="section" id="story">
       <div class="wrap">
@@ -172,7 +190,7 @@ const tocItems = [
           <h2>Броня: из чего состоит и как работает</h2>
           <p class="lead">Выберите боеприпас, чтобы увидеть, какой слой что делает. Нажмите на слой на схеме или в списке, чтобы прочитать о нём.</p>
         </div>
-        <ArmorDemo scheme={armor} />
+        <ArmorDemo scheme={armor} detail={armorDetails[item.id]} name={item.name} />
       </div>
     </section>
   )}

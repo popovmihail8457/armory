@@ -1,18 +1,24 @@
 ---
 import { layerTypes, threats, STOP_BELOW, EDGE_BELOW, type ArmorScheme } from '../data/armor';
+import type { ArmorDetail } from '../data/armor-details';
 
 interface Props {
   scheme: ArmorScheme;
+  /** Что известно о составе слоёв этой машины. */
+  detail?: ArmorDetail;
+  /** Название машины для подписи. */
+  name?: string;
 }
 
-const { scheme } = Astro.props;
-const layers = scheme.layers.map((kind) => layerTypes.find((layer) => layer.kind === kind)!);
+const { scheme, detail, name } = Astro.props;
+const layers = scheme.layers.map((kind) => ({ ...layerTypes.find((layer) => layer.kind === kind)!, own: detail?.layers?.[kind] ?? '' }));
 const config = { layers, threats, stop: STOP_BELOW, edge: EDGE_BELOW };
 ---
 <section class="radar armor" data-armor data-config={JSON.stringify(config)}>
   <div class="armor-head">
     <h3>{scheme.name}</h3>
     <p>{scheme.text}</p>
+    {detail?.note && <p class="armor-own-note"><span class="eyebrow">{name ?? 'Эта машина'}</span>{detail.note}</p>}
   </div>
   <div class="radar-tabs" role="tablist" aria-label="Тип боеприпаса">
     {threats.map((threat, i) => <button type="button" role="tab" class="radar-tab" data-threat={threat.id} aria-selected={i === 0} title={threat.name}>{threat.short}</button>)}
@@ -33,13 +39,14 @@ const config = { layers, threats, stop: STOP_BELOW, edge: EDGE_BELOW };
         {layers.map((layer, i) => (
           <li>
             <button type="button" class="armor-layer" data-layer={i} aria-pressed={i === 0}>
-              <span class="armor-layer-name">{layer.name}</span>
+              <span class="armor-layer-name">{layer.name}{layer.own && <i class="armor-has-own" title="Есть сведения о составе"></i>}</span>
               <span class="armor-layer-effect num"></span>
             </button>
           </li>
         ))}
       </ol>
       <p class="radar-text armor-layer-text"></p>
+      <p class="armor-layer-own" hidden><span class="eyebrow">Состав на этой машине</span><span class="armor-layer-own-text"></span></p>
     </div>
   </div>
   <p class="notice">
@@ -50,7 +57,7 @@ const config = { layers, threats, stop: STOP_BELOW, edge: EDGE_BELOW };
 
 <script>
   type ThreatId = 'apfsds' | 'heat' | 'tandem' | 'hesh' | 'autocannon' | 'frag';
-  interface Layer { kind: string; name: string; text: string; absorb: Record<ThreatId, number>; width: number }
+  interface Layer { kind: string; name: string; text: string; absorb: Record<ThreatId, number>; width: number; own: string }
   interface Threat { id: ThreatId; name: string; short: string; text: string; power: number }
 
   const DURATION = 4.2;
@@ -118,6 +125,9 @@ const config = { layers, threats, stop: STOP_BELOW, edge: EDGE_BELOW };
         button.querySelector('.armor-layer-effect')!.textContent = stopIndex >= 0 && i > stopIndex ? 'не задействован' : effectWord(layers[i].absorb[threat.id]);
       });
       set('.armor-layer-text', layers[selectedLayer].text);
+      const ownBox = root.querySelector<HTMLElement>('.armor-layer-own')!;
+      ownBox.hidden = !layers[selectedLayer].own;
+      set('.armor-layer-own-text', layers[selectedLayer].own);
     }
 
     function drawLayer(layer: Layer, x: number, w: number, active: boolean, triggered: boolean) {
