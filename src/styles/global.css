@@ -392,9 +392,7 @@ html { scroll-padding-top: 116px; }
   font: inherit; color: var(--text-2); background: transparent; border: 0; cursor: pointer;
   padding: 26px 22px 12px; min-height: 64px;
 }
-.mod-tab::before { content: ''; position: absolute; left: 0; right: 0; top: 11px; height: 2px; background: var(--line-strong); }
-.mod-dot { position: absolute; left: 22px; top: 5px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 3px solid var(--line-strong); z-index: 1; }
-.mod-tab.past::before, .mod-tab[aria-selected='true']::before { background: var(--c, var(--era-modern)); }
+.mod-dot { position: absolute; left: 22px; top: 5px; width: 14px; height: 14px; border-radius: 50%; background: var(--bg); border: 3px solid var(--line-strong); z-index: 1; transition: background 0.35s ease, border-color 0.35s ease; transition-delay: var(--d, 0s); }
 .mod-tab.past .mod-dot { border-color: var(--c, var(--era-modern)); }
 .mod-tab[aria-selected='true'] .mod-dot { background: var(--c, var(--era-modern)); border-color: var(--c, var(--era-modern)); }
 .mod-tab[aria-selected='true'] { color: var(--text); }
@@ -426,18 +424,19 @@ html { scroll-padding-top: 116px; }
 /* Видеофон операций */
 .reel-section { padding-bottom: 0; }
 .reel { position: relative; }
-.reel-stage { position: sticky; top: 0; height: 100vh; margin-bottom: -100vh; overflow: hidden; z-index: 0; background: transparent; }
-.reel-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #101010; }
+.reel { display: grid; grid-template-columns: minmax(0, 1fr); }
+.reel-stage { grid-area: 1 / 1; align-self: start; position: sticky; top: 0; height: 100vh; overflow: hidden; z-index: 0; background: transparent; }
+.reel-video { position: absolute; top: 0; bottom: 0; height: 100%; object-fit: cover; }
 .reel-shade { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(18, 18, 17, 0.88) 0%, rgba(18, 18, 17, 0.55) 55%, rgba(18, 18, 17, 0.2) 100%); }
-.reel-cards { position: relative; z-index: 1; padding: 18vh 0 22vh; width: min(1120px, 100% - 32px); margin-inline: auto; }
+.reel-cards { grid-area: 1 / 1; position: relative; z-index: 1; padding: 18vh 0 22vh; width: min(1120px, 100% - 32px); margin-inline: auto; }
 .reel-card { min-height: 70vh; display: flex; align-items: center; }
 .reel-box { max-width: 520px; padding: 24px 26px; background: rgba(26, 26, 25, 0.82); backdrop-filter: blur(6px); border: 1px solid var(--line); border-left: 4px solid var(--c, var(--era-modern)); border-radius: var(--radius); display: grid; gap: 10px; }
 .reel-box h3 { font-size: 1.5rem; }
 .reel-box p { color: var(--text-2); line-height: 1.7; }
 .reel-credit { position: relative; z-index: 1; width: min(1120px, 100% - 32px); margin: 0 auto; padding: 0 0 28px; color: var(--text-3); font-size: 0.8rem; }
 .reel-credit a { color: var(--text-2); }
-@media (max-width: 720px) { .reel-stage { height: 70vh; margin-bottom: -70vh; } .reel-card { min-height: 55vh; } }
-@media (prefers-reduced-motion: reduce) { .reel-stage { position: absolute; inset: 0; height: 100%; margin: 0; } }
+@media (max-width: 720px) { .reel-stage { height: 70vh; } .reel-card { min-height: 55vh; } }
+@media (prefers-reduced-motion: reduce) { .reel-stage { position: relative; align-self: stretch; height: auto; } }
 .chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { display: inline-flex; align-items: center; gap: 8px; text-decoration: none; color: var(--text-2); font-size: 0.9rem; padding: 8px 14px; min-height: 40px; background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--radius); transition: border-color 0.2s ease, color 0.2s ease; }
 .chip:hover { color: var(--text); border-color: var(--text-2); }
@@ -458,3 +457,74 @@ html { scroll-padding-top: 116px; }
 .cost-chart li.active .cost-track i { opacity: 1; }
 .cost-val { font-size: 0.82rem; text-align: right; color: var(--text-2); }
 @media (max-width: 640px) { .cost-chart li { grid-template-columns: 1fr; gap: 4px; } .cost-val { text-align: left; } }
+/* Плавная шкала версий */
+.mod-track { position: absolute; top: 11px; height: 2px; background: var(--line-strong); pointer-events: none; }
+.mod-fill { display: block; height: 100%; width: 0; background: var(--c, var(--era-modern)); transition: width 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); }
+@media (prefers-reduced-motion: reduce) { .mod-fill, .mod-dot { transition: none !important; } }
+
+/* Видеофон: ролик справа с плавным краем, чтобы надписи в кадре не перекрывали текст карточек */
+.reel-video { left: 42%; width: 58%; background: transparent; filter: brightness(0.85); -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 30%); mask-image: linear-gradient(90deg, transparent 0, #000 30%); }
+.reel-shade { background: linear-gradient(90deg, rgba(18, 18, 17, 0.9) 0%, rgba(18, 18, 17, 0.55) 45%, rgba(18, 18, 17, 0.25) 100%); }
+.reel-box { background: rgba(26, 26, 25, 0.92); }
+
+/* Баллистика снарядов */
+.ball { display: grid; gap: var(--gap); }
+.ball-top { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr)); gap: var(--gap); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.ball-field { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.ball-field[hidden] { display: none; }
+.ball-field small { color: var(--text-3); font-size: 0.82rem; }
+.ball-gun { font: inherit; color: var(--text); background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 8px 10px; min-height: 40px; width: 100%; }
+.ball-shells, .ball-presets { display: flex; flex-wrap: wrap; gap: 8px; }
+.ball-btn { font: inherit; font-size: 0.9rem; color: var(--text-2); cursor: pointer; background: var(--surface-2); border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 6px 12px; min-height: 40px; display: inline-flex; align-items: center; gap: 8px; transition: border-color 0.2s ease, color 0.2s ease; }
+.ball-btn:hover:not(:disabled) { color: var(--text); border-color: var(--text-2); }
+.ball-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.ball-btn[aria-pressed='true'] { color: var(--text); border-color: var(--text-2); }
+.ball-shell { box-shadow: inset 3px 0 0 var(--s, transparent); }
+.ball-shell .num { font-size: 0.74rem; color: var(--text-3); }
+.ball-angle { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; }
+.ball-angle-val { font-size: 1.3rem; color: var(--text); min-width: 5ch; text-align: right; }
+.ball-slider, .ball-time { width: 100%; accent-color: var(--era-modern); min-height: 28px; }
+.ball-stage { display: grid; gap: 12px; }
+.ball-canvas { cursor: crosshair; touch-action: pan-y; }
+.ball-legend { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.88rem; color: var(--text-2); }
+.ball-legend span { display: inline-flex; align-items: center; gap: 8px; }
+.ball-legend i { width: 14px; height: 3px; border-radius: 2px; }
+.ball-legend b { font-weight: 500; color: var(--text); }
+.ball-legend em { font-style: normal; color: var(--text-3); font-size: 0.82rem; }
+.ball-play { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+.ball-clock { min-width: 8ch; text-align: right; color: var(--text-2); }
+.ball-marker { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 0; border: 1px solid var(--line); border-radius: 4px; }
+.ball-marker div { padding: 10px 12px; border-right: 1px solid var(--line); display: grid; gap: 4px; }
+.ball-marker div:last-child { border-right: 0; }
+.ball-marker dt { color: var(--text-3); font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.ball-marker dd { margin: 0; font-size: 1.05rem; color: var(--text); }
+@media (max-width: 560px) { .ball-marker { grid-template-columns: repeat(2, minmax(0, 1fr)); } .ball-marker div:nth-child(2) { border-right: 0; } .ball-marker div:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }
+
+/* Сводная таблица с заливкой */
+.heat-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.heat { width: 100%; border-collapse: collapse; font-size: 0.92rem; min-width: 720px; }
+.heat caption { caption-side: bottom; text-align: left; padding: 12px 16px; color: var(--text-3); font-size: 0.82rem; }
+.heat th, .heat td { padding: 10px 14px; border-bottom: 1px solid var(--line); text-align: left; }
+.heat thead th { background: var(--surface-2); padding: 0; vertical-align: bottom; }
+.heat thead button { font: inherit; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); background: none; border: 0; cursor: pointer; padding: 12px 14px; width: 100%; text-align: inherit; min-height: 44px; }
+.heat thead button:hover { color: var(--text); }
+.heat thead th[aria-sort] button { color: var(--text); }
+.heat thead th[aria-sort='descending'] button::after { content: ' \2193'; }
+.heat thead th[aria-sort='ascending'] button::after { content: ' \2191'; }
+.heat tbody th { font-weight: 600; color: var(--text); white-space: nowrap; }
+.heat tbody td { color: var(--text-2); }
+.heat .heat-num { text-align: right; white-space: nowrap; }
+.heat tbody td.heat-num { color: var(--text); background: rgba(57, 135, 229, calc(var(--h, 0) * 0.42)); }
+.heat-none { color: var(--text-3); font-family: var(--font); font-size: 0.82rem; }
+.heat tbody tr:hover th, .heat tbody tr:hover td:not(.heat-num) { background: var(--surface-2); }
+
+/* Список снарядов на странице техники */
+.shell-group { margin-bottom: 24px; }
+.shell-group h3 { margin: 0 0 10px; }
+.shell-list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.shell-list li { display: grid; grid-template-columns: 56px minmax(0, 1fr) auto; gap: 14px; align-items: baseline; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+.shell-list li:last-child { border-bottom: 0; }
+.shell-list div { display: grid; gap: 2px; }
+.shell-list div span { color: var(--text-2); font-size: 0.92rem; }
+.shell-list .num { color: var(--text-2); white-space: nowrap; }
+@media (max-width: 560px) { .shell-list li { grid-template-columns: 1fr; gap: 4px; } }

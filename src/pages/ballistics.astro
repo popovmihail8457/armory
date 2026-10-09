@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+import BallisticsLab from '../components/BallisticsLab.astro';
+import ShellTable from '../components/ShellTable.astro';
+import WarheadDemo from '../components/WarheadDemo.astro';
+import { guns, shells, shellTypes } from '../data/shells';
+
+const typeCount = (id: string) => shells.filter((shell) => shell.type === id).length;
+const scenes = [...new Set(shellTypes.map((type) => type.scene))];
+---
+<Base title="Баллистика снарядов" era="late" noPhoto description="Траектории снарядов танковых пушек, автоматических пушек БМП и гаубиц: угол ствола, дальность, скорость и время полёта.">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Навигация">
+      <a href="/">Главная</a><span>/</span>
+      <a href="/weapons/">Вооружение</a><span>/</span>
+      <span>Баллистика снарядов</span>
+    </nav>
+  </div>
+
+  <section class="section" style="--c:var(--era-late)">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="stripe"></span>
+        <span class="eyebrow">Танки, БМП, артиллерия</span>
+        <h1>Баллистика снарядов</h1>
+        <p class="lead">Выберите орудие и снаряд, меняйте угол ствола и ведите маркер вдоль траектории: график покажет высоту, скорость и время в любой точке. В справочнике {guns.length} орудий и {shells.length} снарядов.</p>
+      </div>
+      <BallisticsLab initial="3bm42" />
+    </div>
+  </section>
+
+  <section class="section" id="types">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Типы снарядов</h2>
+        <p class="lead">Чем снаряды отличаются по принципу действия и почему у них разные траектории.</p>
+      </div>
+      <div class="cards">
+        {shellTypes.map((type) => (
+          <div class="card">
+            <span class="stripe"></span>
+            <span class="eyebrow">{type.short} · снарядов в справочнике: {typeCount(type.id)}</span>
+            <h3>{type.name}</h3>
+            <p class="desc">{type.text}</p>
+          </div>
+        ))}
+      </div>
+      <div style="margin-top: 32px;">
+        <WarheadDemo perMod={scenes} initial={scenes[0]} tabs />
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="tank-table">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Сводка: танковые и автоматические пушки</h2>
+        <p class="lead">Нажмите на заголовок столбца для сортировки. Заливка ячейки показывает место значения среди снарядов таблицы: чем плотнее, тем лучше показатель.</p>
+      </div>
+      <ShellTable kinds={['tank', 'auto', 'low']} caption="Начальные данные по открытым источникам, скорость и время на 2 км рассчитаны учебной моделью" />
+    </div>
+  </section>
+
+  <section class="section" id="howitzer-table">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Сводка: гаубицы и дальнобойные пушки</h2>
+        <p class="lead">Осколочно-фугасные снаряды на полном заряде. Дальность указана по открытым данным для стрельбы обычным снарядом без активно-реактивных ускорителей.</p>
+      </div>
+      <ShellTable kinds={['howitzer']} caption="Гаубицы: начальная скорость, масса снаряда и наибольшая дальность по открытым источникам" />
+      <p class="notice" style="margin-top: 28px;">
+        Источники значений и описание модели: <a href="/sources/#ballistics">источники и методика</a>.
+      </p>
+    </div>
+  </section>
+</Base>

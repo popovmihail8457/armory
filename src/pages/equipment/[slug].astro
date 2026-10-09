@@ -8,6 +8,8 @@ import StorySection from '../../components/StorySection.astro';
 import TrajectoryDemo from '../../components/TrajectoryDemo.astro';
 import CoverageDiagram from '../../components/CoverageDiagram.astro';
 import OperationsReel from '../../components/OperationsReel.astro';
+import BallisticsLab from '../../components/BallisticsLab.astro';
+import { gunsOfPlatform, shellsOfGun, shellTypeById } from '../../data/shells';
 import { operations } from '../../data/operations';
 import { videos } from '../../data/videos';
 import { bgForItem } from '../../lib/bg';
@@ -51,6 +53,7 @@ const itemPhoto = bgForItem(item.id);
 const isAircraft = domain.id === 'aviation';
 const cov = isAircraft ? coverageFor(item.id) : undefined;
 const defense = defenseByItem[item.id];
+const itemGuns = gunsOfPlatform(item.id);
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
 const tocItems = [
   story && { id: 'story', label: 'История' },
@@ -58,6 +61,7 @@ const tocItems = [
   { id: 'specs', label: 'Характеристики' },
   arms && { id: 'armament', label: 'Вооружение' },
   trajScene && { id: 'trajectory', label: 'Траектория' },
+  itemGuns.length > 0 && { id: 'shells', label: 'Снаряды и баллистика' },
   usedWeapons.length > 0 && { id: 'weapons-used', label: 'Применяемое оружие' },
   isAircraft && { id: 'coverage', label: 'Углы обзора' },
   defense && { id: 'defense', label: 'Защита' },
@@ -160,6 +164,33 @@ const tocItems = [
           <p class="lead">Упрощённая анимация показывает принцип полёта и наведения. Реальные профили зависят от версии и условий применения.</p>
         </div>
         <TrajectoryDemo only={[trajScene]} initial={trajScene} />
+      </div>
+    </section>
+  )}
+
+  {itemGuns.length > 0 && (
+    <section class="section" id="shells" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Снаряды и баллистика</h2>
+          <p class="lead">Типы снарядов к орудиям этой машины. Выберите снаряд и угол ствола: график покажет траекторию, скорость и время полёта.</p>
+        </div>
+        {itemGuns.map((gun) => (
+          <div class="shell-group">
+            <h3>{gun.name}</h3>
+            <ul class="shell-list">
+              {shellsOfGun(gun.id).map((shell) => (
+                <li>
+                  <abbr class="eyebrow" title={shellTypeById(shell.type).name}>{shellTypeById(shell.type).short}</abbr>
+                  <div><strong>{shell.name}</strong><span>{shell.note}</span></div>
+                  <span class="num">{shell.v0 ? `≈${formatNumber(shell.v0)} м/с` : 'управляемая'}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+        <BallisticsLab gunIds={itemGuns.map((gun) => gun.id)} />
+        <p style="margin-top: 16px;"><a href="/ballistics/">Все орудия и сравнительные таблицы на странице баллистики</a></p>
       </div>
     </section>
   )}

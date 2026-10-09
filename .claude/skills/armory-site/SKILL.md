@@ -18,6 +18,9 @@ description: Работа с сайтом «Арсенал» (справочни
 - `src/data/trajectory.ts` - сцены траекторий и карта группа техники -> сцена (`groupScene`); компонент `TrajectoryDemo`.
 - `src/data/coverage.ts` - углы обзора радара, СПО и датчиков пуска ракет самолётов (`half` это полуугол, 180 означает круг); для машин без данных `status: none|undisclosed`. Схема: `CoverageDiagram`.
 - `src/data/operations.ts` и `src/data/videos.ts` - участие в операциях и видеоролики Commons (встраиваются ссылкой, только PD/CC0); компонент `OperationsReel` (закреплённый видеофон).
+- `src/data/shells.ts` - орудия танков, БМП и гаубиц (`guns`, поле `platforms` связывает с техникой, `weaponId` с каталогом), снаряды (`shells`: тип, `v0`, масса в полёте, для гаубиц `rangeKm`) и типы снарядов. Без массы траектория не строится: массу не придумывать.
+- `src/lib/ballistics.ts` - учебная модель внешней баллистики (`simulate`, `speedAt`, `timeTo`). Коэффициенты формы в `SHAPE` сверены с опубликованными дальностями гаубиц (расхождение около 10 процентов). Компоненты: `BallisticsLab` (угол ствола, пуск, сравнение до 5 снарядов), `ShellTable` (сортируемая таблица с заливкой). Страница `/ballistics/`, блок «Снаряды и баллистика» на страницах техники и орудий.
+- `public/bg/items/` - фото отдельных моделей и их `manifest.json`; на странице модели показывается только её фото (`bgForItem`).
 - `src/lib/data.ts`, `src/lib/bg.ts` - выборки, ранги, выбор фото-фона из `public/bg/manifest.json`.
 - `src/components/` - `BarChart`, `Scatter`, `Timeline`, `ArmamentMap`, `RadarDemo`, `DefenseDemo`, `TrajectoryDemo`, `StorySection`.
 - `src/pages/` - главная, `periods/[era]/[domain]/[group]`, `equipment/[slug]`, `weapons/`, `radar`, `defense`, `sources`.

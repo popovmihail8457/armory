@@ -1,0 +1,400 @@
+---
+import { equipment } from '../data/equipment';
+import { guns, shells, shellTypeById } from '../data/shells';
+
+interface Props {
+  /** Ограничить набор орудий (страница техники или орудия). Без него показывается весь каталог. */
+  gunIds?: string[];
+  /** Снаряд, выбранный при открытии. */
+  initial?: string;
+}
+
+const { gunIds, initial } = Astro.props;
+const shownGuns = gunIds ? guns.filter((gun) => gunIds.includes(gun.id)) : guns;
+const nameOf = (id: string) => equipment.find((item) => item.id === id)?.name ?? id;
+const kindLabel = { tank: 'Танковые пушки', auto: 'Автоматические пушки', low: 'Орудия малого давления', howitzer: 'Гаубицы и пушки' } as const;
+const kinds = (Object.keys(kindLabel) as (keyof typeof kindLabel)[]).filter((kind) => shownGuns.some((gun) => gun.kind === kind));
+const data = shownGuns.map((gun) => ({
+  id: gun.id,
+  name: gun.name,
+  caliber: gun.caliber,
+  howitzer: gun.kind === 'howitzer' || gun.kind === 'low',
+  shells: shells.filter((shell) => shell.gun === gun.id).map((shell) => {
+    const type = shellTypeById(shell.type);
+    return { id: shell.id, name: shell.name, type: shell.type, typeShort: type.short, typeName: type.name, v0: shell.v0, mass: shell.mass, rangeKm: shell.rangeKm, note: shell.note };
+  }),
+}));
+const firstGun = data.find((gun) => gun.shells.some((shell) => shell.id === initial)) ?? data[0];
+---
+<section class="ball" data-ball data-guns={JSON.stringify(data)} data-initial={initial ?? ''}>
+  <div class="ball-top">
+    <label class="ball-field" hidden={data.length < 2}>
+      <span class="eyebrow">Орудие и техника</span>
+      <select class="ball-gun">
+        {kinds.map((kind) => (
+          <optgroup label={kindLabel[kind]}>
+            {shownGuns.filter((gun) => gun.kind === kind).map((gun) => (
+              <option value={gun.id} selected={gun.id === firstGun.id}>{gun.name}: {gun.platforms.map(nameOf).join(', ')}</option>
+            ))}
+          </optgroup>
+        ))}
+      </select>
+    </label>
+    <div class="ball-field">
+      <span class="eyebrow">Снаряд</span>
+      <div class="ball-shells" role="group" aria-label="Снаряды орудия"></div>
+    </div>
+    <div class="ball-field">
+      <span class="eyebrow">Угол ствола к горизонту</span>
+      <div class="ball-angle">
+        <input type="range" class="ball-slider" min="0.5" max="60" step="0.5" value="2" aria-label="Угол ствола, градусы" />
+        <output class="ball-angle-val num">2°</output>
+      </div>
+      <div class="ball-presets" role="group" aria-label="Готовые углы">
+        {[1, 2, 5, 15, 30, 45].map((angle) => <button type="button" class="ball-btn" data-angle={angle}>{angle}°</button>)}
+      </div>
+    </div>
+    <div class="ball-field">
+      <span class="eyebrow">Сравнение</span>
+      <button type="button" class="ball-btn ball-compare" aria-pressed="false">Сравнение: выкл.</button>
+      <small>До 5 снарядов этого орудия на одном графике.</small>
+    </div>
+  </div>
+
+  <div class="radar-body">
+    <div class="radar-stage ball-stage">
+      <div class="radar-tabs" role="tablist" aria-label="Вид графика">
+        <button type="button" role="tab" class="radar-tab" data-view="profile" aria-selected="true">Профиль полёта</button>
+        <button type="button" role="tab" class="radar-tab" data-view="speed" aria-selected="false">Скорость по дистанции</button>
+      </div>
+      <canvas class="radar-canvas ball-canvas" width="760" height="460" role="img" aria-label="График траектории снаряда"></canvas>
+      <div class="ball-legend" aria-label="Снаряды на графике"></div>
+      <div class="ball-play">
+        <button type="button" class="ball-btn ball-run">Пуск</button>
+        <input type="range" class="ball-time" min="0" max="1000" value="0" aria-label="Положение снаряда на траектории" />
+        <output class="ball-clock num">0,00 с</output>
+      </div>
+      <dl class="ball-marker">
+        <div><dt>Дистанция</dt><dd class="num k-x">0 м</dd></div>
+        <div><dt>Высота</dt><dd class="num k-y">0 м</dd></div>
+        <div><dt>Скорость</dt><dd class="num k-v">0 м/с</dd></div>
+        <div><dt>Время</dt><dd class="num k-t">0,00 с</dd></div>
+      </dl>
+    </div>
+    <div class="radar-info">
+      <div>
+        <span class="eyebrow ball-type"></span>
+        <h3 class="radar-title ball-name"></h3>
+      </div>
+      <p class="radar-text ball-note"></p>
+      <dl class="radar-readout">
+        <div><dt>Дальность</dt><dd class="num r-range">-</dd></div>
+        <div><dt>Время полёта</dt><dd class="num r-time">-</dd></div>
+        <div><dt>Скорость у цели</dt><dd class="num r-impact">-</dd></div>
+        <div><dt>Длина траектории</dt><dd class="num r-path">-</dd></div>
+        <div><dt>Угол падения</dt><dd class="num r-fall">-</dd></div>
+        <div><dt>Наибольшая высота</dt><dd class="num r-apex">-</dd></div>
+        <div><dt>Начальная скорость</dt><dd class="num r-v0">-</dd></div>
+        <div><dt>Масса в полёте</dt><dd class="num r-mass">-</dd></div>
+        <div><dt>Калибр</dt><dd class="num r-cal">-</dd></div>
+        <div class="r-pub-row" hidden><dt>Дальность по открытым данным</dt><dd class="num r-pub">-</dd></div>
+      </dl>
+    </div>
+  </div>
+  <p class="notice">
+    Учебная модель: материальная точка, сила тяжести и сопротивление воздуха, ровная местность, без ветра.
+    Начальная скорость и масса взяты из открытых источников, форма снаряда задана типовым коэффициентом для его класса.
+    Числа показывают характер траектории и не заменяют таблицы стрельбы.
+  </p>
+</section>
+
+<script>
+  import { simulate, type ShellTypeId, type Trajectory, type TrajectoryPoint } from '../lib/ballistics';
+
+  interface ShellItem { id: string; name: string; type: string; typeShort: string; typeName: string; v0?: number; mass?: number; rangeKm?: number; note: string }
+  interface GunItem { id: string; name: string; caliber: number; howitzer: boolean; shells: ShellItem[] }
+
+  const SERIES = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d7d6cd'];
+  const MAX_COMPARE = 5;
+  const PLAY_SECONDS = 4;
+  const PAD = { left: 64, right: 18, top: 18, bottom: 44 };
+
+  const fmt = (value: number, digits = 0) => value.toLocaleString('ru-RU', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+  const hasBallistics = (shell: ShellItem) => shell.v0 !== undefined && shell.mass !== undefined;
+
+  function niceStep(span: number, target: number): number {
+    const raw = span / target;
+    const power = Math.pow(10, Math.floor(Math.log10(raw)));
+    const unit = raw / power;
+    return (unit < 1.5 ? 1 : unit < 3.5 ? 2 : unit < 7.5 ? 5 : 10) * power;
+  }
+
+  function pointAt(points: TrajectoryPoint[], t: number): TrajectoryPoint {
+    const index = Math.min(points.length - 1, Math.max(0, Math.round(t / 0.01)));
+    return points[index];
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-ball]').forEach((root) => {
+    const gunList: GunItem[] = JSON.parse(root.dataset.guns ?? '[]');
+    if (gunList.length === 0) return;
+    const $ = <T extends HTMLElement>(selector: string) => root.querySelector<T>(selector)!;
+    const canvas = $<HTMLCanvasElement>('.ball-canvas');
+    const ctx = canvas.getContext('2d')!;
+    const css = getComputedStyle(root);
+    const color = (name: string) => css.getPropertyValue(name).trim();
+    const gunSelect = $<HTMLSelectElement>('.ball-gun');
+    const shellBox = $('.ball-shells');
+    const slider = $<HTMLInputElement>('.ball-slider');
+    const timeSlider = $<HTMLInputElement>('.ball-time');
+    const compareBtn = $<HTMLButtonElement>('.ball-compare');
+    const runBtn = $<HTMLButtonElement>('.ball-run');
+    const legend = $('.ball-legend');
+
+    const initialId = root.dataset.initial;
+    let gun = gunList.find((g) => g.shells.some((s) => s.id === initialId)) ?? gunList[0];
+    let selected: string[] = [];
+    let compare = false;
+    let view: 'profile' | 'speed' = 'profile';
+    let angle = 2;
+    let time = 0;
+    let playing = 0;
+    let series: { shell: ShellItem; path: Trajectory; color: string }[] = [];
+
+    const setText = (selector: string, text: string) => { $(selector).textContent = text; };
+
+    function compute() {
+      series = selected
+        .map((id) => gun.shells.find((s) => s.id === id))
+        .filter((shell): shell is ShellItem => Boolean(shell) && hasBallistics(shell!))
+        .map((shell, i) => ({
+          shell,
+          color: SERIES[i % SERIES.length],
+          path: simulate({ type: shell.type as ShellTypeId, caliber: gun.caliber, v0: shell.v0!, mass: shell.mass! }, angle),
+        }));
+      time = Math.min(time, series[0]?.path.time ?? 0);
+    }
+
+    function renderShells() {
+      shellBox.replaceChildren(...gun.shells.map((shell) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ball-btn ball-shell';
+        button.dataset.id = shell.id;
+        button.disabled = !hasBallistics(shell);
+        button.title = hasBallistics(shell) ? shell.typeName : `${shell.typeName}: траектория не строится`;
+        button.innerHTML = `<span class="num"></span><span></span>`;
+        button.children[0].textContent = shell.typeShort;
+        button.children[1].textContent = shell.name;
+        button.addEventListener('click', () => toggleShell(shell.id));
+        return button;
+      }));
+    }
+
+    function toggleShell(id: string) {
+      if (!compare) selected = [id];
+      else if (selected.includes(id)) selected = selected.length > 1 ? selected.filter((s) => s !== id) : selected;
+      else if (selected.length < MAX_COMPARE) selected = [...selected, id];
+      update();
+    }
+
+    function selectGun(next: GunItem, preferred?: string) {
+      gun = next;
+      const first = gun.shells.find((s) => s.id === preferred && hasBallistics(s)) ?? gun.shells.find(hasBallistics);
+      selected = first ? [first.id] : [];
+      angle = gun.howitzer ? 45 : 2;
+      slider.value = String(angle);
+      renderShells();
+      update();
+    }
+
+    function renderInfo() {
+      const main = series[0];
+      shellBox.querySelectorAll<HTMLButtonElement>('.ball-shell').forEach((button) => {
+        const index = selected.indexOf(button.dataset.id!);
+        button.setAttribute('aria-pressed', String(index >= 0));
+        button.style.setProperty('--s', index >= 0 ? SERIES[index % SERIES.length] : 'transparent');
+      });
+      legend.replaceChildren(...series.map((item) => {
+        const row = document.createElement('span');
+        row.innerHTML = '<i></i><b></b><em class="num"></em>';
+        (row.children[0] as HTMLElement).style.background = item.color;
+        row.children[1].textContent = item.shell.name;
+        row.children[2].textContent = `≈${fmt(item.path.range)} м`;
+        return row;
+      }));
+      setText('.ball-angle-val', `${fmt(angle, 1)}°`);
+      if (!main) {
+        setText('.ball-name', gun.name);
+        setText('.ball-type', '');
+        setText('.ball-note', 'Для снарядов этого орудия в справочнике нет данных, достаточных для расчёта траектории.');
+        return;
+      }
+      const { shell, path } = main;
+      setText('.ball-type', shell.typeName);
+      setText('.ball-name', `${shell.name}, ${gun.name}`);
+      setText('.ball-note', shell.note);
+      setText('.r-range', `≈${fmt(path.range)} м`);
+      setText('.r-time', `≈${fmt(path.time, 2)} с`);
+      setText('.r-impact', `≈${fmt(path.impactSpeed)} м/с`);
+      setText('.r-path', `≈${fmt(path.pathLength)} м`);
+      setText('.r-fall', `≈${fmt(path.impactAngle, 1)}°`);
+      setText('.r-apex', `≈${fmt(path.apex.y)} м на ${fmt(path.apex.x)} м`);
+      setText('.r-v0', `≈${fmt(shell.v0!)} м/с`);
+      setText('.r-mass', `≈${fmt(shell.mass!, shell.mass! < 10 ? 2 : 1)} кг`);
+      setText('.r-cal', `${fmt(gun.caliber)} мм`);
+      $('.r-pub-row').hidden = shell.rangeKm === undefined;
+      if (shell.rangeKm !== undefined) setText('.r-pub', `≈${fmt(shell.rangeKm, 1)} км (наибольшая)`);
+    }
+
+    function renderMarker() {
+      const main = series[0];
+      if (!main) return;
+      const point = pointAt(main.path.points, time);
+      setText('.k-x', `${fmt(point.x)} м`);
+      setText('.k-y', `${fmt(point.y, point.y < 100 ? 1 : 0)} м`);
+      setText('.k-v', `${fmt(point.v)} м/с`);
+      setText('.k-t', `${fmt(point.t, 2)} с`);
+      setText('.ball-clock', `${fmt(time, 2)} с`);
+      timeSlider.value = String(Math.round((time / main.path.time) * 1000));
+    }
+
+    function draw() {
+      const { width, height } = canvas;
+      ctx.clearRect(0, 0, width, height);
+      ctx.font = '12px Consolas, monospace';
+      const plotW = width - PAD.left - PAD.right;
+      const plotH = height - PAD.top - PAD.bottom;
+      if (series.length === 0) {
+        ctx.fillStyle = color('--text-3');
+        ctx.textAlign = 'center';
+        ctx.fillText('Нет данных для расчёта траектории', width / 2, height / 2);
+        return;
+      }
+      const yOf = (p: TrajectoryPoint) => (view === 'profile' ? p.y : p.v);
+      const maxX = Math.max(...series.map((s) => s.path.range)) * 1.04;
+      const maxY = Math.max(...series.map((s) => (view === 'profile' ? s.path.apex.y : s.shell.v0!))) * 1.12 || 1;
+      const sx = (x: number) => PAD.left + (x / maxX) * plotW;
+      const sy = (y: number) => PAD.top + plotH - (y / maxY) * plotH;
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = color('--line');
+      ctx.fillStyle = color('--text-3');
+      const stepX = niceStep(maxX, 6);
+      ctx.textAlign = 'center';
+      for (let x = 0; x <= maxX; x += stepX) {
+        ctx.beginPath(); ctx.moveTo(sx(x), PAD.top); ctx.lineTo(sx(x), PAD.top + plotH); ctx.stroke();
+        ctx.fillText(fmt(x), sx(x), PAD.top + plotH + 16);
+      }
+      const stepY = niceStep(maxY, 5);
+      ctx.textAlign = 'right';
+      for (let y = 0; y <= maxY; y += stepY) {
+        ctx.beginPath(); ctx.moveTo(PAD.left, sy(y)); ctx.lineTo(PAD.left + plotW, sy(y)); ctx.stroke();
+        ctx.fillText(fmt(y, stepY < 1 ? 1 : 0), PAD.left - 8, sy(y) + 4);
+      }
+      ctx.strokeStyle = color('--line-strong');
+      ctx.beginPath(); ctx.moveTo(PAD.left, PAD.top); ctx.lineTo(PAD.left, PAD.top + plotH); ctx.lineTo(PAD.left + plotW, PAD.top + plotH); ctx.stroke();
+      ctx.textAlign = 'right';
+      ctx.fillText('Дистанция, м', PAD.left + plotW, height - 8);
+      ctx.textAlign = 'left';
+      ctx.fillText(view === 'profile' ? 'Высота, м' : 'Скорость, м/с', PAD.left + 8, PAD.top + 12);
+
+      series.forEach((item, index) => {
+        const { points } = item.path;
+        const stride = Math.max(1, Math.floor(points.length / 400));
+        ctx.strokeStyle = item.color;
+        ctx.lineWidth = index === 0 ? 2.5 : 2;
+        ctx.beginPath();
+        points.forEach((p, i) => {
+          if (i % stride !== 0 && i !== points.length - 1) return;
+          if (i === 0) ctx.moveTo(sx(p.x), sy(yOf(p))); else ctx.lineTo(sx(p.x), sy(yOf(p)));
+        });
+        ctx.stroke();
+        const marker = pointAt(points, Math.min(time, item.path.time));
+        ctx.fillStyle = item.color;
+        ctx.strokeStyle = color('--surface');
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(sx(marker.x), sy(yOf(marker)), index === 0 ? 6 : 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      });
+
+      const main = series[0];
+      if (view === 'profile' && main.path.apex.y > 0) {
+        const apex = main.path.apex;
+        ctx.fillStyle = color('--text-2');
+        ctx.textAlign = sx(apex.x) > width - 150 ? 'right' : 'left';
+        ctx.fillText(`Вершина ≈${fmt(apex.y)} м`, sx(apex.x) + (ctx.textAlign === 'left' ? 10 : -10), Math.max(PAD.top + 28, sy(apex.y) - 10));
+      }
+    }
+
+    function update() {
+      compute();
+      renderInfo();
+      renderMarker();
+      draw();
+    }
+
+    function stop() {
+      if (playing) cancelAnimationFrame(playing);
+      playing = 0;
+      runBtn.textContent = 'Пуск';
+    }
+
+    function play() {
+      const main = series[0];
+      if (!main) return;
+      if (time >= main.path.time - 0.02) time = 0;
+      runBtn.textContent = 'Пауза';
+      let last = performance.now();
+      const frame = (now: number) => {
+        time += ((now - last) / 1000) * (main.path.time / PLAY_SECONDS);
+        last = now;
+        if (time >= main.path.time) { time = main.path.time; renderMarker(); draw(); stop(); return; }
+        renderMarker();
+        draw();
+        playing = requestAnimationFrame(frame);
+      };
+      playing = requestAnimationFrame(frame);
+    }
+
+    gunSelect.addEventListener('change', () => { stop(); time = 0; selectGun(gunList.find((g) => g.id === gunSelect.value) ?? gunList[0]); });
+    slider.addEventListener('input', () => { stop(); angle = Number(slider.value); update(); });
+    root.querySelectorAll<HTMLButtonElement>('[data-angle]').forEach((button) => button.addEventListener('click', () => {
+      stop(); angle = Number(button.dataset.angle); slider.value = String(angle); update();
+    }));
+    compareBtn.addEventListener('click', () => {
+      compare = !compare;
+      compareBtn.setAttribute('aria-pressed', String(compare));
+      compareBtn.textContent = compare ? 'Сравнение: вкл.' : 'Сравнение: выкл.';
+      if (!compare) selected = selected.slice(0, 1);
+      update();
+    });
+    root.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((tab) => tab.addEventListener('click', () => {
+      view = tab.dataset.view as typeof view;
+      root.querySelectorAll('[data-view]').forEach((other) => other.setAttribute('aria-selected', String(other === tab)));
+      draw();
+    }));
+    runBtn.addEventListener('click', () => (playing ? stop() : play()));
+    timeSlider.addEventListener('input', () => {
+      stop();
+      time = (Number(timeSlider.value) / 1000) * (series[0]?.path.time ?? 0);
+      renderMarker();
+      draw();
+    });
+    canvas.addEventListener('pointermove', (event) => {
+      const main = series[0];
+      if (!main || playing) return;
+      const rect = canvas.getBoundingClientRect();
+      const px = ((event.clientX - rect.left) / rect.width) * canvas.width;
+      const maxX = Math.max(...series.map((s) => s.path.range)) * 1.04;
+      const x = ((px - PAD.left) / (canvas.width - PAD.left - PAD.right)) * maxX;
+      const points = main.path.points;
+      let low = 0;
+      let high = points.length - 1;
+      while (low < high) { const mid = (low + high) >> 1; if (points[mid].x < x) low = mid + 1; else high = mid; }
+      time = points[low].t;
+      renderMarker();
+      draw();
+    });
+
+    selectGun(gun, initialId);
+  });
+</script>

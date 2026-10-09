@@ -3,10 +3,13 @@ import Base from '../layouts/Base.astro';
 import { metrics } from '../data/taxonomy';
 import { equipment } from '../data/equipment';
 import { eras, domains, groups } from '../data/taxonomy';
-import { bgManifest } from '../lib/bg';
+import { bgManifest, itemManifest } from '../lib/bg';
 import { videos } from '../data/videos';
 
 const videoRows = Object.entries(videos).flatMap(([id, list]) => list.map((clip) => ({ name: equipment.find((item) => item.id === id)?.name ?? id, clip })));
+const itemPhotoRows = Object.entries(itemManifest)
+  .filter(([, entry]) => entry.file)
+  .map(([id, entry]) => ({ name: equipment.find((item) => item.id === id)?.name ?? id, title: (entry.title ?? '').replace(/^File:/, ''), author: entry.author ?? 'не указан', license: entry.license ?? '', page: entry.page }));
 const photoRows = Object.entries(bgManifest)
   .filter(([, entry]) => entry.file)
   .map(([key, entry]) => {
@@ -55,6 +58,11 @@ const photoRows = Object.entries(bgManifest)
             <li>{row.era}, {row.domain}, {row.group}: <a href={row.page} rel="noopener" target="_blank">{row.title}</a>. Автор: {row.author}. Лицензия: {row.license}.</li>
           ))}
         </ul>
+        <h3>Фотографии отдельных моделей</h3>
+        <p>На странице модели показывается только её собственное фото. Если подходящего свободного снимка нет, страница остаётся без фото.</p>
+        <ul>
+          {itemPhotoRows.map((row) => (<li>{row.name}: <a href={row.page} rel="noopener" target="_blank">{row.title}</a>. Автор: {row.author}. Лицензия: {row.license}.</li>))}
+        </ul>
         <h2>Видео</h2>
         <p>Ролики на страницах техники встраиваются ссылкой на файлы Wikimedia Commons и находятся в общественном достоянии или опубликованы под лицензией CC0. В проект они не скачиваются, а при отсутствии подходящего ролика показывается фото.</p>
         <ul>
@@ -62,6 +70,8 @@ const photoRows = Object.entries(bgManifest)
         </ul>
         <h2>Углы обзора и системы защиты</h2>
         <p>Углы обзора радаров, станций предупреждения об облучении и датчиков обнаружения пуска ракет приведены по открытым данным и ориентировочно. Если данные не публиковались, это указано на странице машины, а значения не придумываются.</p>
+        <h2 id="ballistics">Баллистика снарядов</h2>
+        <p>Начальная скорость, масса и калибр снарядов приведены по открытым справочным данным и округлены. Траектории на странице баллистики рассчитаны учебной моделью: материальная точка, сила тяжести, сопротивление воздуха с типовым коэффициентом для класса снаряда, стандартная атмосфера, ровная местность, без ветра. Модель сверена с опубликованными наибольшими дальностями гаубиц и расходится с ними примерно на 10 процентов. Если масса снаряда в полёте в открытых данных указана по-разному, траектория для него не строится. Оформление графиков вдохновлено сайтом wtradar.net, но его данные относятся к компьютерной игре и здесь не используются.</p>
         <h2>Исправления</h2>
         <p>Если вы заметили неточность, укажите модель, значение и источник. Исправления вносятся после сверки.</p>
       </div>

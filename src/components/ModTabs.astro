@@ -17,6 +17,7 @@ const pos = (v: number) => (logMax === logMin ? 50 : ((Math.log10(Math.max(0.1, 
 ---
 <div class="mods" data-mods>
   <div class="mod-tabs" role="tablist" aria-label="Модификации">
+    <span class="mod-track" aria-hidden="true"><i class="mod-fill"></i></span>
     {mods.map((mod, i) => (
       <button type="button" role="tab" id={`mod-tab-${i}`} class="mod-tab" data-i={i} aria-controls={`mod-panel-${i}`} aria-selected={i === 0} tabindex={i === 0 ? 0 : -1}>
         <span class="mod-dot" aria-hidden="true"></span>
@@ -68,18 +69,34 @@ const pos = (v: number) => (logMax === logMin ? 50 : ((Math.log10(Math.max(0.1, 
     const tabs = [...root.querySelectorAll<HTMLButtonElement>('.mod-tab')];
     const panels = [...root.querySelectorAll<HTMLElement>('.mod-panel')];
     const rows = [...root.querySelectorAll<HTMLElement>('.cost-chart li')];
+    const track = root.querySelector<HTMLElement>('.mod-track')!;
+    const fill = root.querySelector<HTMLElement>('.mod-fill')!;
+    const dotX = (i: number) => tabs[i].offsetLeft + 29;
+    const layoutTrack = () => {
+      track.style.left = dotX(0) + 'px';
+      track.style.width = Math.max(0, dotX(tabs.length - 1) - dotX(0)) + 'px';
+    };
+    let current = 0;
     const select = (index: number, focus = false) => {
+      const forward = index >= current;
+      layoutTrack();
+      fill.style.width = Math.max(0, dotX(index) - dotX(0)) + 'px';
       tabs.forEach((tab, i) => {
         const on = i === index;
         tab.setAttribute('aria-selected', String(on));
         tab.tabIndex = on ? 0 : -1;
         tab.classList.toggle('past', i < index);
+        const dot = tab.querySelector<HTMLElement>('.mod-dot');
+        if (dot) dot.style.setProperty('--d', (forward ? i * 0.1 : (tabs.length - i) * 0.08) + 's');
         panels[i].hidden = !on;
       });
+      current = index;
       rows.forEach((row, i) => row.classList.toggle('active', i === index));
       root.dispatchEvent(new CustomEvent('modselect', { detail: { index }, bubbles: true }));
       if (focus) tabs[index].focus();
     };
+    layoutTrack();
+    window.addEventListener('resize', () => { layoutTrack(); fill.style.width = Math.max(0, dotX(current) - dotX(0)) + 'px'; });
     tabs.forEach((tab, i) => {
       tab.addEventListener('click', () => select(i));
       tab.addEventListener('keydown', (event) => {

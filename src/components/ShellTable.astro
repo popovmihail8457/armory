@@ -1,0 +1,119 @@
+---
+import { speedAt, timeTo, type ShellTypeId } from '../lib/ballistics';
+import { guns, shells, shellTypeById, type Gun } from '../data/shells';
+
+interface Props {
+  kinds: Gun['kind'][];
+  /** Контрольная дистанция для расчётных столбцов, м. */
+  distance?: number;
+  caption: string;
+}
+
+const { kinds, distance = 2000, caption } = Astro.props;
+const rows = shells
+  .map((shell) => ({ shell, gun: guns.find((gun) => gun.id === shell.gun)! }))
+  .filter(({ shell, gun }) => kinds.includes(gun.kind) && shell.v0 !== undefined)
+  .map(({ shell, gun }) => {
+    const input = shell.mass !== undefined ? { type: shell.type as ShellTypeId, caliber: gun.caliber, v0: shell.v0!, mass: shell.mass } : undefined;
+    const ballistic = input && shell.type !== 'rocket' ? input : undefined;
+    const far = ballistic ? speedAt(ballistic, distance) : undefined;
+    return {
+      name: shell.name,
+      gun: gun.name,
+      type: shellTypeById(shell.type).short,
+      v0: shell.v0!,
+      mass: shell.mass,
+      energy: shell.mass !== undefined ? (shell.mass * shell.v0! * shell.v0!) / 2e6 : undefined,
+      far,
+      keep: far !== undefined ? (far / shell.v0!) * 100 : undefined,
+      time: ballistic ? timeTo(ballistic, distance) : undefined,
+      range: shell.rangeKm,
+    };
+  });
+const showRange = rows.some((row) => row.range !== undefined);
+const columns = [
+  { key: 'v0', label: 'Начальная скорость, м/с', digits: 0, better: 'high' },
+  { key: 'mass', label: 'Масса в полёте, кг', digits: 2, better: 'none' },
+  { key: 'energy', label: 'Дульная энергия, МДж', digits: 1, better: 'high' },
+  ...(showRange
+    ? [{ key: 'range', label: 'Наибольшая дальность, км', digits: 1, better: 'high' }]
+    : [
+        { key: 'far', label: `Скорость на ${distance / 1000} км, м/с`, digits: 0, better: 'high' },
+        { key: 'keep', label: 'Сохраняет скорости, %', digits: 0, better: 'high' },
+        { key: 'time', label: `Время до ${distance / 1000} км, с`, digits: 2, better: 'low' },
+      ]),
+] as const;
+type Key = (typeof columns)[number]['key'];
+const value = (row: (typeof rows)[number], key: Key) => row[key as keyof typeof row] as number | undefined;
+const share = (row: (typeof rows)[number], column: (typeof columns)[number]) => {
+  const current = value(row, column.key);
+  if (current === undefined || column.better === 'none') return 0;
+  const all = rows.map((r) => value(r, column.key)).filter((v): v is number => v !== undefined);
+  const min = Math.min(...all);
+  const max = Math.max(...all);
+  if (max === min) return 0;
+  const position = (current - min) / (max - min);
+  return column.better === 'low' ? 1 - position : position;
+};
+const format = (v: number | undefined, digits: number) =>
+  v === undefined ? 'нет данных' : v.toLocaleString('ru-RU', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+---
+<div class="heat-wrap">
+  <table class="heat" data-heat>
+    <caption>{caption}</caption>
+    <thead>
+      <tr>
+        <th scope="col"><button type="button" data-sort="text">Снаряд</button></th>
+        <th scope="col"><button type="button" data-sort="text">Орудие</button></th>
+        <th scope="col"><button type="button" data-sort="text">Тип</button></th>
+        {columns.map((column) => <th scope="col" class="heat-num"><button type="button" data-sort="num">{column.label}</button></th>)}
+      </tr>
+    </thead>
+    <tbody>
+      {rows.map((row) => (
+        <tr>
+          <th scope="row">{row.name}</th>
+          <td>{row.gun}</td>
+          <td class="num">{row.type}</td>
+          {columns.map((column) => {
+            const current = value(row, column.key);
+            return (
+              <td class="heat-num num" data-v={current ?? ''} style={`--h:${share(row, column).toFixed(2)}`}>
+                {current === undefined ? <span class="heat-none">нет данных</span> : `≈${format(current, column.digits)}`}
+              </td>
+            );
+          })}
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLTableElement>('[data-heat]').forEach((table) => {
+    const body = table.tBodies[0];
+    const heads = [...table.querySelectorAll<HTMLButtonElement>('thead button')];
+    heads.forEach((button, index) => {
+      button.addEventListener('click', () => {
+        const cell = button.parentElement!;
+        const descending = cell.getAttribute('aria-sort') !== 'descending';
+        heads.forEach((other) => other.parentElement!.removeAttribute('aria-sort'));
+        cell.setAttribute('aria-sort', descending ? 'descending' : 'ascending');
+        const numeric = button.dataset.sort === 'num';
+        const key = (row: HTMLTableRowElement) => {
+          const target = row.cells[index];
+          return numeric ? (target.dataset.v === '' ? null : Number(target.dataset.v)) : target.textContent!.trim();
+        };
+        const sorted = [...body.rows].sort((a, b) => {
+          const left = key(a);
+          const right = key(b);
+          if (left === null) return 1;
+          if (right === null) return -1;
+          const order = typeof left === 'number' ? left - (right as number) : String(left).localeCompare(String(right), 'ru');
+          return descending ? -order : order;
+        });
+        body.replaceChildren(...sorted);
+      });
+    });
+  });
+</script>

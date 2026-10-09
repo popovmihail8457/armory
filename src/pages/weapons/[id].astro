@@ -6,6 +6,8 @@ import ModTabs from '../../components/ModTabs.astro';
 import { weaponMods } from '../../data/weapons/mods';
 import { weaponCosts } from '../../data/weapons/costs';
 import WarheadDemo from '../../components/WarheadDemo.astro';
+import BallisticsLab from '../../components/BallisticsLab.astro';
+import { gunsOfWeapon } from '../../data/shells';
 import { warheadScenes } from '../../data/weapons/warheads';
 import { equipment } from '../../data/equipment';
 import { weaponMetrics } from '../../data/weapons/taxonomy';
@@ -34,12 +36,14 @@ const specRows = category.metrics
 const others = peers.filter((p) => p.id !== weapon.id);
 const mods = weaponMods[weapon.id] ?? [];
 const cost = weaponCosts[weapon.id];
+const shellGuns = gunsOfWeapon(weapon.id);
 const scenes = warheadScenes(weapon.id, Math.max(1, mods.length));
 const tocItems = [
   { id: 'principle', label: 'Принцип работы' },
   { id: 'specs', label: 'Характеристики' },
   { id: 'design', label: 'Устройство' },
   { id: 'warhead', label: 'Боевая часть' },
+  shellGuns.length > 0 && { id: 'shells', label: 'Снаряды и баллистика' },
   { id: 'features', label: 'Особенности' },
   { id: 'history', label: 'История' },
   mods.length > 0 && { id: 'mods', label: 'Модификации' },
@@ -132,6 +136,18 @@ const tocItems = [
       <WarheadDemo perMod={scenes} initial={scenes[0]} />
     </div>
   </section>
+
+  {shellGuns.length > 0 && (
+    <section class="section" id="shells" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Снаряды и баллистика</h2>
+          <p class="lead">Выберите снаряд и угол ствола. В режиме сравнения на одном графике видны траектории нескольких снарядов.</p>
+        </div>
+        <BallisticsLab gunIds={shellGuns.map((gun) => gun.id)} />
+      </div>
+    </section>
+  )}
 
   <section class="section" id="features" style={`--c:var(--era-${era.id})`}>
     <div class="wrap">
