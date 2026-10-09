@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+import { eras } from '../data/taxonomy';
+---
+<Base title="Страница не найдена" noPhoto noindex description="Такой страницы в справочнике нет.">
+  <section class="wrap">
+    <h1>Страницы нет</h1>
+    <p>Адрес введён неверно или страница переехала. Выберите раздел справочника:</p>
+    <ul>
+      <li><a href="/">Главная</a></li>
+      {eras.map((era) => <li><a href={`/periods/${era.id}/`}>{era.from}–{era.to === 2026 ? 'н. в.' : era.to}</a></li>)}
+      <li><a href="/weapons/">Вооружение</a></li>
+      <li><a href="/sources/">О данных</a></li>
+    </ul>
+  </section>
+</Base>

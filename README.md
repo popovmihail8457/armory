@@ -1,43 +1,35 @@
-# Astro Starter Kit: Minimal
+# Арсенал
+
+Справочник военной техники с 1947 года до наших дней: флот, авиация, наземная техника и вооружение. Сайт статический (Astro), на русском языке.
+
+## Команды
+
+| Команда | Действие |
+| :-- | :-- |
+| `npm install` | Установить зависимости (нужен Node 22.12 или новее) |
+| `npm run dev` | Сервер разработки на `localhost:4321` |
+| `npm run build` | Собрать сайт в `dist/` |
+| `npm run preview` | Посмотреть собранный сайт локально |
+| `node scripts/check-data.mjs` | Проверить связность данных (ссылки между техникой, вооружением, версиями) |
+
+## Публикация
+
+Сайт собирается в статические файлы, подойдёт любой статический хостинг. Для боевой сборки задайте адрес сайта, иначе не создаются canonical, Open Graph и карта сайта:
 
 ```sh
-npm create astro@latest -- --template minimal
+SITE_URL=https://ваш-домен npm run build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+В PowerShell: `$env:SITE_URL = "https://ваш-домен"; npm run build`.
+Содержимое папки `dist/` загружается на хостинг целиком. В сборке есть `robots.txt` и `sitemap-index.xml`.
 
-## 🚀 Project Structure
+## Данные и фото
 
-Inside of your Astro project, you'll see the following folders and files:
+- Данные лежат в `src/data/` (техника, вооружение, версии, графики полёта, броня, датчики, схемы кораблей).
+- Фото только реальные, Public domain или CC0. Автор и лицензия каждого снимка записаны в `manifest.json` рядом с файлами в `public/bg/` и выводятся на странице `/sources/`.
+- Числа в справочнике ориентировочные и помечены «≈». Если открытых данных нет, так и написано.
+- Сжатие новых фото: `node scripts/optimize-photos.mjs`.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Секреты
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+В проекте нет ключей и токенов. Если понадобятся, хранить только в `.env` (он в `.gitignore`), в репозиторий класть `.env.example` с пустыми значениями.
