@@ -18,7 +18,7 @@ import { armorOf, armorSchemes } from '../../data/armor';
 import { hangars } from '../../data/hangars';
 import { armorDetails } from '../../data/armor-details';
 import VariantSwitch from '../../components/VariantSwitch.astro';
-import { variants } from '../../data/variants';
+import { variantsOf } from '../../data/variants';
 import { shipSchemes, launchScenes } from '../../data/ships';
 import { fleetSchemes } from '../../data/ships-fleet';
 import { samSensors, type Sensor } from '../../data/sensors';
@@ -73,7 +73,7 @@ const launches = launchScenes[item.id] ?? [];
 const trajScene = equipmentScene(item, launches.length > 0);
 const armor = armorSchemes.find((scheme) => scheme.id === armorOf[item.id]);
 const hangar = hangars[item.id];
-const variantList = variants[item.id] ?? [];
+const variantList = variantsOf(item, story?.variants);
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
 const placeWord = { aviation: 'Ангар', fleet: 'Док', ground: 'Бокс' }[domain.id];
 const tocItems = [

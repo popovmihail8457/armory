@@ -114,11 +114,17 @@ const fullTitle = title === 'Арсенал' ? 'Арсенал: справочн
       const tocLinks = [...document.querySelectorAll('.toc a[href^="#"]')];
       if (tocLinks.length > 0 && 'IntersectionObserver' in window) {
         const byId = new Map(tocLinks.map((link) => [link.getAttribute('href').slice(1), link]));
+        const glow = document.createElement('span');
+        glow.className = 'toc-glow';
+        tocLinks[0].parentElement.prepend(glow);
         const mark = (id) => {
           tocLinks.forEach((link) => link.removeAttribute('aria-current'));
           const link = byId.get(id);
           if (!link) return;
           link.setAttribute('aria-current', 'true');
+          glow.style.setProperty('--x', link.offsetLeft + 'px');
+          glow.style.setProperty('--w', link.offsetWidth + 'px');
+          glow.classList.add('on');
           const bar = link.parentElement;
           bar.scrollTo({ left: link.offsetLeft - bar.clientWidth / 2 + link.offsetWidth / 2, behavior: 'smooth' });
         };

@@ -8,7 +8,8 @@ import type { MetricId } from './taxonomy';
  */
 export interface Variant {
   name: string;
-  year: number;
+  /** Год принятия версии. Если он в открытых данных не уточнён, не указывается. */
+  year?: number;
   text: string;
   specs?: Partial<Record<MetricId, number>>;
   /** Радиолокатор и сектор обзора одной строкой. */
@@ -106,3 +107,16 @@ export const variants: Record<string, Variant[]> = {
     { name: 'Flight III', year: 2023, text: 'Новый радиолокатор с активными решётками на нитриде галлия и более мощная электростанция для него.', specs: { displacement: 9700, length: 155.3 }, radar: 'AN/SPY-6: чувствительность в десятки раз выше, чем у SPY-1', changes: ['Радиолокатор AN/SPY-6', 'Усиленные электростанция и охлаждение'], remove: ['harpoon'] },
   ],
 };
+
+/**
+ * Версии для переключателя. Если для машины нет подробного описания, переключатель собирается из списка
+ * версий в её досье: первая совпадает с базовой записью, остальные описаны общим текстом без выдуманных различий.
+ */
+export function variantsOf(item: { id: string; name: string; year: number; text: string }, names?: string[]): Variant[] {
+  const detailed = variants[item.id];
+  if (detailed) return detailed;
+  if (!names || names.length < 2) return [{ name: item.name, year: item.year, text: item.text }];
+  return names.map((name, i) => (i === 0
+    ? { name, year: item.year, text: item.text }
+    : { name, text: 'Серия или модификация этого семейства. Отдельных открытых данных для сравнения в справочнике нет: характеристики и состав вооружения даны по базовой записи.' }));
+}

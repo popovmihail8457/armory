@@ -42,7 +42,7 @@ const delta = (value: number, base?: number) => {
   <div class="radar-tabs" role="tablist" aria-label="Версии">
     {list.map((variant, i) => (
       <button type="button" role="tab" class="radar-tab" id={`variant-tab-${i}`} aria-controls={`variant-panel-${i}`} aria-selected={i === 0} tabindex={i === 0 ? 0 : -1}>
-        <span>{variant.name}</span><span class="num variant-year">{variant.year}</span>
+        <span>{variant.name}</span>{variant.year && <span class="num variant-year">{variant.year}</span>}
       </button>
     ))}
   </div>
@@ -50,7 +50,7 @@ const delta = (value: number, base?: number) => {
     <article class="variant-panel" role="tabpanel" id={`variant-panel-${i}`} aria-labelledby={`variant-tab-${i}`} hidden={i !== 0}>
       <div class="variant-main">
         <header>
-          <span class="eyebrow num">{variant.year}</span>
+          {variant.year && <span class="eyebrow num">{variant.year}</span>}
           <h3>{variant.name}</h3>
         </header>
         <p class="variant-text">{variant.text}</p>

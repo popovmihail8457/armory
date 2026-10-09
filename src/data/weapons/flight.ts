@@ -1,6 +1,7 @@
 import { calibrate, type FlightProfile, type FlightScenario } from '../../lib/missileFlight';
 import { weapons } from './data';
 import { weaponMods } from './mods';
+import type { WeaponData } from './types';
 
 export type FlightKind = 'short' | 'medium' | 'long' | 'ramjet' | 'manpads' | 'sam-short' | 'sam-medium' | 'sam-long';
 export type FlightGroup = 'air' | 'ground';
@@ -42,6 +43,24 @@ export const flightKindOf: Record<string, FlightKind> = {
   'hawk-missile': 'sam-medium', '9m38': 'sam-medium', 'essm': 'sam-medium', 'v-750': 'sam-medium', '5v27': 'sam-medium', '3m9': 'sam-medium',
   'pac-2': 'sam-long', '48n6': 'sam-long', '40n6': 'sam-long', 'sm-2': 'sam-long', 'aster-30': 'sam-long', 'sm-6': 'sam-long',
 };
+
+const AUTO_CATEGORIES = new Set(['aam', 'sam', 'sea-air', 'manpads']);
+
+/** Класс полёта: явный из таблицы, иначе по классу и дальности образца. */
+function kindOf(weapon: WeaponData): FlightKind | undefined {
+  if (flightKindOf[weapon.id]) return flightKindOf[weapon.id];
+  const range = weapon.specs.range;
+  if (!AUTO_CATEGORIES.has(weapon.category) || range === undefined) return undefined;
+  if (weapon.category === 'manpads') return 'manpads';
+  if (weapon.category === 'aam') return range <= 30 ? 'short' : range <= 120 ? 'medium' : 'long';
+  return range <= 12 ? 'sam-short' : range <= 60 ? 'sam-medium' : 'sam-long';
+}
+
+/**
+ * Калибр, если он не опубликован: оценка по массе по степенной зависимости, снятой с ракет с известным калибром.
+ * Сопротивление всё равно подгоняется под опубликованную дальность, поэтому оценка влияет на форму графика слабо.
+ */
+const estimateDiameter = (mass: number): number => Math.round(127 * Math.pow(mass / 85, 0.4));
 
 /** Отличия версии от базовой записи каталога. Незаполненные поля берутся из каталога. */
 export interface FlightModSpec {
@@ -126,19 +145,25 @@ const round = (value: number, digits: number) => Number(value.toFixed(digits));
 
 /** Профили полёта, сверенные с опубликованными дальностью и скоростью. Считаются один раз при сборке. */
 export const flightEntries: FlightEntry[] = weapons.flatMap((weapon) => {
-  const kind = flightKindOf[weapon.id];
-  const { mass, diameter, range, speed } = weapon.specs;
-  if (!kind || mass === undefined || diameter === undefined || range === undefined) return [];
+  const kind = kindOf(weapon);
+  const { mass, range, speed } = weapon.specs;
+  if (!kind || mass === undefined || range === undefined) return [];
+  const diameter = weapon.specs.diameter ?? estimateDiameter(mass);
   const preset = flightKinds[kind];
-  const profile = calibrate(
+  let profile: FlightProfile;
+  try {
+    profile = calibrate(
     { mass, diameter, burn: preset.burn, loft: preset.loft },
     preset.reference,
     range * 1000,
     speed !== undefined ? speed / 3.6 : undefined,
   );
+  } catch {
+    return [];
+  }
   const clean = { ...profile, propFrac: round(profile.propFrac, 3), cd: round(profile.cd, 3) };
   const names = weaponMods[weapon.id] ?? [];
-  const specs = flightMods[weapon.id] ?? [];
+  const specs = flightMods[weapon.id] ?? names.map(() => null);
   if (specs.length > 0 && specs.length !== names.length) throw new Error(`flightMods['${weapon.id}']: версий ${specs.length}, а в mods.ts ${names.length}`);
   const mods: FlightModEntry[] = specs.map((spec, i) => {
     if (spec === null) return { name: names[i].name, profile: null };

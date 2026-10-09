@@ -28,9 +28,10 @@ const firstGun = data.find((gun) => gun.shells.some((shell) => shell.id === init
 ---
 <section class="ball" data-ball data-guns={JSON.stringify(data)} data-initial={initial ?? ''}>
   <div class="ball-top">
-    <label class="ball-field" hidden={data.length < 2}>
+    <div class="ball-field gun-field" hidden={data.length < 2}>
       <span class="eyebrow">Орудие и техника</span>
-      <select class="ball-gun">
+      <div class="gun-tabs" role="tablist" aria-label="Орудие и техника"></div>
+      <select class="ball-gun" hidden aria-hidden="true" tabindex="-1">
         {kinds.map((kind) => (
           <optgroup label={kindLabel[kind]}>
             {shownGuns.filter((gun) => gun.kind === kind).map((gun) => (
@@ -39,7 +40,7 @@ const firstGun = data.find((gun) => gun.shells.some((shell) => shell.id === init
           </optgroup>
         ))}
       </select>
-    </label>
+    </div>
     <div class="ball-field">
       <span class="eyebrow">Снаряд</span>
       <div class="ball-shells" role="group" aria-label="Снаряды орудия"></div>
@@ -355,6 +356,31 @@ const firstGun = data.find((gun) => gun.shells.some((shell) => shell.id === init
       playing = requestAnimationFrame(frame);
     }
 
+    const gunTabs = $('.gun-tabs');
+    const buildGunTabs = () => {
+      gunTabs.replaceChildren(...[...gunSelect.options].map((option, i) => {
+        const [title, ...rest] = option.textContent!.split(': ');
+        const tab = document.createElement('button');
+        tab.type = 'button';
+        tab.setAttribute('role', 'tab');
+        tab.className = 'gun-tab';
+        tab.dataset.id = option.value;
+        tab.style.setProperty('--i', String(i));
+        tab.innerHTML = '<b></b><small></small>';
+        tab.children[0].textContent = title;
+        tab.children[1].textContent = rest.join(': ');
+        tab.addEventListener('click', () => { gunSelect.value = option.value; gunSelect.dispatchEvent(new Event('change')); });
+        return tab;
+      }));
+    };
+    const markGunTab = () => gunTabs.querySelectorAll<HTMLElement>('.gun-tab').forEach((tab) => {
+      const on = tab.dataset.id === gunSelect.value;
+      tab.setAttribute('aria-selected', String(on));
+      if (on) tab.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    });
+    buildGunTabs();
+    markGunTab();
+    gunSelect.addEventListener('change', markGunTab);
     gunSelect.addEventListener('change', () => { stop(); time = 0; selectGun(gunList.find((g) => g.id === gunSelect.value) ?? gunList[0]); });
     slider.addEventListener('input', () => { stop(); angle = Number(slider.value); update(); });
     root.querySelectorAll<HTMLButtonElement>('[data-angle]').forEach((button) => button.addEventListener('click', () => {

@@ -17,11 +17,21 @@ const first = entries.find((entry) => entry.id === initial) ?? entries[0];
 const reference = flightKinds[first.kind].reference;
 const air = group === 'air';
 ---
-<section class="ball flight" data-flight data-entries={JSON.stringify(entries)} data-initial={first.id} data-air={String(air)} data-follow={String(followMods && first.mods.some((mod) => mod.profile))}>
+<section class="ball flight" data-flight data-entries={JSON.stringify(entries)} data-initial={first.id} data-air={String(air)} data-follow={String(followMods && first.mods.length > 0)}>
   <div class="ball-top">
     <div class="ball-field flight-pick">
       <span class="eyebrow">Ракета</span>
-      <div class="ball-shells" role="group" aria-label="Ракеты"></div>
+      <div class="flight-tools">
+        <button type="button" class="ball-btn flight-step" data-step="-1" aria-label="Предыдущая ракета">&lsaquo;</button>
+        <input type="search" class="flight-search" placeholder="Найти ракету" aria-label="Найти ракету по названию" />
+        <button type="button" class="ball-btn flight-step" data-step="1" aria-label="Следующая ракета">&rsaquo;</button>
+        <span class="flight-count num"></span>
+      </div>
+      <div class="ball-shells flight-list" role="group" aria-label="Ракеты"></div>
+      <div class="flight-mods-wrap" hidden>
+        <span class="eyebrow">Версия</span>
+        <div class="flight-mods" role="group" aria-label="Версии ракеты"></div>
+      </div>
       <button type="button" class="ball-btn ball-compare" aria-pressed="false">Сравнение: выкл.</button>
       {followMods && first.mods.filter((mod) => mod.profile).length > 1 && <button type="button" class="ball-btn flight-versions" aria-pressed="false">Сравнить версии</button>}
     </div>
@@ -174,28 +184,70 @@ const air = group === 'air';
     let series: { entry: Entry; result: FlightResult; color: string }[] = [];
     const ownId = root.dataset.initial ?? entries[0].id;
     const own = entries.find((e) => e.id === ownId)!;
+    const entryById = new Map(entries.map((e) => [e.id, e]));
+    /** Выбранная версия по ракетам: индекс в списке версий, undefined означает базовую запись каталога. */
+    const modOf: Record<string, number | undefined> = {};
+    const modBox = $('.flight-mods');
+    const modWrap = $('.flight-mods-wrap');
+    const searchBox = $<HTMLInputElement>('.flight-search');
+    const countOut = $('.flight-count');
     const follow = root.dataset.follow === 'true';
     const versionsBtn = root.querySelector<HTMLButtonElement>('.flight-versions');
     const modNote = $('.flight-modnote');
-    /** Выбранная версия своей ракеты: подменяет профиль записи каталога. */
-    let ownView: Entry | null = null;
     let versionMode = false;
-    const asEntry = (mod: ModEntry): Entry => ({ ...own, name: mod.name, profile: mod.profile!, rangeKm: mod.rangeKm ?? own.rangeKm, speedKmh: mod.speedKmh });
-    const resolve = (id: string): Entry => (id === ownId && ownView ? ownView : entries.find((e) => e.id === id)!);
-    const versionEntries = (): Entry[] => (own.mods ?? []).filter((mod) => mod.profile).slice(-MAX_COMPARE).map(asEntry);
+    const asEntry = (base: Entry, mod: ModEntry): Entry => ({ ...base, name: mod.name, profile: mod.profile!, rangeKm: mod.rangeKm ?? base.rangeKm, speedKmh: mod.speedKmh });
+    const resolve = (id: string): Entry => {
+      const base = entryById.get(id)!;
+      const index = modOf[id];
+      const mod = index === undefined ? undefined : base.mods?.[index];
+      return mod?.profile ? asEntry(base, mod) : base;
+    };
+    const versionEntries = (): Entry[] => {
+      const base = entryById.get(selected[0])!;
+      return (base.mods ?? []).filter((mod) => mod.profile).slice(-MAX_COMPARE).map((mod) => asEntry(base, mod));
+    };
     const shown = (): Entry[] => (versionMode ? versionEntries() : selected.map(resolve));
+
+    function pickMod(id: string, index: number | undefined) {
+      modOf[id] = index;
+      stop();
+      time = 0;
+      fitDistance();
+      update();
+    }
+
+    function renderMods() {
+      const base = entryById.get(selected[0])!;
+      const mods = base.mods ?? [];
+      modWrap.hidden = mods.length === 0;
+      modBox.replaceChildren(...[{ name: 'Базовая', profile: base.profile } as ModEntry, ...mods].map((mod, i) => {
+        const index = i === 0 ? undefined : i - 1;
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ball-btn flight-mod';
+        button.textContent = mod.name;
+        const empty = i > 0 && !mod.profile;
+        button.disabled = empty;
+        if (empty) button.title = 'Отдельных открытых данных по версии нет';
+        button.setAttribute('aria-pressed', String(modOf[base.id] === index));
+        button.addEventListener('click', () => pickMod(base.id, index));
+        return button;
+      }));
+    }
 
     function followMod(index: number) {
       const mods = own.mods ?? [];
       const picked = mods[index];
       if (!picked) return;
-      const fallback = picked.profile ? picked : [...mods.slice(0, index)].reverse().find((mod) => mod.profile) ?? mods.slice(index).find((mod) => mod.profile);
-      if (!fallback) return;
-      ownView = asEntry(fallback);
+      if (!selected.includes(ownId)) selected = [ownId];
+      let fallbackIndex = -1;
+      for (let i = index - 1; i >= 0 && fallbackIndex < 0; i -= 1) if (mods[i].profile) fallbackIndex = i;
+      modOf[ownId] = picked.profile ? index : fallbackIndex >= 0 ? fallbackIndex : undefined;
+      const shownName = modOf[ownId] === undefined ? 'базовая запись' : mods[modOf[ownId]!].name;
       modNote.hidden = false;
       modNote.textContent = picked.profile
         ? `График построен для версии ${picked.name}.`
-        : `Отдельных открытых данных по версии ${picked.name} нет, показана ${fallback.name}.`;
+        : `Отдельных открытых данных по версии ${picked.name} нет, показана ${shownName}.`;
       stop();
       time = 0;
       fitDistance();
@@ -230,6 +282,41 @@ const air = group === 'air';
       time = Math.min(time, series[0].result.time);
     }
 
+    function choose(id: string) {
+      if (versionMode) setVersionMode(false);
+      if (!compare) selected = [id];
+      else if (selected.includes(id)) selected = selected.length > 1 ? selected.filter((item) => item !== id) : selected;
+      else if (selected.length < MAX_COMPARE) selected = [...selected, id];
+      stop();
+      time = 0;
+      fitDistance();
+      update();
+    }
+
+    function applyFilter() {
+      const query = searchBox.value.trim().toLowerCase();
+      let visible = 0;
+      shellBox.querySelectorAll<HTMLButtonElement>('.ball-shell').forEach((button) => {
+        const match = !query || button.textContent!.toLowerCase().includes(query);
+        button.hidden = !match;
+        if (match) visible += 1;
+      });
+      countOut.textContent = query ? `${visible} из ${entries.length}` : `${entries.length} ракет`;
+    }
+
+    function step(delta: number) {
+      const list = [...shellBox.querySelectorAll<HTMLButtonElement>('.ball-shell')].filter((button) => !button.hidden).map((button) => button.dataset.id!);
+      if (list.length === 0) return;
+      const at = list.indexOf(selected[0]);
+      const next = list[(at + delta + list.length * 2) % list.length];
+      selected = compare ? [...selected.slice(0, 0), next, ...selected.slice(1).filter((id) => id !== next)] : [next];
+      stop();
+      time = 0;
+      fitDistance();
+      update();
+      shellBox.querySelector<HTMLElement>('[data-id="' + next + '"]')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+    }
+
     function renderButtons() {
       shellBox.replaceChildren(...entries.map((entry) => {
         const button = document.createElement('button');
@@ -238,18 +325,10 @@ const air = group === 'air';
         button.dataset.id = entry.id;
         button.title = entry.kindLabel;
         button.textContent = entry.name;
-        button.addEventListener('click', () => {
-          if (versionMode) setVersionMode(false);
-          if (!compare) selected = [entry.id];
-          else if (selected.includes(entry.id)) selected = selected.length > 1 ? selected.filter((s) => s !== entry.id) : selected;
-          else if (selected.length < MAX_COMPARE) selected = [...selected, entry.id];
-          stop();
-          time = 0;
-          fitDistance();
-          update();
-        });
+        button.addEventListener('click', () => choose(entry.id));
         return button;
       }));
+      applyFilter();
     }
 
     function renderInfo() {
@@ -267,6 +346,7 @@ const air = group === 'air';
         row.children[2].textContent = item.result.reached ? `≈${fmt(item.result.time, 1)} с` : `не долетает, ≈${fmt(item.result.reach / 1000, 1)} км`;
         return row;
       }));
+      renderMods();
       setText('.ball-type', entry.kindLabel);
       setText('.ball-name', entry.name);
       setText('.flight-verdict', result.reached
@@ -431,6 +511,8 @@ const air = group === 'air';
       versionsBtn?.setAttribute('aria-pressed', String(on));
       if (versionsBtn) versionsBtn.textContent = on ? 'Версии: на графике' : 'Сравнить версии';
     }
+    searchBox.addEventListener('input', applyFilter);
+    root.querySelectorAll<HTMLButtonElement>('.flight-step').forEach((button) => button.addEventListener('click', () => step(Number(button.dataset.step))));
     versionsBtn?.addEventListener('click', () => { setVersionMode(!versionMode); stop(); time = 0; fitDistance(); update(); });
     if (follow) document.addEventListener('modselect', (event) => followMod((event as CustomEvent<{ index: number }>).detail.index));
     sliders.forEach((input) => input.addEventListener('input', () => { stop(); update(); }));
