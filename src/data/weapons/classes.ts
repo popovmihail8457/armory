@@ -6,7 +6,7 @@ import type { WeaponCategoryId, WeaponData } from './types';
  */
 
 /** Малые управляемые ракеты и боеприпасы «воздух-поверхность» (УРВП). */
-const LIGHT_AGM = new Set(['agm-114', 'agm-176', 'apkws', 'mam-l', 'mam-t', 'cirit', 'umtas', 'hj-10', 'pars3-lr', 'blue-arrow-7', 'kab-20', 'brimstone', 'agm-179', 'jagm', 'gbu-44']);
+const LIGHT_AGM = new Set(['agm-114', 'agm-176', 'apkws', 'mam-l', 'mam-t', 'cirit', 'umtas', 'hj-10', 'pars3-lr', 'blue-arrow-7', 'kab-20', 'brimstone', 'agm-179', 'jagm', 'gbu-44', 'lmur']);
 /** Ракеты ПЗРК. */
 const MANPADS = new Set(['stinger-missile', '9m32', '9m39', '9m342', '9m336', 'redeye-missile', 'mistral-missile', 'starstreak-missile', 'blowpipe', 'rbs-70', 'rbs-90', 'piorun-missile', 'qw-1', 'anza', 'javelin-sam', 'starburst', '9m36', 'fn-6']);
 

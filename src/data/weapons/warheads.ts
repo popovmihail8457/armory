@@ -124,7 +124,7 @@ const EXTRA: Record<string, WarheadScene | null> = {
   'agm-12': 'blast', 'kh-23': 'blast', 'kh-25': 'blast', 'kh-15': 'blast', 'martel': 'frag', 'kh-28': 'frag', 'agm-78': 'frag',
   // лёгкие ракеты и боеприпасы «воздух-поверхность»: боевая часть рассчитана на технику, а не на здания
   'agm-114': 'shaped', 'jagm': 'tandem', 'hj-10': 'tandem', 'pars3-lr': 'tandem', 'umtas': 'tandem', 'brimstone': 'tandem',
-  'agm-176': 'frag', 'mam-l': 'frag', 'mam-t': 'frag', 'cirit': 'frag', 'apkws': 'frag', 'kab-20': 'frag', 'blue-arrow-7': 'frag', 'gbu-44': 'frag',
+  'agm-176': 'frag', 'lmur': 'tandem', 'mam-l': 'frag', 'mam-t': 'frag', 'cirit': 'frag', 'apkws': 'frag', 'kab-20': 'frag', 'blue-arrow-7': 'frag', 'gbu-44': 'frag',
   // только ядерное оснащение: сцена не показывается
   'agm-28': null, 'agm-69': null, 'asmp': null, 'honest-john': null, 'pershing-1a': null, 'pershing-2-missile': null, 'subroc': null,
   // перехват прямым попаданием

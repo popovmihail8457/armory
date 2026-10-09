@@ -1,7 +1,7 @@
 ---
 import type { Equipment } from '../data/equipment';
 import type { WeaponData } from '../data/weapons/types';
-import { hardpointSpecs, layoutOfGroup, TYPICAL_EXTERNAL, stationsOf, roleName, roleAccepts, loadouts, silhouettes } from '../data/hardpoints';
+import { hardpointSpecs, layoutOf, layoutOfGroup, TYPICAL_EXTERNAL, stationsOf, roleName, roleAccepts, loadouts, silhouettes } from '../data/hardpoints';
 import { weaponUrl } from '../lib/weapons';
 
 interface Props {
@@ -11,7 +11,7 @@ interface Props {
 
 const { item, weapons } = Astro.props;
 const spec = hardpointSpecs[item.id];
-const layout = spec?.layout ?? layoutOfGroup[item.group] ?? 'fighter';
+const layout = layoutOf[item.id] ?? layoutOfGroup[item.group] ?? 'fighter';
 const known = spec?.external !== undefined || spec?.internal !== undefined;
 const external = spec?.external ?? (known ? 0 : TYPICAL_EXTERNAL[layout]);
 const internal = spec?.internal ?? 0;
