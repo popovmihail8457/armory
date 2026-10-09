@@ -209,8 +209,13 @@ const start = scenes.some((scene) => scene.id === initial) ? initial : scenes[0]
       for (let x = 0; x <= W; x += 6) ctx.lineTo(x, terrain(x));
       ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
       polyline(Array.from({ length: Math.floor(W / 6) + 1 }, (_, i): Pt => [i * 6, terrain(i * 6)]), 'rgba(255,255,255,0.3)', 1);
-      const px = (v: number) => 60 + (610 - 60) * v;
-      const py = (x: number) => Math.min(terrain(x), terrain(x + 24), terrain(x + 48)) - 40;
+      const TX = 630;
+      const px = (v: number) => 60 + (TX - 60) * v;
+      const py = (x: number) => {
+        const cruiseY = Math.min(terrain(x), terrain(x + 24), terrain(x + 48)) - 40;
+        const k = clamp((x - 540) / (TX - 540), 0, 1);
+        return mix(cruiseY, terrain(TX) - 22, k * k);
+      };
       const mx = px(u), my = py(mx);
       const trail: Pt[] = Array.from({ length: Math.floor(u * 140) + 1 }, (_, i): Pt => { const x = px(i / 140); return [x, py(x)]; });
       polyline(trail, accent, 2, 0.8);
@@ -220,11 +225,11 @@ const start = scenes.some((scene) => scene.id === initial) ? initial : scenes[0]
         if (mx > fx - 6 && mx < fx + 70) ring(mx, my, 10 + ((time * 40) % 24), green, 2, 0.5);
         if (i === 0) text('точка коррекции', fx, fy - 88, faint, 11, 'center');
       });
-      ctx.fillStyle = '#8a8a82'; ctx.fillRect(612, terrain(640) - 22, 36, 22);
+      ctx.fillStyle = '#8a8a82'; ctx.fillRect(TX - 18, terrain(TX) - 22, 36, 22);
       if (u < 1) {
         line(mx, my, mx, terrain(mx), faint, 1, 0.8, [3, 3]); text('высота над рельефом', mx + 8, (my + terrain(mx)) / 2, faint, 11);
         const nx = px(Math.min(1, u + 0.01)); missile(mx, my, Math.atan2(py(nx) - my, nx - mx), false);
-      } else burst(630, terrain(630) - 20, (s - 7.9) / 0.9);
+      } else burst(TX, terrain(TX) - 24, (s - 7.9) / 0.9);
       dot(70, 60, 5, '#8a8a82'); text('спутник', 82, 64, faint, 11);
       if (u > 0 && u < 1 && Math.floor(time * 2) % 2 === 0) line(70, 62, mx, my, green, 1, 0.25, [2, 6]);
       caption('Ракета повторяет рельеф и корректирует положение по спутнику и карте');

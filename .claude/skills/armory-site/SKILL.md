@@ -67,3 +67,6 @@ description: Работа с сайтом «Арсенал» (справочни
 
 ## Фото: сжатие
 После загрузки и отбора фото запустить `node scripts/optimize-photos.mjs`: основной файл не шире 1600 px, рядом `<имя>-m.jpg` 900 px для экранов до 720 px (подставляется в `Base.astro`). Скрипт безопасно запускать повторно.
+
+## Классы вооружения и траектории
+Классы стволов и малых ракет назначаются в `src/data/weapons/classes.ts` (`reclass`), список проверяется `node --experimental-strip-types scripts/list-classes.mts`. Сцена траектории образца: `trajectoryOf` в `src/data/trajectory.ts`, сцены самой анимации в `TrajectoryDemo.astro` (`SHOTS` для выстрелов по дуге). Точки подвески самолётов: `src/data/hardpoints.ts`, число точек вносить только если оно известно.

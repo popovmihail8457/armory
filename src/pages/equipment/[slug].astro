@@ -10,6 +10,7 @@ import CoverageDiagram from '../../components/CoverageDiagram.astro';
 import OperationsReel from '../../components/OperationsReel.astro';
 import BallisticsLab from '../../components/BallisticsLab.astro';
 import ShipExplorer from '../../components/ShipExplorer.astro';
+import Hardpoints from '../../components/Hardpoints.astro';
 import SensorScope from '../../components/SensorScope.astro';
 import NavalLaunchDemo from '../../components/NavalLaunchDemo.astro';
 import ArmorDemo from '../../components/ArmorDemo.astro';
@@ -75,6 +76,7 @@ const armor = armorSchemes.find((scheme) => scheme.id === armorOf[item.id]);
 const hangar = hangars[item.id];
 const variantList = variantsOf(item, story?.variants);
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
+const hasHardpoints = ['fighters', 'bombers', 'helicopters', 'uav'].includes(item.group) && usedWeapons.some((weapon) => weapon.category !== 'aircraft-guns');
 const placeWord = { aviation: 'Ангар', fleet: 'Док', ground: 'Бокс' }[domain.id];
 const tocItems = [
   variantList.length > 0 && { id: 'variants', label: 'Версии' },
@@ -87,6 +89,7 @@ const tocItems = [
   sensors.length > 0 && { id: 'sensors', label: 'Радары и секторы' },
   launches.length > 0 && { id: 'launch', label: 'Пуск ракет' },
   arms && { id: 'armament', label: 'Вооружение' },
+  hasHardpoints && { id: 'hardpoints', label: 'Точки подвески' },
   trajScene && { id: 'trajectory', label: 'Траектория' },
   itemGuns.length > 0 && { id: 'shells', label: 'Снаряды и баллистика' },
   usedWeapons.length > 0 && { id: 'weapons-used', label: 'Применяемое оружие' },
@@ -251,6 +254,18 @@ const tocItems = [
           <p class="lead">Наведите курсор на строку или номер на фото, чтобы увидеть, где что расположено.</p>
         </div>
         <ArmamentMap entry={arms} />
+      </div>
+    </section>
+  )}
+
+  {hasHardpoints && (
+    <section class="section" id="hardpoints" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Точки подвески</h2>
+          <p class="lead">Схема сверху: выберите набор нагрузки, чтобы увидеть, какие точки и какое оружие в нём участвуют. Наведите курсор на номер, чтобы найти строку.</p>
+        </div>
+        <Hardpoints item={item} weapons={usedWeapons} />
       </div>
     </section>
   )}
