@@ -56,7 +56,13 @@ export const shellTypes: ShellType[] = [
 ];
 
 export const guns: Gun[] = [
-  { id: 'd-10t', name: '100-мм Д-10Т', country: 'СССР', caliber: 100, kind: 'tank', platforms: ['t-54'] },
+  { id: 'd-10t', name: '100-мм Д-10Т', country: 'СССР', caliber: 100, kind: 'tank', platforms: ['t-54', 'type-59'] },
+  { id: 'm32', name: '76-мм M32', country: 'США', caliber: 76, kind: 'tank', platforms: ['m41'] },
+  { id: 'd-56t', name: '76-мм Д-56Т', country: 'СССР', caliber: 76, kind: 'tank', platforms: ['pt-76'] },
+  { id: 'm81', name: '152-мм M81', country: 'США', caliber: 152, kind: 'low', platforms: ['m551'] },
+  { id: 'm113-175', name: '175-мм M113', country: 'США', caliber: 175, kind: 'howitzer', platforms: ['m107'] },
+  { id: 'm46-130', name: '130-мм М-46', country: 'СССР', caliber: 130, kind: 'howitzer', platforms: ['m-46'] },
+  { id: 'm137', name: '105-мм M137', country: 'США', caliber: 105, kind: 'howitzer', platforms: ['m102'] },
   { id: 'm41', name: '90-мм M41', country: 'США', caliber: 90, kind: 'tank', platforms: ['m48'] },
   { id: 'u-5ts', name: '115-мм У-5ТС', country: 'СССР', caliber: 115, kind: 'tank', platforms: ['t-62'] },
   { id: 'l7', name: '105-мм L7 / M68', country: 'Великобритания', caliber: 105, kind: 'tank', platforms: ['m60', 'leopard-1', 'm1-abrams'], weaponId: 'l7' },
@@ -71,7 +77,7 @@ export const guns: Gun[] = [
   { id: 'rh-202', name: '20-мм Rh 202', country: 'ФРГ', caliber: 20, kind: 'auto', platforms: ['marder'] },
   { id: 'rarden', name: '30-мм L21 RARDEN', country: 'Великобритания', caliber: 30, kind: 'auto', platforms: ['warrior'] },
   { id: 'bofors-40', name: '40-мм Bofors L/70', country: 'Швеция', caliber: 40, kind: 'auto', platforms: ['cv90', 'k21'] },
-  { id: '2a31', name: '122-мм 2А31', country: 'СССР', caliber: 122, kind: 'howitzer', platforms: ['2s1'] },
+  { id: '2a31', name: '122-мм 2А31', country: 'СССР', caliber: 122, kind: 'howitzer', platforms: ['2s1', 'd-30'] },
   { id: '2a33', name: '152-мм 2А33', country: 'СССР', caliber: 152, kind: 'howitzer', platforms: ['2s3'] },
   { id: '2a64', name: '152-мм 2А64', country: 'СССР', caliber: 152, kind: 'howitzer', platforms: ['2s19'] },
   { id: 'm185', name: '155-мм M185 / M284', country: 'США', caliber: 155, kind: 'howitzer', platforms: ['m109'] },
@@ -140,6 +146,16 @@ export const shells: Shell[] = [
   // 40-мм Bofors
   { id: 'bofors-he', name: '40 мм HE', gun: 'bofors-40', type: 'he', v0: 1025, mass: 0.96, note: 'Осколочно-фугасный снаряд. Современные версии имеют программируемый взрыватель.' },
   { id: 'bofors-apfsds', name: '40 мм APFSDS-T', gun: 'bofors-40', type: 'apfsds', v0: 1470, note: 'Оперённый подкалиберный снаряд.' },
+  // Орудия техники Вьетнамской войны
+  { id: 'm339', name: 'M339 AP', gun: 'm32', type: 'ap', v0: 975, note: 'Бронебойный снаряд лёгкого танка M41.' },
+  { id: 'm352', name: 'M352 HE', gun: 'm32', type: 'he', v0: 732, note: 'Осколочно-фугасный снаряд.' },
+  { id: 'br-350a', name: 'БР-350А', gun: 'd-56t', type: 'ap', v0: 655, mass: 6.3, note: 'Бронебойный снаряд, общий с дивизионной пушкой ЗиС-3.' },
+  { id: 'of-350', name: 'ОФ-350', gun: 'd-56t', type: 'he', v0: 680, mass: 6.2, note: 'Осколочно-фугасная граната.' },
+  { id: 'm409', name: 'M409 HEAT-MP', gun: 'm81', type: 'heat', v0: 683, mass: 22, note: 'Многоцелевой кумулятивный снаряд со сгорающей гильзой.' },
+  { id: 'mgm-51-shell', name: 'MGM-51 Shillelagh', gun: 'm81', type: 'missile', note: 'Управляемая ракета с наведением по инфракрасному лучу, дальность ≈2-3 км.' },
+  { id: 'm437', name: 'M437', gun: 'm113-175', type: 'he', v0: 914, mass: 66.6, rangeKm: 32.7, note: 'Осколочно-фугасный снаряд дальнобойной пушки.' },
+  { id: 'of-482m', name: 'ОФ-482М', gun: 'm46-130', type: 'he', v0: 930, mass: 33.4, rangeKm: 27.5, note: 'Осколочно-фугасный снаряд, полный заряд.' },
+  { id: 'm1-he', name: 'M1', gun: 'm137', type: 'he', v0: 494, mass: 15, rangeKm: 11.5, note: 'Стандартный 105-мм осколочно-фугасный снаряд.' },
   // Гаубицы
   { id: '3of56', name: '3ОФ56', gun: '2a31', type: 'he', v0: 690, mass: 21.8, rangeKm: 15.2, note: 'Осколочно-фугасный снаряд, полный заряд.' },
   { id: '3of25', name: '3ОФ25', gun: '2a33', type: 'he', v0: 655, mass: 43.6, rangeKm: 17.4, note: 'Осколочно-фугасный снаряд, полный заряд.' },

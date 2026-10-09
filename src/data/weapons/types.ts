@@ -43,6 +43,8 @@ export interface WeaponData {
   /** id моделей техники, на которых применяется */
   platforms: string[];
   wiki: string;
+  /** Краткое описание для записей сокращённого формата (без отдельного текста в texts.ts). */
+  brief?: string;
 }
 
 export interface WeaponText {

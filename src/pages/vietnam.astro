@@ -1,0 +1,114 @@
+---
+import Base from '../layouts/Base.astro';
+import { conflicts } from '../data/conflicts';
+import { equipment } from '../data/equipment';
+import { weapons } from '../data/weapons/data';
+import { weaponCategories } from '../data/weapons/taxonomy';
+import { eraOf, itemUrl, groupById } from '../lib/data';
+import { weaponUrl } from '../lib/weapons';
+
+const conflict = conflicts.find((entry) => entry.id === 'vietnam')!;
+const allItems = new Set(conflict.sections.flatMap((section) => section.items));
+const byId = (id: string) => equipment.find((item) => item.id === id)!;
+const used = weapons
+  .filter((weapon) => weapon.year >= conflict.weaponYears[0] && weapon.year <= conflict.weaponYears[1] && weapon.platforms.some((id) => allItems.has(id)))
+  .sort((a, b) => a.year - b.year);
+const small = weapons
+  .filter((weapon) => weapon.year >= conflict.weaponYears[0] && weapon.year <= conflict.weaponYears[1] && weapon.platforms.length === 0 && ['guns', 'rockets'].includes(weapon.category) && ['СССР', 'США', 'Китай'].includes(weapon.country))
+  .sort((a, b) => a.year - b.year);
+const categoryName = (id: string) => weaponCategories.find((category) => category.id === id)?.name ?? id;
+---
+<Base title={conflict.name} era="late" domain="aviation" description={`${conflict.name} (${conflict.years}): техника и вооружение сторон.`}>
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Навигация">
+      <a href="/">Главная</a><span>/</span>
+      <span>{conflict.name}</span>
+    </nav>
+  </div>
+
+  <section class="section" style="--c:var(--era-late)">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="stripe"></span>
+        <span class="eyebrow num">{conflict.years}</span>
+        <h1>{conflict.name}</h1>
+        <p class="lead">{conflict.lead}</p>
+      </div>
+      <dl class="facts">
+        <div><dt>Техника в подборке</dt><dd class="num">{allItems.size}</dd></div>
+        <div><dt>Образцов вооружения</dt><dd class="num">{used.length + small.length}</dd></div>
+        <div><dt>Годы</dt><dd class="num">{conflict.years}</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <nav class="toc" aria-label="Разделы страницы">
+    <div class="wrap">
+      {conflict.sections.map((section, i) => <a href={`#part-${i}`}>{section.title}</a>)}
+      <a href="#weapons">Вооружение техники</a>
+      <a href="#infantry">Пехотное оружие и артиллерия</a>
+    </div>
+  </nav>
+
+  {conflict.sections.map((section, i) => (
+    <section class="section" id={`part-${i}`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>{section.title}</h2>
+          <p class="lead">{section.text}</p>
+        </div>
+        <div class="cards">
+          {section.items.map(byId).sort((a, b) => a.year - b.year).map((item) => (
+            <a class="card" href={itemUrl(item)} style={`--c:var(--era-${eraOf(item.year).id})`}>
+              <span class="stripe"></span>
+              <h3>{item.name}</h3>
+              <span class="meta num">{item.year} · {item.country}</span>
+              <span class="desc">{groupById(item.group).name}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class="section" id="weapons">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Вооружение техники</h2>
+        <p class="lead">Образцы из каталога, принятые на вооружение до 1973 года и применявшиеся с техникой из этой подборки.</p>
+      </div>
+      <div class="cards">
+        {used.map((weapon) => (
+          <a class="card" href={weaponUrl(weapon)} style={`--c:var(--era-${eraOf(weapon.year).id})`}>
+            <span class="stripe"></span>
+            <h3>{weapon.name}</h3>
+            <span class="meta num">{weapon.year} · {weapon.country}</span>
+            <span class="desc">{categoryName(weapon.category)}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="infantry">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Пехотное оружие и артиллерия</h2>
+        <p class="lead">Стрелковое оружие, гранатомёты, миномёты и буксируемые орудия сторон.</p>
+      </div>
+      <div class="cards">
+        {small.map((weapon) => (
+          <a class="card" href={weaponUrl(weapon)} style={`--c:var(--era-${eraOf(weapon.year).id})`}>
+            <span class="stripe"></span>
+            <h3>{weapon.name}</h3>
+            <span class="meta num">{weapon.year} · {weapon.country}</span>
+            <span class="desc">{weapon.type}</span>
+          </a>
+        ))}
+      </div>
+      <p class="notice" style="margin-top: 32px;">
+        Подборка составлена по открытым источникам и не претендует на полноту. Часть оружия этого списка создана раньше и применялась и в других конфликтах.
+      </p>
+    </div>
+  </section>
+</Base>

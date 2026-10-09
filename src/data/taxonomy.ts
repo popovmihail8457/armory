@@ -49,7 +49,7 @@ export const groups: Group[] = [
   { id: 'carriers', domain: 'fleet', name: 'Авианосцы', lead: 'Плавучие аэродромы: основа морской авиации.', metrics: ['displacement', 'length', 'speedKn'] },
   { id: 'submarines', domain: 'fleet', name: 'Подводные лодки', lead: 'Атомные ударные и ракетные подводные лодки.', metrics: ['displacement', 'length', 'speedKn'] },
   { id: 'surface', domain: 'fleet', name: 'Эсминцы и крейсеры', lead: 'Надводные корабли с ракетным вооружением.', metrics: ['displacement', 'length', 'speedKn'] },
-  { id: 'frigates', domain: 'fleet', name: 'Фрегаты и корветы', lead: 'Многоцелевые корабли охранения и борьбы с подводными лодками.', metrics: ['displacement', 'length', 'speedKn'] },
+  { id: 'frigates', domain: 'fleet', name: 'Фрегаты, корветы и катера', lead: 'Многоцелевые корабли охранения, ракетные и патрульные катера.', metrics: ['displacement', 'length', 'speedKn'] },
   { id: 'amphibious', domain: 'fleet', name: 'Десантные корабли', lead: 'Корабли для высадки морской пехоты и техники.', metrics: ['displacement', 'length', 'speedKn'] },
   { id: 'fighters', domain: 'aviation', name: 'Истребители', lead: 'Самолёты завоевания превосходства в воздухе.', metrics: ['speed', 'range', 'mtow'] },
   { id: 'bombers', domain: 'aviation', name: 'Бомбардировщики и штурмовики', lead: 'Ударная авиация дальнего и фронтового действия.', metrics: ['speed', 'range', 'mtow'] },
@@ -63,7 +63,7 @@ export const groups: Group[] = [
   { id: 'mlrs', domain: 'ground', name: 'Реактивные системы залпового огня', lead: 'РСЗО: массированный огонь по площадям.', metrics: ['mass', 'caliber', 'range'] },
   { id: 'otrk', domain: 'ground', name: 'ОТРК и тактические ракеты', lead: 'Оперативно-тактические ракетные комплексы: баллистические ракеты малой и средней дальности.', metrics: ['range', 'launchMass'] },
   { id: 'airdef', domain: 'ground', name: 'Противовоздушная оборона', lead: 'Зенитные ракетные комплексы средней и большой дальности.', metrics: ['range'] },
-  { id: 'manpads', domain: 'ground', name: 'ПЗРК и ЗРК малой дальности', lead: 'Переносные зенитные ракетные комплексы и системы ближней обороны.', metrics: ['range'] },
+  { id: 'manpads', domain: 'ground', name: 'ПЗРК, ЗРК малой дальности и зенитная артиллерия', lead: 'Переносные зенитные ракетные комплексы, системы ближней обороны и ствольная зенитная артиллерия.', metrics: ['range'] },
   { id: 'sensors', domain: 'ground', name: 'РЛС, станции РТР и РЭБ', lead: 'Радиолокационные станции, средства пассивной радиотехнической разведки и радиоэлектронной борьбы.', metrics: ['range'] },
   { id: 'atgm', domain: 'ground', name: 'Противотанковые комплексы', lead: 'Противотанковые ракетные комплексы и их ракеты.', metrics: ['range', 'caliber'] },
 ];

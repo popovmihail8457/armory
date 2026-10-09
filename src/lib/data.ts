@@ -5,6 +5,7 @@ export const YEAR_MIN = 1947;
 export const YEAR_MAX = 2026;
 
 export function eraOf(year: number): Era {
+  if (year < eras[0].from) return eras[0];
   return eras.find((era) => year >= era.from && year <= era.to) ?? eras[eras.length - 1];
 }
 

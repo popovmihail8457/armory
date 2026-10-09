@@ -1,4 +1,5 @@
 import type { WeaponCategoryId, WeaponData } from './types';
+import { extraWeapons } from './catalog-extra';
 
 const w = (
   id: string, name: string, country: string, year: number, category: WeaponData['category'], type: string,
@@ -626,8 +627,68 @@ const EXTRA_PLATFORMS: Record<string, string[]> = {
   'ram': ['tarawa'],
 };
 
-export const weapons: WeaponData[] = base.map((weapon) => ({
+/** Носители из партий расширения (Вьетнамская война, современная наземная техника). */
+const MORE_PLATFORMS: Record<string, string[]> = {
+  'p-15': ['komar', 'osa-boat'],
+  '9m38': ['sovremenny'],
+  'asroc': ['charles-f-adams', 'long-beach'],
+  'm61': ['f-105', 'a-7', 'ac-130', 'm163'],
+  'aim-9': ['f-8', 'f-100', 'f-105', 'a-4', 'a-7', 'f-5'],
+  'agm-45': ['f-105', 'a-4', 'a-6', 'a-7'],
+  'mk-82': ['a-4', 'a-6', 'a-7', 'f-105', 'f-100', 'a-1', 'b-52', 'b-57'],
+  'mk-84': ['f-105', 'a-6', 'a-7'],
+  'gbu-12': ['a-6', 'a-7'],
+  'gbu-10': ['a-6', 'a-7'],
+  'm2hb': ['pbr', 'swift-boat', 'm41', 'm113', 'm48', 'm60', 'm107'],
+  'bgm-71': ['uh-1'],
+  'agm-65': ['a-7'],
+  'm242': ['lav-25'],
+  '2a42': ['btr-82a', 'bmd-4m'],
+  'aim-120': ['nasams'],
+  'iris-t': ['iris-t-slm'],
+  'aim-7': ['f-8'],
+  'hydra-70': ['uh-1', 'oh-6'],
+  'm240': ['m1a2-sepv3', 'stryker', 'lav-25'],
+  'rh-120': ['leopard-2a7', 'm1a2-sepv3'],
+  '2a46': ['t-90m', 't-64', 't-80'],
+  'fgm-148': ['stryker'],
+  '9m133': ['bmp-3'],
+  'phalanx': ['kitty-hawk', 'enterprise'],
+  'rim-7': ['kitty-hawk', 'enterprise'],
+  'agm-114': ['mq-1', 'mq-9', 'ah-64'],
+};
+
+/** Носители, добавленные по итогам проверки scripts/check-data.mjs (техника без привязанного вооружения). */
+const GAP_PLATFORMS: Record<string, string[]> = {
+  'r-77': ['su-57'],
+  'r-73': ['su-57'],
+  'gsh-30-1': ['su-57'],
+  'agm-114': ['uh-60'],
+  'hydra-70': ['uh-60'],
+  'm134': ['uh-60'],
+  'rim-7': ['forrestal', 'iwo-jima'],
+  'phalanx': ['forrestal', 'queen-elizabeth', 'america'],
+  'essm': ['america'],
+  'ram': ['america'],
+  'm2hb': ['vab', 'patria-amv', 'namer', 'lvtp-5'],
+  'mg3': ['fuchs', 'boxer', 'puma'],
+  'kpv': ['btr-152'],
+  'pk': ['btr-50', 'btr-40', 't-14', 'btr-82a'],
+  'dshkm': ['btr-50', 'btr-40'],
+  'rbu-6000': ['kotlin'],
+  'm60-mg': ['m551', 'lvtp-5'],
+  'ak-630': ['type-052d'],
+  'sm-2': ['long-beach'],
+  'mk-42': ['long-beach'],
+  'harpoon': ['long-beach', 'charles-f-adams'],
+  'tomahawk': ['long-beach'],
+  'kord': ['t-14'],
+  'nsv': ['t-90'],
+  'mk-19': ['stryker'],
+};
+
+export const weapons: WeaponData[] = [...base, ...extraWeapons].map((weapon) => ({
   ...weapon,
-  platforms: [...new Set([...weapon.platforms, ...(EXTRA_PLATFORMS[weapon.id] ?? [])])],
+  platforms: [...new Set([...weapon.platforms, ...(EXTRA_PLATFORMS[weapon.id] ?? []), ...(MORE_PLATFORMS[weapon.id] ?? []), ...(GAP_PLATFORMS[weapon.id] ?? [])])],
   also: ALSO[weapon.id],
 }));

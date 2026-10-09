@@ -53,11 +53,11 @@ const tocItems = [
   guidance.length > 0 && { id: 'guidance', label: 'Наведение' },
   { id: 'specs', label: 'Характеристики' },
   flight && { id: 'flight', label: 'Профиль полёта' },
-  { id: 'design', label: 'Устройство' },
+  weapon.guidance && { id: 'design', label: 'Устройство' },
   { id: 'warhead', label: 'Боевая часть' },
   shellGuns.length > 0 && { id: 'shells', label: 'Снаряды и баллистика' },
-  { id: 'features', label: 'Особенности' },
-  { id: 'history', label: 'История' },
+  text.features.length > 0 && { id: 'features', label: 'Особенности' },
+  text.history && { id: 'history', label: 'История' },
   mods.length > 0 && { id: 'mods', label: 'Модификации' },
   platforms.length > 0 && { id: 'platforms', label: 'Носители' },
   specRows.length > 0 && others.length > 0 && { id: 'compare', label: 'Сравнение' },
@@ -151,7 +151,7 @@ const tocItems = [
     </section>
   )}
 
-  <section class="section" id="design" style={`--c:var(--era-${era.id})`}>
+  {weapon.guidance && (<section class="section" id="design" style={`--c:var(--era-${era.id})`}>
     <div class="wrap">
       <div class="section-head">
         <h2>Устройство</h2>
@@ -162,7 +162,7 @@ const tocItems = [
         <div class="card"><span class="stripe"></span><span class="eyebrow">Боевая часть</span><p>{weapon.warheadType}</p></div>
       </div>
     </div>
-  </section>
+  </section>)}
 
   <section class="section" id="warhead" style={`--c:var(--era-${era.id})`}>
     <div class="wrap">
@@ -186,7 +186,7 @@ const tocItems = [
     </section>
   )}
 
-  <section class="section" id="features" style={`--c:var(--era-${era.id})`}>
+  {text.features.length > 0 && (<section class="section" id="features" style={`--c:var(--era-${era.id})`}>
     <div class="wrap">
       <div class="section-head">
         <h2>Особенности</h2>
@@ -200,16 +200,16 @@ const tocItems = [
         <p>{text.fact}</p>
       </blockquote>
     </div>
-  </section>
+  </section>)}
 
-  <section class="section" id="history">
+  {text.history && (<section class="section" id="history">
     <div class="wrap">
       <div class="section-head">
         <h2>История</h2>
       </div>
       <p class="principle">{text.history}</p>
     </div>
-  </section>
+  </section>)}
 
   {mods.length > 0 && (
     <section class="section" id="mods" style={`--c:var(--era-${era.id})`}>
@@ -265,7 +265,7 @@ const tocItems = [
           ))}
         </div>
         <p class="notice" style="margin-top: 32px;">
-          Данные приведены по открытым источникам. Страница в Википедии: <a href={`https://en.wikipedia.org/wiki/${weapon.wiki}`} rel="noopener" target="_blank">открыть</a>.
+          Данные приведены по открытым источникам. {weapon.wiki && <>Страница в Википедии: <a href={`https://en.wikipedia.org/wiki/${weapon.wiki}`} rel="noopener" target="_blank">открыть</a>.</>}
           Подробности: <a href="/sources/">источники и методика</a>.
         </p>
       </div>

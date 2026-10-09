@@ -1,3 +1,4 @@
+import { categoryPrinciple } from '../data/weapons/taxonomy';
 import { weapons } from '../data/weapons/data';
 import { weaponTexts } from '../data/weapons/texts';
 import { weaponCategories } from '../data/weapons/taxonomy';
@@ -20,8 +21,10 @@ export const categoryById = (id: string): WeaponCategory => {
 
 export const weaponText = (id: string): WeaponText => {
   const found = weaponTexts[id];
-  if (!found) throw new Error(`Нет текста для вооружения: ${id}`);
-  return found;
+  if (found) return found;
+  const weapon = weapons.find((item) => item.id === id);
+  if (!weapon?.brief) throw new Error(`Нет текста для вооружения: ${id}`);
+  return { summary: weapon.brief, history: '', principle: categoryPrinciple[weapon.category] ?? '', features: [], fact: '' };
 };
 
 export const weaponsOfCategory = (categoryId: string): WeaponData[] =>

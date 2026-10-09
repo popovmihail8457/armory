@@ -88,12 +88,18 @@ export const armorSchemes: ArmorScheme[] = [
 
 /** Схема бронирования по моделям техники. */
 export const armorOf: Record<string, ArmorSchemeId> = {
-  't-54': 'steel', 'm48': 'steel',
-  't-72': 'composite', 'leopard-2': 'composite', 'm1-abrams': 'composite',
-  't-90': 'composite-era',
-  't-14': 'modular-aps',
-  'bmp-1': 'light', 'm113': 'light',
-  'm2-bradley': 'light-addon',
+  // steel
+  't-54': 'steel', 'm48': 'steel', 'type-59': 'steel', 'm60': 'steel', 't-62': 'steel', 'leopard-1': 'steel', 'amx-30': 'steel', 'chieftain': 'steel',
+  // composite
+  't-64': 'composite', 't-72': 'composite', 'leopard-2': 'composite', 'm1-abrams': 'composite', 'challenger-2': 'composite', 'leclerc': 'composite', 'type-10': 'composite', 'leopard-2a7': 'composite', 'tos-1a': 'composite',
+  // composite-era
+  't-80': 'composite-era', 't-90': 'composite-era', 't-90m': 'composite-era', 'type-99': 'composite-era', 'vt-4': 'composite-era', 'k2': 'composite-era',
+  // modular-aps
+  't-14': 'modular-aps', 'merkava-4': 'modular-aps', 'm1a2-sepv3': 'modular-aps', 'namer': 'modular-aps',
+  // light
+  'bmp-1': 'light', 'm113': 'light', 'btr-152': 'light', 'btr-40': 'light', 'btr-50': 'light', 'btr-60': 'light', 'btr-70': 'light', 'btr-80': 'light', 'btr-82a': 'light', 'bmp-2': 'light', 'bmp-3': 'light', 'bmd-4m': 'light', 'lvtp-5': 'light', 'vab': 'light', 'fuchs': 'light', 'lav-25': 'light', 'pt-76': 'light', 'm41': 'light', 'm551': 'light', 'm109': 'light', '2s3': 'light', '2s1': 'light', '2s19': 'light', 'pzh-2000': 'light', 'as-90': 'light', 'k9': 'light', 'krab': 'light', 'caesar': 'light', 'archer': 'light', 'zsu-57-2': 'light', 'm42': 'light', 'm163': 'light',
+  // light-addon
+  'm2-bradley': 'light-addon', 'marder': 'light-addon', 'warrior': 'light-addon', 'cv90': 'light-addon', 'puma': 'light-addon', 'stryker': 'light-addon', 'patria-amv': 'light-addon', 'boxer': 'light-addon', 'k21': 'light-addon',
 };
 
 export const STOP_BELOW = 0.15;
