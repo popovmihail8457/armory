@@ -12,7 +12,7 @@ interface Props {
 const { gunIds, initial } = Astro.props;
 const shownGuns = gunIds ? guns.filter((gun) => gunIds.includes(gun.id)) : guns;
 const nameOf = (id: string) => equipment.find((item) => item.id === id)?.name ?? id;
-const kindLabel = { tank: 'Танковые пушки', auto: 'Автоматические пушки', low: 'Орудия малого давления', howitzer: 'Гаубицы и пушки' } as const;
+const kindLabel = { tank: 'Танковые пушки', auto: 'Автоматические пушки', mg: 'Пулемёты', low: 'Орудия малого давления', howitzer: 'Гаубицы и пушки' } as const;
 const kinds = (Object.keys(kindLabel) as (keyof typeof kindLabel)[]).filter((kind) => shownGuns.some((gun) => gun.kind === kind));
 const data = shownGuns.map((gun) => ({
   id: gun.id,

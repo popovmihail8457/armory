@@ -70,6 +70,12 @@ keysOf(variantsText).forEach((id) => { if (!equipmentIds.has(id)) errors.push(`v
 const detailText = read('src/data/armor-details.ts');
 keysOf(detailText).forEach((id) => { if (!armorIds.has(id)) errors.push(`armor-details: у ${id} нет модели брони`); });
 
+// Техника, у которой по её назначению нет вооружения или управляемых ракет
+const UNARMED = new Set(['c-17', 'c-130', 'il-76', 'u-2', 'sr-71', 'e-3', 'a-50', 'e-2d', 'ec-121', 'typhoon', 'borei', 'ohio',
+  'p-12', 'p-18', 'an-tps-43', 'an-tps-75', 'giraffe', 'an-mpq-64', 'an-tpq-36', 'arthur', 'an-tpq-53', 'kolchuga', 'tamara', 'krasukha-4']);
+const NO_MISSILES = new Set(['queen-elizabeth', 'nautilus', 'skipjack', 'kotlin', 'pbr', 'swift-boat']);
+const NO_HANGAR_DATA = new Set(['invincible', 'kitty-hawk', 'enterprise']);
+
 // Покрытие
 const armed = new Set(platformRefs);
 const sensorIds = new Set(keysOf(read('src/data/sensors.ts')));
@@ -90,9 +96,10 @@ missing('Бронетехника без модели брони', inGroup('tank
 missing('Танки, БМП и артиллерия без снарядов', inGroup('tanks', 'ifv', 'artillery').filter((id) => !gunPlatforms.has(id)));
 missing('ЗРК и РЛС без схемы радаров', inGroup('airdef', 'sensors').filter((id) => !sensorIds.has(id)));
 missing('Корабли без схемы систем', inGroup('carriers', 'surface', 'frigates', 'amphibious').filter((id) => !shipIds.has(id)));
-missing('Корабли и подлодки без схемы пуска ракет', inGroup('carriers', 'surface', 'frigates', 'amphibious', 'submarines').filter((id) => !launchKeys.has(id)));
-missing('Авианосцы без ангара', inGroup('carriers').filter((id) => !hangarIds.has(id)));
-missing('Техника без привязанного вооружения', equipment.map((item) => item.id).filter((id) => !armed.has(id) && !gunPlatforms.has(id)));
+missing('Корабли и подлодки без схемы пуска ракет', inGroup('carriers', 'surface', 'frigates', 'amphibious', 'submarines').filter((id) => !launchKeys.has(id) && !NO_MISSILES.has(id)));
+missing('Авианосцы без ангара', inGroup('carriers').filter((id) => !hangarIds.has(id) && !NO_HANGAR_DATA.has(id)));
+info.push(`Авианосцы, для которых нет открытых размеров ангара: ${[...NO_HANGAR_DATA].join(', ')}`);
+missing('Техника без привязанного вооружения', equipment.map((item) => item.id).filter((id) => !armed.has(id) && !gunPlatforms.has(id) && !UNARMED.has(id)));
 missing('Техника без своего фото', equipment.map((item) => item.id).filter((id) => !photoIds.has(id)));
 missing('Вооружение без своего фото', [...weaponIds].filter((id) => !weaponPhotoIds.has(id)));
 

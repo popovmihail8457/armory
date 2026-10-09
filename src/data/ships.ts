@@ -210,6 +210,7 @@ export const launchScenes: Record<string, LaunchScene[]> = {
   'visby': ['canister'],
   'wasp': ['rail'],
   'america': ['rail'],
+  'mistral': ['rail'],
   'forrestal': ['rail'],
   'kitty-hawk': ['rail'],
   'enterprise': ['rail'],

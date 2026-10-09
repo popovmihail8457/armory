@@ -1,4 +1,4 @@
-import type { WarheadScene } from './types';
+import type { WarheadScene, WeaponData } from './types';
 
 export interface WarheadInfo {
   id: WarheadScene;
@@ -107,9 +107,61 @@ const BY_MOD: Record<string, WarheadScene[]> = {
   'milan-missile': ['shaped', 'shaped', 'tandem'],
 };
 
-export function warheadScenes(weaponId: string, modCount: number): WarheadScene[] {
-  const byMod = BY_MOD[weaponId];
+/** Сцены для записей сокращённого формата, у которых боевая часть не следует из класса. */
+const EXTRA: Record<string, WarheadScene | null> = {
+  // противотанковые с тандемной боевой частью
+  '9m131': 'tandem', '9m123': 'tandem', 'vikhr': 'tandem', 'spike-lr': 'tandem', 'spike-nlos': 'tandem', 'eryx': 'tandem', 'jagm': 'tandem', 'rpg-29': 'tandem',
+  // кумулятивные гранатомёты и безоткатные орудия
+  'rpg-2': 'shaped', 'rpg-7': 'shaped', 'rpg-18': 'shaped', 'm72': 'shaped', 'at4': 'shaped', 'panzerfaust-3': 'shaped', 'apilas': 'shaped', 'smaw': 'shaped',
+  'carl-gustaf': 'shaped', 'm40-rr': 'shaped', 'b-10': 'shaped', 'spg-9': 'shaped', 'm81': 'shaped',
+  // термобарические и фугасные
+  'rpo-a': 'blast', 'tos-rocket': 'blast', 'odab-500': 'blast', 'blu-82': 'blast', 'gbu-43': 'blast',
+  // кассетные
+  'mk-20': 'cluster', 'cbu-24': 'cluster', 'cbu-87': 'cluster', 'cbu-97': 'cluster', 'rbk-500': 'cluster', 'bl755': 'cluster', '9m27': 'cluster', '9m55': 'cluster',
+  // проникающие
+  'betab-500': 'penetrator', 'durandal': 'penetrator', 'gbu-27': 'penetrator', 'gbu-24': 'penetrator', 'as-30l': 'penetrator', 'agm-142': 'penetrator', 'agm-130': 'penetrator', 'kh-47': 'penetrator',
+  // ракеты «воздух-поверхность» с фугасной или осколочно-фугасной боевой частью
+  'agm-12': 'blast', 'kh-23': 'blast', 'kh-25': 'blast', 'kh-15': 'blast', 'martel': 'frag', 'kh-28': 'frag', 'agm-78': 'frag',
+  // только ядерное оснащение: сцена не показывается
+  'agm-28': null, 'agm-69': null, 'asmp': null, 'honest-john': null, 'pershing-1a': null, 'pershing-2-missile': null, 'subroc': null,
+  // перехват прямым попаданием
+  'sm-3': 'kinetic', 'rapier': 'kinetic',
+  // пушки, у которых основной снаряд не совпадает с правилом по описанию типа
+  'goalkeeper': 'kinetic', 'rarden': 'kinetic', 'm197': 'frag', 'am-23': 'frag', 'gau-12': 'frag', 'gau-22': 'frag', '2a38': 'frag',
+};
+
+/** Слова в описании типа, по которым ствольное оружие стреляет осколочными боеприпасами. */
+const FRAG_GUN = /зенит|гаубиц|миномёт|гранатомёт|корабельн|дивизионн|дальнобойн|лёгкая пушка|авиационная пушка|автоматическая пушка|автомат$|комплекс/i;
+/** Стрелковое оружие: анимация боевой части для пули не имеет смысла. */
+const SMALL_ARM = /автомат |автомат$|винтовк|карабин|пулемёт|пистолет/i;
+
+function byCategory(weapon: WeaponData): WarheadScene | null {
+  switch (weapon.category) {
+    case 'aam': case 'sam': case 'sea-air': case 'arm': return 'frag';
+    case 'abm': return 'kinetic';
+    case 'atgm': return 'shaped';
+    case 'air-sea': case 'sea-sea': case 'ground-sea': case 'cruise': return 'penetrator';
+    case 'agm': case 'guided-bombs': case 'bombs': case 'ground-ground': case 'sea-surface': return 'blast';
+    case 'rockets': return 'frag';
+    case 'torpedo': case 'asw': return null;
+    case 'guns':
+      if (SMALL_ARM.test(weapon.type) && !/пушк/i.test(weapon.type)) return null;
+      if (/танков|противотанков/i.test(weapon.type)) return 'kinetic';
+      return FRAG_GUN.test(weapon.type) ? 'frag' : 'kinetic';
+    default: return null;
+  }
+}
+
+/**
+ * Сцены боевой части по версиям образца. Пустой массив: подходящей анимации нет
+ * (торпеды и глубинные бомбы действуют под водой, у стрелкового оружия боевой части нет),
+ * и раздел на странице не показывается.
+ */
+export function warheadScenes(weapon: WeaponData, modCount: number): WarheadScene[] {
+  if (weapon.category === 'torpedo' || weapon.category === 'asw') return [];
+  const byMod = BY_MOD[weapon.id];
   if (byMod && byMod.length === modCount) return byMod;
-  const fallback = DEFAULT[weaponId] ?? 'blast';
-  return Array.from({ length: Math.max(1, modCount) }, () => fallback);
+  const scene = weapon.id in EXTRA ? EXTRA[weapon.id] : DEFAULT[weapon.id] ?? byCategory(weapon);
+  if (!scene) return [];
+  return Array.from({ length: Math.max(1, modCount) }, () => scene);
 }

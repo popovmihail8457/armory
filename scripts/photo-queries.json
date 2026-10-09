@@ -1568,5 +1568,1962 @@
       ],
       "ordnance|load|weapons"
     ]
+  },
+  "items-auto": {
+    "f-86": [
+      [
+        "North American F-86 Sabre",
+        "North American F-86 Sabre military"
+      ],
+      "F.?86|American"
+    ],
+    "f-15": [
+      [
+        "McDonnell Douglas F-15 Eagle",
+        "McDonnell Douglas F-15 Eagle military"
+      ],
+      "F.?15|Douglas"
+    ],
+    "f-22": [
+      [
+        "Lockheed Martin F-22 Raptor",
+        "Lockheed Martin F-22 Raptor military"
+      ],
+      "F.?22|Lockheed|Martin|Raptor"
+    ],
+    "f-35a": [
+      [
+        "Lockheed Martin F-35 Lightning II",
+        "Lockheed Martin F-35 Lightning II military"
+      ],
+      "F.?35|Lockheed|Martin|Lightning"
+    ],
+    "su-57": [
+      [
+        "Sukhoi Su-57",
+        "Sukhoi Su-57 military"
+      ],
+      "Su.?57|Sukhoi"
+    ],
+    "b-52": [
+      [
+        "Boeing B-52 Stratofortress",
+        "Boeing B-52 Stratofortress military"
+      ],
+      "B.?52|Boeing|Stratofortress"
+    ],
+    "tu-95": [
+      [
+        "Tupolev Tu-95",
+        "Tupolev Tu-95 military"
+      ],
+      "Tu.?95|Tupolev"
+    ],
+    "a-10": [
+      [
+        "Fairchild Republic A-10 Thunderbolt II",
+        "Fairchild Republic A-10 Thunderbolt II military"
+      ],
+      "A.?10|Fairchild|Republic|Thunderbolt"
+    ],
+    "b-2": [
+      [
+        "Northrop Grumman B-2 Spirit",
+        "Northrop Grumman B-2 Spirit military"
+      ],
+      "B.?2|Northrop|Grumman|Spirit"
+    ],
+    "il-76": [
+      [
+        "Ilyushin Il-76",
+        "Ilyushin Il-76 military"
+      ],
+      "Il.?76|Ilyushin"
+    ],
+    "c-17": [
+      [
+        "Boeing C-17 Globemaster III",
+        "Boeing C-17 Globemaster III military"
+      ],
+      "C.?17|Boeing|Globemaster"
+    ],
+    "uh-1": [
+      [
+        "Bell UH-1 Iroquois",
+        "Bell UH-1 Iroquois military"
+      ],
+      "UH.?1|Iroquois"
+    ],
+    "ah-64": [
+      [
+        "Boeing AH-64 Apache",
+        "Boeing AH-64 Apache military"
+      ],
+      "AH.?64|Boeing|Apache"
+    ],
+    "mq-1": [
+      [
+        "General Atomics MQ-1 Predator",
+        "General Atomics MQ-1 Predator military"
+      ],
+      "MQ.?1|General|Atomics|Predator"
+    ],
+    "mq-9": [
+      [
+        "General Atomics MQ-9 Reaper",
+        "General Atomics MQ-9 Reaper military"
+      ],
+      "MQ.?9|General|Atomics|Reaper"
+    ],
+    "nimitz": [
+      [
+        "USS Nimitz",
+        "USS Nimitz military"
+      ],
+      "Nimitz"
+    ],
+    "de-gaulle": [
+      [
+        "French aircraft carrier Charles de Gaulle",
+        "French aircraft carrier Charles de Gaulle military"
+      ],
+      "French|Charles|Gaulle"
+    ],
+    "gerald-ford": [
+      [
+        "USS Gerald R. Ford",
+        "USS Gerald R. Ford military"
+      ],
+      "Gerald"
+    ],
+    "nautilus": [
+      [
+        "USS Nautilus",
+        "USS Nautilus military"
+      ],
+      "Nautilus"
+    ],
+    "forrest-sherman": [
+      [
+        "Forrest Sherman-class destroyer",
+        "Forrest Sherman-class destroyer military"
+      ],
+      "Forrest"
+    ],
+    "arleigh-burke": [
+      [
+        "Arleigh Burke-class destroyer",
+        "Arleigh Burke-class destroyer military"
+      ],
+      "Arleigh"
+    ],
+    "type-055": [
+      [
+        "Type 055 destroyer",
+        "Type 055 destroyer military"
+      ],
+      "055"
+    ],
+    "m48": [
+      [
+        "M48 Patton",
+        "M48 Patton military"
+      ],
+      "M48|Patton"
+    ],
+    "leopard-2": [
+      [
+        "Leopard 2",
+        "Leopard 2 military"
+      ],
+      "Leopard"
+    ],
+    "m1-abrams": [
+      [
+        "M1 Abrams",
+        "M1 Abrams military"
+      ],
+      "Abrams"
+    ],
+    "t-90": [
+      [
+        "T-90",
+        "T-90 military"
+      ],
+      "T.?90"
+    ],
+    "merkava-4": [
+      [
+        "Merkava",
+        "Merkava military"
+      ],
+      "Merkava"
+    ],
+    "k2": [
+      [
+        "K2 Black Panther",
+        "K2 Black Panther military"
+      ],
+      "Panther"
+    ],
+    "leopard-1": [
+      [
+        "Leopard 1",
+        "Leopard 1 military"
+      ],
+      "Leopard"
+    ],
+    "t-64": [
+      [
+        "T-64",
+        "T-64 military"
+      ],
+      "T.?64"
+    ],
+    "chieftain": [
+      [
+        "Chieftain",
+        "Chieftain military"
+      ],
+      "Chieftain"
+    ],
+    "t-80": [
+      [
+        "T-80",
+        "T-80 military"
+      ],
+      "T.?80"
+    ],
+    "m113": [
+      [
+        "M113 armored personnel carrier",
+        "M113 armored personnel carrier military"
+      ],
+      "M113"
+    ],
+    "bmp-1": [
+      [
+        "BMP-1",
+        "BMP-1 military"
+      ],
+      "BMP.?1"
+    ],
+    "m2-bradley": [
+      [
+        "M2 Bradley",
+        "M2 Bradley military"
+      ],
+      "Bradley"
+    ],
+    "m109": [
+      [
+        "M109 howitzer",
+        "M109 howitzer military"
+      ],
+      "M109"
+    ],
+    "2s3": [
+      [
+        "2S3 Akatsiya",
+        "2S3 Akatsiya military"
+      ],
+      "2S3|Akatsiya"
+    ],
+    "pzh-2000": [
+      [
+        "PzH 2000",
+        "PzH 2000 military"
+      ],
+      "2000"
+    ],
+    "2s7": [
+      [
+        "2S7 Pion",
+        "2S7 Pion military"
+      ],
+      "2S7"
+    ],
+    "himars": [
+      [
+        "M142 HIMARS",
+        "M142 HIMARS military"
+      ],
+      "M142"
+    ],
+    "s-75": [
+      [
+        "S-75 Dvina",
+        "S-75 Dvina military"
+      ],
+      "S.?75"
+    ],
+    "s-300": [
+      [
+        "S-300 missile system",
+        "S-300 missile system military"
+      ],
+      "S.?300"
+    ],
+    "s-400": [
+      [
+        "S-400 missile system",
+        "S-400 missile system military"
+      ],
+      "S.?400"
+    ],
+    "r-11": [
+      [
+        "R-11 Zemlya",
+        "R-11 Zemlya military"
+      ],
+      "R.?11|Zemlya"
+    ],
+    "r-17": [
+      [
+        "R-17 Elbrus",
+        "R-17 Elbrus military"
+      ],
+      "R.?17|Elbrus"
+    ],
+    "pershing-1": [
+      [
+        "MGM-31 Pershing",
+        "MGM-31 Pershing military"
+      ],
+      "MGM.?31|Pershing"
+    ],
+    "lance": [
+      [
+        "MGM-52 Lance",
+        "MGM-52 Lance military"
+      ],
+      "MGM.?52"
+    ],
+    "oka": [
+      [
+        "OTR-23 Oka",
+        "OTR-23 Oka military"
+      ],
+      "OTR.?23"
+    ],
+    "pershing-2": [
+      [
+        "Pershing II",
+        "Pershing II military"
+      ],
+      "Pershing"
+    ],
+    "atacms": [
+      [
+        "MGM-140 ATACMS",
+        "MGM-140 ATACMS military"
+      ],
+      "MGM.?140"
+    ],
+    "iskander": [
+      [
+        "9K720 Iskander",
+        "9K720 Iskander military"
+      ],
+      "9K720|Iskander"
+    ],
+    "prsm": [
+      [
+        "Precision Strike Missile",
+        "Precision Strike Missile military"
+      ],
+      "Precision|Strike"
+    ],
+    "nike-hercules": [
+      [
+        "Nike Hercules",
+        "Nike Hercules military"
+      ],
+      "Hercules"
+    ],
+    "s-200": [
+      [
+        "S-200 missile system",
+        "S-200 missile system military"
+      ],
+      "S.?200"
+    ],
+    "patriot": [
+      [
+        "MIM-104 Patriot",
+        "MIM-104 Patriot military"
+      ],
+      "MIM.?104|Patriot"
+    ],
+    "pantsir": [
+      [
+        "Pantsir missile system",
+        "Pantsir missile system military"
+      ],
+      "Pantsir"
+    ],
+    "mistral-sam": [
+      [
+        "Mistral",
+        "Mistral military"
+      ],
+      "Mistral"
+    ],
+    "malyutka": [
+      [
+        "9K11 Malyutka",
+        "9K11 Malyutka military"
+      ],
+      "9K11|Malyutka"
+    ],
+    "kornet": [
+      [
+        "9M133 Kornet",
+        "9M133 Kornet military"
+      ],
+      "9M133|Kornet"
+    ],
+    "e-3": [
+      [
+        "Boeing E-3 Sentry",
+        "Boeing E-3 Sentry military"
+      ],
+      "E.?3|Boeing|Sentry"
+    ],
+    "a-50": [
+      [
+        "Beriev A-50",
+        "Beriev A-50 military"
+      ],
+      "A.?50|Beriev"
+    ],
+    "gorshkov": [
+      [
+        "Admiral Gorshkov-class frigate",
+        "Admiral Gorshkov-class frigate military"
+      ],
+      "Admiral"
+    ],
+    "f-14": [
+      [
+        "Grumman F-14 Tomcat",
+        "Grumman F-14 Tomcat military"
+      ],
+      "F.?14|Grumman|Tomcat"
+    ],
+    "rafale": [
+      [
+        "Dassault Rafale",
+        "Dassault Rafale military"
+      ],
+      "Dassault|Rafale"
+    ],
+    "tu-22m": [
+      [
+        "Tupolev Tu-22M",
+        "Tupolev Tu-22M military"
+      ],
+      "Tu.?22M|Tupolev"
+    ],
+    "mi-28": [
+      [
+        "Mil Mi-28",
+        "Mil Mi-28 military"
+      ],
+      "Mi.?28"
+    ],
+    "type-052d": [
+      [
+        "Type 052D destroyer",
+        "Type 052D destroyer military"
+      ],
+      "052D"
+    ],
+    "leopard-2a7": [
+      [
+        "Leopard 2",
+        "Leopard 2 military"
+      ],
+      "Leopard"
+    ],
+    "t-14": [
+      [
+        "T-14 Armata",
+        "T-14 Armata military"
+      ],
+      "T.?14|Armata"
+    ],
+    "vt-4": [
+      [
+        "VT-4",
+        "VT-4 military"
+      ],
+      "VT.?4"
+    ],
+    "m1a2-sepv3": [
+      [
+        "M1 Abrams",
+        "M1 Abrams military"
+      ],
+      "Abrams"
+    ],
+    "t-90m": [
+      [
+        "T-90",
+        "T-90 military"
+      ],
+      "T.?90"
+    ],
+    "btr-60": [
+      [
+        "BTR-60",
+        "BTR-60 military"
+      ],
+      "BTR.?60"
+    ],
+    "btr-70": [
+      [
+        "BTR-70",
+        "BTR-70 military"
+      ],
+      "BTR.?70"
+    ],
+    "patria-amv": [
+      [
+        "Patria AMV",
+        "Patria AMV military"
+      ],
+      "Patria"
+    ],
+    "k21": [
+      [
+        "K21",
+        "K21 military"
+      ],
+      "K21"
+    ],
+    "btr-82a": [
+      [
+        "BTR-82",
+        "BTR-82 military"
+      ],
+      "BTR.?82"
+    ],
+    "bmd-4m": [
+      [
+        "BMD-4",
+        "BMD-4 military"
+      ],
+      "BMD.?4"
+    ],
+    "archer": [
+      [
+        "Archer Artillery System",
+        "Archer Artillery System military"
+      ],
+      "Archer|Artillery"
+    ],
+    "tos-1a": [
+      [
+        "TOS-1",
+        "TOS-1 military"
+      ],
+      "TOS.?1"
+    ],
+    "chunmoo": [
+      [
+        "K239 Chunmoo",
+        "K239 Chunmoo military"
+      ],
+      "K239|Chunmoo"
+    ],
+    "tornado-s": [
+      [
+        "Tornado",
+        "Tornado military"
+      ],
+      "Tornado"
+    ],
+    "s-350": [
+      [
+        "S-350 missile system",
+        "S-350 missile system military"
+      ],
+      "S.?350"
+    ],
+    "p-12": [
+      [
+        "P-12 radar",
+        "P-12 radar military"
+      ],
+      "P.?12"
+    ],
+    "an-tps-43": [
+      [
+        "AN/TPS-43",
+        "AN/TPS-43 military"
+      ],
+      "AN/TPS.?43"
+    ],
+    "p-18": [
+      [
+        "P-18 radar",
+        "P-18 radar military"
+      ],
+      "P.?18"
+    ],
+    "giraffe": [
+      [
+        "Giraffe radar",
+        "Giraffe radar military"
+      ],
+      "Giraffe"
+    ],
+    "an-tpq-36": [
+      [
+        "AN/TPQ-36 Firefinder radar",
+        "AN/TPQ-36 Firefinder radar military"
+      ],
+      "AN/TPQ.?36|Firefinder"
+    ],
+    "kolchuga": [
+      [
+        "Kolchuga passive sensor",
+        "Kolchuga passive sensor military"
+      ],
+      "Kolchuga"
+    ],
+    "tamara": [
+      [
+        "Tamara passive sensor",
+        "Tamara passive sensor military"
+      ],
+      "Tamara"
+    ],
+    "an-tps-75": [
+      [
+        "AN/TPS-75",
+        "AN/TPS-75 military"
+      ],
+      "AN/TPS.?75"
+    ],
+    "an-mpq-64": [
+      [
+        "AN/MPQ-64 Sentinel",
+        "AN/MPQ-64 Sentinel military"
+      ],
+      "AN/MPQ.?64|Sentinel"
+    ],
+    "an-tpq-53": [
+      [
+        "AN/TPQ-53 Quick Reaction Capability Radar",
+        "AN/TPQ-53 Quick Reaction Capability Radar military"
+      ],
+      "AN/TPQ.?53|Reaction|Capability"
+    ],
+    "krasukha-4": [
+      [
+        "Krasukha",
+        "Krasukha military"
+      ],
+      "Krasukha"
+    ],
+    "mig-17": [
+      [
+        "Mikoyan-Gurevich MiG-17",
+        "Mikoyan-Gurevich MiG-17 military"
+      ],
+      "MiG.?17"
+    ],
+    "f-100": [
+      [
+        "North American F-100 Super Sabre",
+        "North American F-100 Super Sabre military"
+      ],
+      "F.?100|American"
+    ],
+    "f-8": [
+      [
+        "Vought F-8 Crusader",
+        "Vought F-8 Crusader military"
+      ],
+      "F.?8|Vought|Crusader"
+    ],
+    "f-105": [
+      [
+        "Republic F-105 Thunderchief",
+        "Republic F-105 Thunderchief military"
+      ],
+      "F.?105|Republic|Thunderchief"
+    ],
+    "f-5": [
+      [
+        "Northrop F-5",
+        "Northrop F-5 military"
+      ],
+      "F.?5|Northrop"
+    ],
+    "a-1": [
+      [
+        "Douglas A-1 Skyraider",
+        "Douglas A-1 Skyraider military"
+      ],
+      "A.?1|Douglas|Skyraider"
+    ],
+    "b-57": [
+      [
+        "Martin B-57 Canberra",
+        "Martin B-57 Canberra military"
+      ],
+      "B.?57|Martin|Canberra"
+    ],
+    "a-4": [
+      [
+        "Douglas A-4 Skyhawk",
+        "Douglas A-4 Skyhawk military"
+      ],
+      "A.?4|Douglas|Skyhawk"
+    ],
+    "a-6": [
+      [
+        "Grumman A-6 Intruder",
+        "Grumman A-6 Intruder military"
+      ],
+      "A.?6|Grumman|Intruder"
+    ],
+    "a-7": [
+      [
+        "LTV A-7 Corsair II",
+        "LTV A-7 Corsair II military"
+      ],
+      "A.?7|Corsair"
+    ],
+    "ac-47": [
+      [
+        "Douglas AC-47 Spooky",
+        "Douglas AC-47 Spooky military"
+      ],
+      "AC.?47|Douglas|Spooky"
+    ],
+    "ac-130": [
+      [
+        "Lockheed AC-130",
+        "Lockheed AC-130 military"
+      ],
+      "AC.?130|Lockheed"
+    ],
+    "ov-10": [
+      [
+        "North American Rockwell OV-10 Bronco",
+        "North American Rockwell OV-10 Bronco military"
+      ],
+      "OV.?10|American|Rockwell|Bronco"
+    ],
+    "ec-121": [
+      [
+        "Lockheed EC-121 Warning Star",
+        "Lockheed EC-121 Warning Star military"
+      ],
+      "EC.?121|Lockheed|Warning"
+    ],
+    "ch-47": [
+      [
+        "Boeing CH-47 Chinook",
+        "Boeing CH-47 Chinook military"
+      ],
+      "CH.?47|Boeing|Chinook"
+    ],
+    "ch-46": [
+      [
+        "Boeing Vertol CH-46 Sea Knight",
+        "Boeing Vertol CH-46 Sea Knight military"
+      ],
+      "CH.?46|Boeing|Vertol|Knight"
+    ],
+    "ch-53": [
+      [
+        "Sikorsky CH-53 Sea Stallion",
+        "Sikorsky CH-53 Sea Stallion military"
+      ],
+      "CH.?53|Sikorsky|Stallion"
+    ],
+    "oh-6": [
+      [
+        "Hughes OH-6 Cayuse",
+        "Hughes OH-6 Cayuse military"
+      ],
+      "OH.?6|Hughes|Cayuse"
+    ],
+    "m41": [
+      [
+        "M41 Walker Bulldog",
+        "M41 Walker Bulldog military"
+      ],
+      "M41|Walker|Bulldog"
+    ],
+    "pt-76": [
+      [
+        "PT-76",
+        "PT-76 military"
+      ],
+      "PT.?76"
+    ],
+    "m551": [
+      [
+        "M551 Sheridan",
+        "M551 Sheridan military"
+      ],
+      "M551|Sheridan"
+    ],
+    "btr-40": [
+      [
+        "BTR-40",
+        "BTR-40 military"
+      ],
+      "BTR.?40"
+    ],
+    "btr-50": [
+      [
+        "BTR-50",
+        "BTR-50 military"
+      ],
+      "BTR.?50"
+    ],
+    "lvtp-5": [
+      [
+        "LVTP-5",
+        "LVTP-5 military"
+      ],
+      "LVTP.?5"
+    ],
+    "m107": [
+      [
+        "M107 self-propelled gun",
+        "M107 self-propelled gun military"
+      ],
+      "M107"
+    ],
+    "d-30": [
+      [
+        "122 mm howitzer 2A18",
+        "122 mm howitzer 2A18 military"
+      ],
+      "122|2A18"
+    ],
+    "m-46": [
+      [
+        "130 mm towed field gun M1954",
+        "130 mm towed field gun M1954 military"
+      ],
+      "130|M1954"
+    ],
+    "m102": [
+      [
+        "M102 howitzer",
+        "M102 howitzer military"
+      ],
+      "M102"
+    ],
+    "s-60": [
+      [
+        "57 mm AZP S-60",
+        "57 mm AZP S-60 military"
+      ],
+      "S.?60"
+    ],
+    "zsu-57-2": [
+      [
+        "ZSU-57-2",
+        "ZSU-57-2 military"
+      ],
+      "ZSU.?57.?2"
+    ],
+    "zu-23-2": [
+      [
+        "ZU-23-2",
+        "ZU-23-2 military"
+      ],
+      "ZU.?23.?2"
+    ],
+    "m42": [
+      [
+        "M42 Duster",
+        "M42 Duster military"
+      ],
+      "M42|Duster"
+    ],
+    "m163": [
+      [
+        "M163 VADS",
+        "M163 VADS military"
+      ],
+      "M163"
+    ],
+    "enterprise": [
+      [
+        "USS Enterprise",
+        "USS Enterprise military"
+      ],
+      "Enterprise"
+    ],
+    "charles-f-adams": [
+      [
+        "Charles F. Adams-class destroyer",
+        "Charles F. Adams-class destroyer military"
+      ],
+      "Charles"
+    ],
+    "pbr": [
+      [
+        "Patrol Boat, River",
+        "Patrol Boat, River military"
+      ],
+      "Patrol"
+    ],
+    "swift-boat": [
+      [
+        "Patrol Craft Fast",
+        "Patrol Craft Fast military"
+      ],
+      "Patrol"
+    ]
+  },
+  "weapons-auto": {
+    "aim-4": [
+      [
+        "AIM-4 Falcon",
+        "AIM-4 Falcon weapon"
+      ],
+      "AIM.?4|Falcon"
+    ],
+    "agm-12": [
+      [
+        "AGM-12 Bullpup",
+        "AGM-12 Bullpup weapon"
+      ],
+      "AGM.?12|Bullpup"
+    ],
+    "agm-62": [
+      [
+        "AGM-62 Walleye",
+        "AGM-62 Walleye weapon"
+      ],
+      "AGM.?62|Walleye"
+    ],
+    "agm-78": [
+      [
+        "AGM-78 Standard ARM",
+        "AGM-78 Standard ARM weapon"
+      ],
+      "AGM.?78|Standard"
+    ],
+    "ffar": [
+      [
+        "Mk 4 FFAR Mighty Mouse",
+        "Mk 4 FFAR Mighty Mouse weapon"
+      ],
+      "Mighty"
+    ],
+    "m117": [
+      [
+        "M117",
+        "M117 weapon"
+      ],
+      "M117"
+    ],
+    "mk-20": [
+      [
+        "Mk 20 Rockeye",
+        "Mk 20 Rockeye weapon"
+      ],
+      "Rockeye"
+    ],
+    "cbu-24": [
+      [
+        "CBU-24",
+        "CBU-24 weapon"
+      ],
+      "CBU.?24"
+    ],
+    "blu-82": [
+      [
+        "BLU-82",
+        "BLU-82 weapon"
+      ],
+      "BLU.?82"
+    ],
+    "m134": [
+      [
+        "M134 Minigun",
+        "M134 Minigun weapon"
+      ],
+      "M134|Minigun"
+    ],
+    "m197": [
+      [
+        "M197",
+        "M197 weapon"
+      ],
+      "M197"
+    ],
+    "m249": [
+      [
+        "M249",
+        "M249 weapon"
+      ],
+      "M249"
+    ],
+    "m82": [
+      [
+        "Barrett M82",
+        "Barrett M82 weapon"
+      ],
+      "M82|Barrett"
+    ],
+    "m203": [
+      [
+        "M203",
+        "M203 weapon"
+      ],
+      "M203"
+    ],
+    "m72": [
+      [
+        "M72 LAW",
+        "M72 LAW weapon"
+      ],
+      "M72"
+    ],
+    "panzerfaust-3": [
+      [
+        "Panzerfaust 3",
+        "Panzerfaust 3 weapon"
+      ],
+      "Panzerfaust"
+    ],
+    "smaw": [
+      [
+        "Mk 153 SMAW",
+        "Mk 153 SMAW weapon"
+      ],
+      "153"
+    ],
+    "carl-gustaf": [
+      [
+        "Carl Gustaf",
+        "Carl Gustaf weapon"
+      ],
+      "Gustaf"
+    ],
+    "mgm-51": [
+      [
+        "MGM-51 Shillelagh",
+        "MGM-51 Shillelagh weapon"
+      ],
+      "MGM.?51|Shillelagh"
+    ],
+    "m224": [
+      [
+        "M224",
+        "M224 weapon"
+      ],
+      "M224"
+    ],
+    "m120": [
+      [
+        "M120",
+        "M120 weapon"
+      ],
+      "M120"
+    ],
+    "m101": [
+      [
+        "M101",
+        "M101 weapon"
+      ],
+      "M101"
+    ],
+    "m114-how": [
+      [
+        "M114",
+        "M114 weapon"
+      ],
+      "M114"
+    ],
+    "m198": [
+      [
+        "M198",
+        "M198 weapon"
+      ],
+      "M198"
+    ],
+    "m777": [
+      [
+        "M777",
+        "M777 weapon"
+      ],
+      "M777"
+    ],
+    "l118": [
+      [
+        "L118",
+        "L118 weapon"
+      ],
+      "L118"
+    ],
+    "fh70": [
+      [
+        "FH70",
+        "FH70 weapon"
+      ],
+      "FH70"
+    ],
+    "oerlikon-35": [
+      [
+        "Oerlikon GDF",
+        "Oerlikon GDF weapon"
+      ],
+      "Oerlikon"
+    ],
+    "bofors-l70": [
+      [
+        "Bofors L/70",
+        "Bofors L/70 weapon"
+      ],
+      "L/70|Bofors"
+    ],
+    "rh-202-gun": [
+      [
+        "Rh 202",
+        "Rh 202 weapon"
+      ],
+      "202"
+    ],
+    "rarden": [
+      [
+        "L21 RARDEN",
+        "L21 RARDEN weapon"
+      ],
+      "L21"
+    ],
+    "mk30-2": [
+      [
+        "MK 30-2/ABM",
+        "MK 30-2/ABM weapon"
+      ],
+      "30.?2/ABM"
+    ],
+    "gau-12": [
+      [
+        "GAU-12/U Equalizer",
+        "GAU-12/U Equalizer weapon"
+      ],
+      "GAU.?12/U|Equalizer"
+    ],
+    "gau-22": [
+      [
+        "GAU-22/A",
+        "GAU-22/A weapon"
+      ],
+      "GAU.?22/A"
+    ],
+    "defa-550": [
+      [
+        "DEFA 550",
+        "DEFA 550 weapon"
+      ],
+      "550"
+    ],
+    "giat-30": [
+      [
+        "GIAT 30M 791",
+        "GIAT 30M 791 weapon"
+      ],
+      "30M|791"
+    ],
+    "l30": [
+      [
+        "L30A1",
+        "L30A1 weapon"
+      ],
+      "L30A1"
+    ],
+    "cn120-26": [
+      [
+        "CN120-26",
+        "CN120-26 weapon"
+      ],
+      "CN120.?26"
+    ],
+    "zpt-98": [
+      [
+        "ZPT-98",
+        "ZPT-98 weapon"
+      ],
+      "ZPT.?98"
+    ],
+    "mk-8": [
+      [
+        "4.5 inch Mk 8",
+        "4.5 inch Mk 8 weapon"
+      ],
+      "4\\.5"
+    ],
+    "goalkeeper": [
+      [
+        "Goalkeeper",
+        "Goalkeeper weapon"
+      ],
+      "Goalkeeper"
+    ],
+    "rim-2": [
+      [
+        "RIM-2 Terrier",
+        "RIM-2 Terrier weapon"
+      ],
+      "RIM.?2|Terrier"
+    ],
+    "rim-8": [
+      [
+        "RIM-8 Talos",
+        "RIM-8 Talos weapon"
+      ],
+      "RIM.?8"
+    ],
+    "rim-24": [
+      [
+        "RIM-24 Tartar",
+        "RIM-24 Tartar weapon"
+      ],
+      "RIM.?24|Tartar"
+    ],
+    "rim-66a": [
+      [
+        "RIM-66 SM-1MR",
+        "RIM-66 SM-1MR weapon"
+      ],
+      "RIM.?66|SM.?1MR"
+    ],
+    "camm": [
+      [
+        "CAMM (Sea Ceptor)",
+        "CAMM (Sea Ceptor) weapon"
+      ],
+      "Ceptor"
+    ],
+    "sm-3": [
+      [
+        "RIM-161 SM-3",
+        "RIM-161 SM-3 weapon"
+      ],
+      "RIM.?161|SM.?3"
+    ],
+    "hhq-9": [
+      [
+        "HQ-9",
+        "HQ-9 weapon"
+      ],
+      "HQ.?9"
+    ],
+    "mim-72": [
+      [
+        "MIM-72 Chaparral",
+        "MIM-72 Chaparral weapon"
+      ],
+      "MIM.?72|Chaparral"
+    ],
+    "crotale": [
+      [
+        "Crotale",
+        "Crotale weapon"
+      ],
+      "Crotale"
+    ],
+    "roland": [
+      [
+        "Roland",
+        "Roland weapon"
+      ],
+      "Roland"
+    ],
+    "rapier": [
+      [
+        "Rapier",
+        "Rapier weapon"
+      ],
+      "Rapier"
+    ],
+    "blowpipe": [
+      [
+        "Blowpipe",
+        "Blowpipe weapon"
+      ],
+      "Blowpipe"
+    ],
+    "hq-16": [
+      [
+        "HQ-16",
+        "HQ-16 weapon"
+      ],
+      "HQ.?16"
+    ],
+    "r-550": [
+      [
+        "R.550 Magic",
+        "R.550 Magic weapon"
+      ],
+      "R\\.550"
+    ],
+    "r-530": [
+      [
+        "R.530",
+        "R.530 weapon"
+      ],
+      "R\\.530"
+    ],
+    "skyflash": [
+      [
+        "Skyflash",
+        "Skyflash weapon"
+      ],
+      "Skyflash"
+    ],
+    "firestreak": [
+      [
+        "Firestreak",
+        "Firestreak weapon"
+      ],
+      "Firestreak"
+    ],
+    "pl-12": [
+      [
+        "PL-12",
+        "PL-12 weapon"
+      ],
+      "PL.?12"
+    ],
+    "pl-10": [
+      [
+        "PL-10",
+        "PL-10 weapon"
+      ],
+      "PL.?10"
+    ],
+    "aam-4": [
+      [
+        "AAM-4",
+        "AAM-4 weapon"
+      ],
+      "AAM.?4"
+    ],
+    "agm-28": [
+      [
+        "AGM-28 Hound Dog",
+        "AGM-28 Hound Dog weapon"
+      ],
+      "AGM.?28"
+    ],
+    "agm-69": [
+      [
+        "AGM-69 SRAM",
+        "AGM-69 SRAM weapon"
+      ],
+      "AGM.?69"
+    ],
+    "agm-84h": [
+      [
+        "AGM-84H SLAM-ER",
+        "AGM-84H SLAM-ER weapon"
+      ],
+      "AGM.?84H"
+    ],
+    "agm-130": [
+      [
+        "AGM-130",
+        "AGM-130 weapon"
+      ],
+      "AGM.?130"
+    ],
+    "agm-142": [
+      [
+        "AGM-142 Have Nap",
+        "AGM-142 Have Nap weapon"
+      ],
+      "AGM.?142"
+    ],
+    "as-30l": [
+      [
+        "AS.30L",
+        "AS.30L weapon"
+      ],
+      "AS\\.30L"
+    ],
+    "martel": [
+      [
+        "Martel",
+        "Martel weapon"
+      ],
+      "Martel"
+    ],
+    "gbu-15": [
+      [
+        "GBU-15",
+        "GBU-15 weapon"
+      ],
+      "GBU.?15"
+    ],
+    "gbu-24": [
+      [
+        "GBU-24 Paveway III",
+        "GBU-24 Paveway III weapon"
+      ],
+      "GBU.?24|Paveway"
+    ],
+    "gbu-27": [
+      [
+        "GBU-27",
+        "GBU-27 weapon"
+      ],
+      "GBU.?27"
+    ],
+    "gbu-43": [
+      [
+        "GBU-43/B MOAB",
+        "GBU-43/B MOAB weapon"
+      ],
+      "GBU.?43/B"
+    ],
+    "cbu-87": [
+      [
+        "CBU-87",
+        "CBU-87 weapon"
+      ],
+      "CBU.?87"
+    ],
+    "cbu-97": [
+      [
+        "CBU-97",
+        "CBU-97 weapon"
+      ],
+      "CBU.?97"
+    ],
+    "bl755": [
+      [
+        "BL755",
+        "BL755 weapon"
+      ],
+      "BL755"
+    ],
+    "durandal": [
+      [
+        "Durandal",
+        "Durandal weapon"
+      ],
+      "Durandal"
+    ],
+    "ss-11": [
+      [
+        "SS.11",
+        "SS.11 weapon"
+      ],
+      "SS\\.11"
+    ],
+    "swingfire": [
+      [
+        "Swingfire",
+        "Swingfire weapon"
+      ],
+      "Swingfire"
+    ],
+    "m47": [
+      [
+        "M47 Dragon",
+        "M47 Dragon weapon"
+      ],
+      "M47|Dragon"
+    ],
+    "hj-8": [
+      [
+        "HJ-8",
+        "HJ-8 weapon"
+      ],
+      "HJ.?8"
+    ],
+    "jagm": [
+      [
+        "AGM-179 JAGM",
+        "AGM-179 JAGM weapon"
+      ],
+      "AGM.?179"
+    ],
+    "honest-john": [
+      [
+        "MGR-1 Honest John",
+        "MGR-1 Honest John weapon"
+      ],
+      "MGR.?1|Honest"
+    ],
+    "pershing-1a": [
+      [
+        "MGM-31A Pershing 1a",
+        "MGM-31A Pershing 1a weapon"
+      ],
+      "MGM.?31A|Pershing"
+    ],
+    "df-15": [
+      [
+        "DF-15",
+        "DF-15 weapon"
+      ],
+      "DF.?15"
+    ],
+    "penguin": [
+      [
+        "Penguin",
+        "Penguin weapon"
+      ],
+      "Penguin"
+    ],
+    "gabriel": [
+      [
+        "Gabriel",
+        "Gabriel weapon"
+      ],
+      "Gabriel"
+    ],
+    "otomat": [
+      [
+        "Otomat",
+        "Otomat weapon"
+      ],
+      "Otomat"
+    ],
+    "kormoran": [
+      [
+        "AS.34 Kormoran",
+        "AS.34 Kormoran weapon"
+      ],
+      "AS\\.34|Kormoran"
+    ],
+    "yj-8": [
+      [
+        "YJ-8",
+        "YJ-8 weapon"
+      ],
+      "YJ.?8"
+    ],
+    "yj-83": [
+      [
+        "YJ-83",
+        "YJ-83 weapon"
+      ],
+      "YJ.?83"
+    ],
+    "yj-18": [
+      [
+        "YJ-18",
+        "YJ-18 weapon"
+      ],
+      "YJ.?18"
+    ],
+    "hy-2": [
+      [
+        "HY-2",
+        "HY-2 weapon"
+      ],
+      "HY.?2"
+    ],
+    "spearfish": [
+      [
+        "Spearfish",
+        "Spearfish weapon"
+      ],
+      "Spearfish"
+    ],
+    "mu90": [
+      [
+        "MU90 Impact",
+        "MU90 Impact weapon"
+      ],
+      "MU90|Impact"
+    ],
+    "f21": [
+      [
+        "F21 Artemis",
+        "F21 Artemis weapon"
+      ],
+      "F21|Artemis"
+    ],
+    "dm2a4": [
+      [
+        "DM2A4 Seehecht",
+        "DM2A4 Seehecht weapon"
+      ],
+      "DM2A4|Seehecht"
+    ],
+    "53-65": [
+      [
+        "53-65",
+        "53-65 weapon"
+      ],
+      "53.?65"
+    ],
+    "subroc": [
+      [
+        "UUM-44 SUBROC",
+        "UUM-44 SUBROC weapon"
+      ],
+      "UUM.?44"
+    ],
+    "malafon": [
+      [
+        "Malafon",
+        "Malafon weapon"
+      ],
+      "Malafon"
+    ],
+    "r-77": [
+      [
+        "R-77",
+        "R-77 missile"
+      ],
+      "R.?77"
+    ],
+    "meteor": [
+      [
+        "Meteor",
+        "Meteor missile"
+      ],
+      "Meteor"
+    ],
+    "agm-65": [
+      [
+        "AGM-65 Maverick",
+        "AGM-65 Maverick missile"
+      ],
+      "AGM.?65|Maverick"
+    ],
+    "exocet": [
+      [
+        "Exocet",
+        "Exocet missile"
+      ],
+      "Exocet"
+    ],
+    "granit": [
+      [
+        "P-700 Granit",
+        "P-700 Granit missile"
+      ],
+      "P.?700|Granit"
+    ],
+    "jassm": [
+      [
+        "AGM-158 JASSM",
+        "AGM-158 JASSM missile"
+      ],
+      "AGM.?158"
+    ],
+    "pac-2": [
+      [
+        "MIM-104 Patriot",
+        "MIM-104 Patriot missile"
+      ],
+      "MIM.?104|Patriot"
+    ],
+    "48n6": [
+      [
+        "S-300 missile system",
+        "S-300 missile system missile"
+      ],
+      "S.?300"
+    ],
+    "9m14": [
+      [
+        "9M14 Malyutka",
+        "9M14 Malyutka missile"
+      ],
+      "9M14|Malyutka"
+    ],
+    "bgm-71": [
+      [
+        "BGM-71 TOW",
+        "BGM-71 TOW missile"
+      ],
+      "BGM.?71"
+    ],
+    "9m133": [
+      [
+        "9M133 Kornet",
+        "9M133 Kornet missile"
+      ],
+      "9M133|Kornet"
+    ],
+    "m61": [
+      [
+        "M61 Vulcan",
+        "M61 Vulcan missile"
+      ],
+      "M61|Vulcan"
+    ],
+    "gau-8": [
+      [
+        "GAU-8 Avenger",
+        "GAU-8 Avenger missile"
+      ],
+      "GAU.?8|Avenger"
+    ],
+    "2a46": [
+      [
+        "2A46 125 mm tank gun",
+        "2A46 125 mm tank gun missile"
+      ],
+      "2A46|125"
+    ],
+    "r-33": [
+      [
+        "R-33",
+        "R-33 missile"
+      ],
+      "R.?33"
+    ],
+    "asraam": [
+      [
+        "AIM-132 ASRAAM",
+        "AIM-132 ASRAAM missile"
+      ],
+      "AIM.?132"
+    ],
+    "57e6": [
+      [
+        "Pantsir missile system",
+        "Pantsir missile system missile"
+      ],
+      "Pantsir"
+    ],
+    "40n6": [
+      [
+        "S-400 missile system",
+        "S-400 missile system missile"
+      ],
+      "S.?400"
+    ],
+    "mistral-missile": [
+      [
+        "Mistral",
+        "Mistral missile"
+      ],
+      "Mistral"
+    ],
+    "sm-6": [
+      [
+        "RIM-174 Standard ERAM",
+        "RIM-174 Standard ERAM missile"
+      ],
+      "RIM.?174|Standard"
+    ],
+    "kh-29": [
+      [
+        "Kh-29",
+        "Kh-29 missile"
+      ],
+      "Kh.?29"
+    ],
+    "brimstone": [
+      [
+        "MBDA Brimstone",
+        "MBDA Brimstone missile"
+      ],
+      "Brimstone"
+    ],
+    "apkws": [
+      [
+        "Advanced Precision Kill Weapon System",
+        "Advanced Precision Kill Weapon System missile"
+      ],
+      "Advanced|Precision|Weapon"
+    ],
+    "am39": [
+      [
+        "Exocet",
+        "Exocet missile"
+      ],
+      "Exocet"
+    ],
+    "9m723": [
+      [
+        "9K720 Iskander",
+        "9K720 Iskander missile"
+      ],
+      "9K720|Iskander"
+    ],
+    "gsh-30-1": [
+      [
+        "GSh-30-1",
+        "GSh-30-1 missile"
+      ],
+      "GSh.?30.?1"
+    ],
+    "r-60": [
+      [
+        "R-60",
+        "R-60 missile"
+      ],
+      "R.?60"
+    ],
+    "python-5": [
+      [
+        "Python",
+        "Python missile"
+      ],
+      "Python"
+    ],
+    "super-530": [
+      [
+        "Super 530",
+        "Super 530 missile"
+      ],
+      "530"
+    ],
+    "r-37": [
+      [
+        "R-37",
+        "R-37 missile"
+      ],
+      "R.?37"
+    ],
+    "5v27": [
+      [
+        "S-125 Neva/Pechora",
+        "S-125 Neva/Pechora missile"
+      ],
+      "S.?125"
+    ],
+    "pac-3": [
+      [
+        "MIM-104 Patriot",
+        "MIM-104 Patriot missile"
+      ],
+      "MIM.?104|Patriot"
+    ],
+    "kh-31": [
+      [
+        "Kh-31",
+        "Kh-31 missile"
+      ],
+      "Kh.?31"
+    ],
+    "kh-59": [
+      [
+        "Kh-59",
+        "Kh-59 missile"
+      ],
+      "Kh.?59"
+    ],
+    "kab-500": [
+      [
+        "KAB-500L",
+        "KAB-500L missile"
+      ],
+      "KAB.?500L"
+    ],
+    "kalibr": [
+      [
+        "Kalibr",
+        "Kalibr missile"
+      ],
+      "Kalibr"
+    ],
+    "oniks": [
+      [
+        "P-800 Oniks",
+        "P-800 Oniks missile"
+      ],
+      "P.?800"
+    ],
+    "s-8": [
+      [
+        "S-8",
+        "S-8 missile"
+      ],
+      "S.?8"
+    ],
+    "2a42": [
+      [
+        "2A42 30 mm autocannon",
+        "2A42 30 mm autocannon missile"
+      ],
+      "2A42"
+    ],
+    "l7": [
+      [
+        "Royal Ordnance L7",
+        "Royal Ordnance L7 missile"
+      ],
+      "Ordnance"
+    ],
+    "m230": [
+      [
+        "M230 chain gun",
+        "M230 chain gun missile"
+      ],
+      "M230"
+    ],
+    "ak-630": [
+      [
+        "AK-630",
+        "AK-630 missile"
+      ],
+      "AK.?630"
+    ],
+    "kh-22": [
+      [
+        "Kh-22",
+        "Kh-22 missile"
+      ],
+      "Kh.?22"
+    ],
+    "moskit": [
+      [
+        "P-270 Moskit",
+        "P-270 Moskit missile"
+      ],
+      "P.?270|Moskit"
+    ],
+    "bazalt": [
+      [
+        "P-500 Bazalt",
+        "P-500 Bazalt missile"
+      ],
+      "P.?500|Bazalt"
+    ],
+    "gsh-30-2": [
+      [
+        "Gryazev-Shipunov GSh-30-2",
+        "Gryazev-Shipunov GSh-30-2 missile"
+      ],
+      "GSh.?30.?2"
+    ],
+    "bk-27": [
+      [
+        "Mauser BK-27",
+        "Mauser BK-27 missile"
+      ],
+      "BK.?27|Mauser"
+    ],
+    "shturm": [
+      [
+        "9K114 Shturm",
+        "9K114 Shturm missile"
+      ],
+      "9K114|Shturm"
+    ],
+    "ataka": [
+      [
+        "9M120 Ataka",
+        "9M120 Ataka missile"
+      ],
+      "9M120"
+    ]
   }
 }

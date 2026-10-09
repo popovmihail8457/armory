@@ -660,12 +660,13 @@ const MORE_PLATFORMS: Record<string, string[]> = {
 
 /** Носители, добавленные по итогам проверки scripts/check-data.mjs (техника без привязанного вооружения). */
 const GAP_PLATFORMS: Record<string, string[]> = {
+  'mistral-missile': ['mistral', 'de-gaulle'],
+  'm134': ['uh-60', 'ch-46', 'ch-53'],
   'r-77': ['su-57'],
   'r-73': ['su-57'],
   'gsh-30-1': ['su-57'],
   'agm-114': ['uh-60'],
   'hydra-70': ['uh-60'],
-  'm134': ['uh-60'],
   'rim-7': ['forrestal', 'iwo-jima'],
   'phalanx': ['forrestal', 'queen-elizabeth', 'america'],
   'essm': ['america'],

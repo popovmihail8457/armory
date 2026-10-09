@@ -47,14 +47,14 @@ const photo = bgForWeapon(weapon.id, weapon.platforms);
 const carrierName = photo.carrier ? equipment.find((item) => item.id === photo.carrier)?.name : undefined;
 const flight = flightEntryOf(weapon.id);
 const guidance = guidanceScenes[weapon.id] ?? [];
-const scenes = warheadScenes(weapon.id, Math.max(1, mods.length));
+const scenes = warheadScenes(weapon, Math.max(1, mods.length));
 const tocItems = [
   { id: 'principle', label: 'Принцип работы' },
   guidance.length > 0 && { id: 'guidance', label: 'Наведение' },
   { id: 'specs', label: 'Характеристики' },
   flight && { id: 'flight', label: 'Профиль полёта' },
   weapon.guidance && { id: 'design', label: 'Устройство' },
-  { id: 'warhead', label: 'Боевая часть' },
+  scenes.length > 0 && { id: 'warhead', label: 'Боевая часть' },
   shellGuns.length > 0 && { id: 'shells', label: 'Снаряды и баллистика' },
   text.features.length > 0 && { id: 'features', label: 'Особенности' },
   text.history && { id: 'history', label: 'История' },
@@ -164,7 +164,7 @@ const tocItems = [
     </div>
   </section>)}
 
-  <section class="section" id="warhead" style={`--c:var(--era-${era.id})`}>
+  {scenes.length > 0 && (<section class="section" id="warhead" style={`--c:var(--era-${era.id})`}>
     <div class="wrap">
       <div class="section-head">
         <h2>Работа боевой части</h2>
@@ -172,7 +172,7 @@ const tocItems = [
       </div>
       <WarheadDemo perMod={scenes} initial={scenes[0]} />
     </div>
-  </section>
+  </section>)}
 
   {shellGuns.length > 0 && (
     <section class="section" id="shells" style={`--c:var(--era-${era.id})`}>

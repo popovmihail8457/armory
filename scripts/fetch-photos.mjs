@@ -8,10 +8,12 @@ import { mkdirSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+/** Первый аргумент: папка в public/bg. Второй (необязательный): набор запросов, если он называется иначе. */
 const set = process.argv[2];
+const querySet = process.argv[3] ?? set;
 const here = dirname(fileURLToPath(import.meta.url));
 const sets = JSON.parse(readFileSync(join(here, 'photo-queries.json'), 'utf8'));
-if (!sets[set]) { console.error('Набор не найден. Доступны:', Object.keys(sets).join(', ')); process.exit(1); }
+if (!sets[querySet]) { console.error('Набор не найден. Доступны:', Object.keys(sets).join(', ')); process.exit(1); }
 const outDir = join(here, '..', 'public', 'bg', set);
 mkdirSync(outDir, { recursive: true });
 const manifestPath = join(outDir, 'manifest.json');
@@ -71,7 +73,7 @@ async function download(url, file) {
 const save = () => writeFileSync(manifestPath, JSON.stringify(manifest, null, 1));
 let total = 0;
 const missing = [];
-for (const [id, [queries, pattern]] of Object.entries(sets[set])) {
+for (const [id, [queries, pattern]] of Object.entries(sets[querySet])) {
   const name = `${id}.jpg`;
   if (manifest[id]?.file && existsSync(join(outDir, name))) continue;
   const cand = await find(queries, new RegExp(pattern, 'i'));

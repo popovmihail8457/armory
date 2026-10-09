@@ -14,7 +14,7 @@ export interface Gun {
   name: string;
   country: string;
   caliber: number;
-  kind: 'tank' | 'auto' | 'howitzer' | 'low';
+  kind: 'tank' | 'auto' | 'howitzer' | 'low' | 'mg';
   /** Техника из справочника с этим орудием. */
   platforms: string[];
   /** Страница орудия в каталоге вооружения, если есть. */
@@ -57,6 +57,13 @@ export const shellTypes: ShellType[] = [
 
 export const guns: Gun[] = [
   { id: 'd-10t', name: '100-мм Д-10Т', country: 'СССР', caliber: 100, kind: 'tank', platforms: ['t-54', 'type-59'] },
+  { id: 'kpvt', name: '14,5-мм пулемёт КПВТ', country: 'СССР', caliber: 14.5, kind: 'mg', platforms: ['btr-60', 'btr-70', 'btr-80'], weaponId: 'kpv' },
+  { id: 'm2-50', name: '12,7-мм пулемёт M2', country: 'США', caliber: 12.7, kind: 'mg', platforms: ['m113', 'stryker', 'vab', 'patria-amv', 'namer', 'boxer'], weaponId: 'm2hb' },
+  { id: 'sgmb', name: '7,62-мм пулемёт СГМБ', country: 'СССР', caliber: 7.62, kind: 'mg', platforms: ['btr-152', 'btr-40', 'btr-50'] },
+  { id: 'nato-762', name: '7,62-мм пулемёт под патрон НАТО', country: 'США, ФРГ', caliber: 7.62, kind: 'mg', platforms: ['fuchs', 'lvtp-5'] },
+  { id: 'mk30', name: '30-мм MK 30-2/ABM', country: 'Германия', caliber: 30, kind: 'auto', platforms: ['puma'], weaponId: 'mk30-2' },
+  { id: 'zpt-98', name: '125-мм ZPT-98', country: 'Китай', caliber: 125, kind: 'tank', platforms: ['type-99'], weaponId: 'zpt-98' },
+  { id: '2a82', name: '125-мм 2А82', country: 'Россия', caliber: 125, kind: 'tank', platforms: ['t-14'], weaponId: '2a82' },
   { id: 'm32', name: '76-мм M32', country: 'США', caliber: 76, kind: 'tank', platforms: ['m41'] },
   { id: 'd-56t', name: '76-мм Д-56Т', country: 'СССР', caliber: 76, kind: 'tank', platforms: ['pt-76'] },
   { id: 'm81', name: '152-мм M81', country: 'США', caliber: 152, kind: 'low', platforms: ['m551'] },
@@ -146,6 +153,15 @@ export const shells: Shell[] = [
   // 40-мм Bofors
   { id: 'bofors-he', name: '40 мм HE', gun: 'bofors-40', type: 'he', v0: 1025, mass: 0.96, note: 'Осколочно-фугасный снаряд. Современные версии имеют программируемый взрыватель.' },
   { id: 'bofors-apfsds', name: '40 мм APFSDS-T', gun: 'bofors-40', type: 'apfsds', v0: 1470, note: 'Оперённый подкалиберный снаряд.' },
+  // Пулемёты бронетранспортёров и пушки без подробных данных
+  { id: 'b-32-145', name: 'Б-32, 14,5 мм', gun: 'kpvt', type: 'ap', v0: 1005, mass: 0.064, note: 'Бронебойно-зажигательная пуля патрона 14,5x114 мм.' },
+  { id: 'm33-ball', name: 'M33, 12,7 мм', gun: 'm2-50', type: 'ap', v0: 890, mass: 0.042, note: 'Обычная пуля патрона 12,7x99 мм. Бронебойные версии имеют закалённый сердечник.' },
+  { id: 'lps-762', name: 'ЛПС, 7,62 мм', gun: 'sgmb', type: 'ap', v0: 800, mass: 0.0096, note: 'Пуля со стальным сердечником патрона 7,62x54 мм.' },
+  { id: 'm80-762', name: 'M80, 7,62 мм', gun: 'nato-762', type: 'ap', v0: 838, mass: 0.0095, note: 'Обычная пуля патрона 7,62x51 мм.' },
+  { id: 'mk30-apfsds', name: '30 мм APFSDS-T', gun: 'mk30', type: 'apfsds', note: 'Оперённый подкалиберный снаряд патрона 30x173 мм. Точные данные в открытых источниках расходятся.' },
+  { id: 'mk30-ketf', name: '30 мм KETF', gun: 'mk30', type: 'he', note: 'Снаряд с программируемым взрывателем: в заданной точке выбрасывает вперёд облако готовых поражающих элементов.' },
+  { id: 'dtw-125', name: 'DTW-125', gun: 'zpt-98', type: 'apfsds', v0: 1740, note: 'Китайский оперённый подкалиберный снаряд. Масса в полёте не публиковалась.' },
+  { id: '3bm59', name: '3БМ59 «Свинец-1»', gun: '2a82', type: 'apfsds', note: 'Удлинённый подкалиберный снаряд нового поколения. Характеристики официально не публиковались.' },
   // Орудия техники Вьетнамской войны
   { id: 'm339', name: 'M339 AP', gun: 'm32', type: 'ap', v0: 975, note: 'Бронебойный снаряд лёгкого танка M41.' },
   { id: 'm352', name: 'M352 HE', gun: 'm32', type: 'he', v0: 732, note: 'Осколочно-фугасный снаряд.' },
