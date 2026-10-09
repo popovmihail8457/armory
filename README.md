@@ -23,6 +23,12 @@ SITE_URL=https://ваш-домен npm run build
 В PowerShell: `$env:SITE_URL = "https://ваш-домен"; npm run build`.
 Содержимое папки `dist/` загружается на хостинг целиком. В сборке есть `robots.txt` и `sitemap-index.xml`.
 
+### GitHub Pages
+
+Автосборка описана в `.github/workflows/deploy.yml`: при каждом push в `main` сайт собирается и публикуется на `https://popovmihail8457.github.io/armory/`. Один раз включите Settings, Pages, Source: GitHub Actions.
+
+Сайт лежит в подпапке `/armory`, поэтому после сборки запускается `scripts/prefix-base.mjs`: он добавляет префикс ко всем внутренним ссылкам (`BASE_PATH=/armory`). Для хостинга в корне домена `BASE_PATH` не задавайте.
+
 ## Данные и фото
 
 - Данные лежат в `src/data/` (техника, вооружение, версии, графики полёта, броня, датчики, схемы кораблей).

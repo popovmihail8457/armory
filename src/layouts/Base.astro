@@ -24,8 +24,11 @@ const photoMobile = photo?.replace(/\.jpg$/, '-m.jpg');
 const activeEra = eras.find((item) => item.id === era);
 const eraLabel = activeEra ? `${activeEra.from}–${activeEra.to === 2026 ? 'н. в.' : activeEra.to}` : '';
 const pathname = Astro.url.pathname;
-const canonical = Astro.site ? new URL(pathname, Astro.site).href : undefined;
-const ogImage = photo && Astro.site ? new URL(photo, Astro.site).href : undefined;
+// BASE_PATH: подпапка на хостинге (GitHub Pages: /armory). Ссылки в HTML получают её после сборки.
+const basePath = (process.env.BASE_PATH ?? '').replace(/\/+$/, '');
+const absolute = (path: string) => new URL(basePath + path, Astro.site).href;
+const canonical = Astro.site ? absolute(pathname) : undefined;
+const ogImage = photo && Astro.site ? absolute(photo) : undefined;
 const fullTitle = title === 'Арсенал' ? 'Арсенал: справочник военной техники' : `${title} | Арсенал`;
 ---
 <!doctype html>
