@@ -598,3 +598,56 @@ a.card:active { transform: translateY(-1px) scale(0.985); }
   @keyframes fly-weapon-out { to { opacity: 0; transform: scale(1.08); } }
   @keyframes fly-weapon-in { from { opacity: 0; transform: scale(0.94); } }
 }
+
+/* Схема корабля с выбором систем */
+.ship { display: grid; gap: var(--gap); --k-radar: #3987e5; --k-missile: #d95926; --k-gun: #c98500; --k-ciws: #d7d6cd; --k-torpedo: #199e70; --k-aviation: #8fb8d8; --k-sonar: #7f8f84; }
+.ship-filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.ship-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--k); display: inline-block; }
+.k-radar { --k: var(--k-radar); } .k-missile { --k: var(--k-missile); } .k-gun { --k: var(--k-gun); } .k-ciws { --k: var(--k-ciws); }
+.k-torpedo { --k: var(--k-torpedo); } .k-aviation { --k: var(--k-aviation); } .k-sonar { --k: var(--k-sonar); }
+.ship-stage { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; overflow-x: auto; }
+.ship-svg { display: block; width: 100%; min-width: 640px; height: auto; }
+.ship-water { stroke: rgba(57, 135, 229, 0.6); stroke-width: 1.5; stroke-dasharray: 8 6; }
+.ship-shapes rect, .ship-shapes polygon { fill: var(--surface-2); stroke: var(--text-2); stroke-width: 1.5; stroke-linejoin: round; }
+.ship-shapes line { stroke: var(--text-2); stroke-width: 2; }
+.ship-label { fill: var(--text-3); font-family: var(--mono); font-size: 13px; }
+.ship-pin { cursor: pointer; outline: none; transition: opacity 0.2s ease; }
+.ship-pin-hit { fill: transparent; }
+.ship-pin-dot { fill: var(--bg); stroke: var(--k); stroke-width: 2.5; transition: fill 0.2s ease; }
+.ship-pin-ring { fill: none; stroke: var(--k); stroke-width: 2; opacity: 0; transform-box: fill-box; transform-origin: center; transition: opacity 0.2s ease, transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.ship-pin text { fill: var(--text); font-family: var(--mono); font-size: 12px; font-weight: 700; pointer-events: none; }
+.ship-pin:hover .ship-pin-ring, .ship-pin.hover .ship-pin-ring, .ship-pin:focus-visible .ship-pin-ring { opacity: 0.7; transform: scale(1.25); }
+.ship-pin[aria-pressed='true'] .ship-pin-dot { fill: var(--k); }
+.ship-pin[aria-pressed='true'] text { fill: var(--bg); }
+.ship-pin[aria-pressed='true'] .ship-pin-ring { opacity: 1; transform: scale(1.35); }
+.ship-pin.dim { opacity: 0.2; }
+.ship-note { display: block; margin-top: 8px; color: var(--text-3); font-size: 0.82rem; }
+.ship-body { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: var(--gap); align-items: start; }
+.ship-list { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); }
+.ship-list li { border-bottom: 1px solid var(--line); }
+.ship-list li:last-child { border-bottom: 0; }
+.ship-list li[hidden] { display: none; }
+.ship-item { font: inherit; color: var(--text-2); background: none; border: 0; cursor: pointer; width: 100%; text-align: left; display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 2px 12px; padding: 10px 14px; min-height: 48px; transition: background 0.2s ease, color 0.2s ease; }
+.ship-item:hover { background: var(--surface-2); color: var(--text); }
+.ship-item[aria-pressed='true'] { background: var(--surface-2); color: var(--text); box-shadow: inset 3px 0 0 var(--era-modern); }
+.ship-num { grid-row: span 2; align-self: center; width: 26px; height: 26px; border-radius: 50%; border: 2px solid var(--k); display: grid; place-items: center; font-size: 0.78rem; color: var(--text); }
+.ship-item-name { font-weight: 600; }
+.ship-item-kind { font-size: 0.8rem; color: var(--text-3); }
+.ship-panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: grid; gap: 12px; position: sticky; top: 124px; }
+.ship-panel[hidden] { display: none; }
+.ship-panel p { color: var(--text-2); }
+.ship-panel .radar-readout dd { max-width: 60%; }
+.ship-show { justify-self: start; }
+.ship-link { color: var(--text-2); font-size: 0.92rem; }
+@media (max-width: 800px) { .ship-body { grid-template-columns: 1fr; } .ship-panel { position: static; } .ship-panels { order: -1; } }
+@media (prefers-reduced-motion: no-preference) { .ship-panel:not([hidden]) { animation: ship-panel-in 0.3s ease both; } @keyframes ship-panel-in { from { opacity: 0; transform: translateY(8px); } } }
+
+/* Обзор радаров и схема пуска */
+.scope .radar-canvas { max-width: 560px; margin-inline: auto; }
+.scope-hint { color: var(--text-3); font-size: 0.8rem; }
+.scope-note:empty { display: none; }
+.naval-stages { margin: 0; padding: 0; list-style: none; counter-reset: stage; display: grid; gap: 0; border-top: 1px solid var(--line); }
+.naval-stages li { counter-increment: stage; padding: 10px 0 10px 34px; position: relative; border-bottom: 1px solid var(--line); color: var(--text-3); transition: color 0.25s ease; }
+.naval-stages li::before { content: counter(stage); position: absolute; left: 0; top: 9px; width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--line-strong); display: grid; place-items: center; font-family: var(--mono); font-size: 0.74rem; transition: border-color 0.25s ease, background 0.25s ease, color 0.25s ease; }
+.naval-stages li.active { color: var(--text); }
+.naval-stages li.active::before { border-color: var(--era-modern); background: var(--era-modern); color: var(--bg); }

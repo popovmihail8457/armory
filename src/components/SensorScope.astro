@@ -1,0 +1,203 @@
+---
+import { sensorTypeName, type Sensor } from '../data/sensors';
+
+interface Props {
+  sensors: Sensor[];
+  /** Подпись направления «вперёд»: нос корабля или ось комплекса. */
+  forward?: string;
+}
+
+const { sensors, forward = 'Нос' } = Astro.props;
+const data = sensors.map((sensor) => ({ ...sensor, typeName: sensorTypeName[sensor.type] }));
+---
+<section class="radar scope" data-scope data-sensors={JSON.stringify(data)} data-forward={forward}>
+  <div class="radar-tabs" role="tablist" aria-label="Радиолокаторы">
+    {sensors.map((sensor, i) => (
+      <button type="button" role="tab" class="radar-tab" data-sensor={sensor.id} aria-selected={i === 0}>{sensor.name}</button>
+    ))}
+  </div>
+  <div class="radar-body">
+    <div class="radar-stage">
+      <canvas class="radar-canvas" width="560" height="560" role="img" aria-label="Схема секторов обзора, вид сверху"></canvas>
+      <button type="button" class="radar-toggle" aria-pressed="false">Пауза</button>
+    </div>
+    <div class="radar-info">
+      <div>
+        <span class="eyebrow scope-type"></span>
+        <h3 class="radar-title scope-name"></h3>
+      </div>
+      <p class="radar-text scope-role"></p>
+      <dl class="radar-readout">
+        <div><dt>Сектор по азимуту</dt><dd class="num scope-az">-</dd></div>
+        <div><dt>Дальность обнаружения</dt><dd class="num scope-range">-</dd></div>
+        <div><dt>Период обзора</dt><dd class="num scope-period">-</dd></div>
+        <div><dt>Диапазон</dt><dd class="num scope-band">-</dd></div>
+      </dl>
+      <p class="radar-text scope-note"></p>
+      <small class="scope-hint">Вид сверху. Кольцо показывает дальность выбранной станции относительно самой дальнобойной в списке, масштаб условный.</small>
+    </div>
+  </div>
+</section>
+
+<script>
+  interface Item { id: string; name: string; role: string; type: 'rotating' | 'array' | 'sector' | 'track'; half: number; center?: number; faces?: number; rangeKm?: number; period?: number; band?: string; note?: string; typeName: string }
+
+  const TAU = Math.PI * 2;
+  const fmt = (value: number, digits = 0) => value.toLocaleString('ru-RU', { maximumFractionDigits: digits });
+
+  document.querySelectorAll<HTMLElement>('[data-scope]').forEach((root) => {
+    const items: Item[] = JSON.parse(root.dataset.sensors ?? '[]');
+    if (items.length === 0) return;
+    const canvas = root.querySelector<HTMLCanvasElement>('canvas')!;
+    const ctx = canvas.getContext('2d')!;
+    const css = getComputedStyle(root);
+    const color = (name: string) => css.getPropertyValue(name).trim();
+    const accent = color('--era-modern') || '#c98500';
+    const toggle = root.querySelector<HTMLButtonElement>('.radar-toggle')!;
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-sensor]')];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const set = (selector: string, text: string) => { root.querySelector(selector)!.textContent = text; };
+    const cx = canvas.width / 2;
+    const cy = canvas.height / 2;
+    const maxR = canvas.width / 2 - 36;
+    const maxRange = Math.max(...items.map((item) => item.rangeKm ?? 0), 1);
+    const radiusOf = (item: Item) => (item.rangeKm ? maxR * (0.3 + 0.7 * Math.sqrt(item.rangeKm / maxRange)) : maxR * 0.55);
+    /** Угол на холсте: 0 градусов направлен вверх (вперёд), по часовой стрелке. */
+    const rad = (deg: number) => ((deg - 90) * Math.PI) / 180;
+
+    let current = items[0];
+    let paused = reduce;
+    let clock = 0;
+    let last = 0;
+
+    function wedge(center: number, half: number, radius: number, fill: string, stroke: string) {
+      ctx.beginPath();
+      if (half >= 180) ctx.arc(cx, cy, radius, 0, TAU);
+      else { ctx.moveTo(cx, cy); ctx.arc(cx, cy, radius, rad(center - half), rad(center + half)); ctx.closePath(); }
+      ctx.fillStyle = fill;
+      ctx.fill();
+      ctx.strokeStyle = stroke;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+    }
+
+    function beam(angleDeg: number, radius: number, width: number, alpha: number) {
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, radius, rad(angleDeg - width), rad(angleDeg + width));
+      ctx.closePath();
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = accent;
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    function drawBase() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = color('--line');
+      ctx.lineWidth = 1;
+      [0.33, 0.66, 1].forEach((k) => { ctx.beginPath(); ctx.arc(cx, cy, maxR * k, 0, TAU); ctx.stroke(); });
+      for (let a = 0; a < 360; a += 30) {
+        ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(rad(a)) * maxR, cy + Math.sin(rad(a)) * maxR); ctx.stroke();
+      }
+      ctx.fillStyle = color('--text-3');
+      ctx.font = '12px Consolas, monospace';
+      ctx.textAlign = 'center';
+      ctx.fillText(root.dataset.forward ?? 'Нос', cx, cy - maxR - 12);
+      ctx.fillText('180°', cx, cy + maxR + 22);
+      ctx.textAlign = 'left';
+      ctx.fillText('90°', cx + maxR + 6, cy + 4);
+      ctx.textAlign = 'right';
+      ctx.fillText('270°', cx - maxR - 6, cy + 4);
+    }
+
+    function drawOthers() {
+      items.filter((item) => item !== current).forEach((item) => {
+        const r = radiusOf(item);
+        wedge(item.center ?? 0, item.type === 'track' ? 180 : item.half, r, 'transparent', color('--line-strong'));
+      });
+    }
+
+    function drawCurrent(t: number) {
+      const r = radiusOf(current);
+      const center = current.center ?? 0;
+      if (current.type === 'rotating') {
+        wedge(0, 180, r, 'rgba(201, 133, 0, 0.07)', accent);
+        const period = Math.min(8, Math.max(1.5, current.period ?? 4));
+        const angle = ((t / period) * 360) % 360;
+        for (let i = 0; i < 6; i += 1) beam(angle - i * 5, r, 3, 0.5 - i * 0.08);
+      } else if (current.type === 'array') {
+        const faces = current.faces ?? 4;
+        const span = 360 / faces;
+        for (let f = 0; f < faces; f += 1) {
+          const mid = 45 + f * span;
+          wedge(mid, span / 2 - 1.5, r, f % 2 ? 'rgba(201, 133, 0, 0.06)' : 'rgba(201, 133, 0, 0.11)', accent);
+          for (let k = 0; k < 3; k += 1) {
+            const seed = Math.sin((Math.floor(t * 5) + k * 7 + f * 13) * 12.9898) * 43758.5453;
+            const offset = ((seed - Math.floor(seed)) - 0.5) * (span - 8);
+            beam(mid + offset, r, 1.2, 0.55);
+          }
+        }
+      } else if (current.type === 'sector') {
+        wedge(center, current.half, r, 'rgba(201, 133, 0, 0.1)', accent);
+        const sweep = Math.sin(t * 1.6) * (current.half - 3);
+        beam(center + sweep, r, 2, 0.6);
+        const hop = Math.sin(Math.floor(t * 4) * 78.233) * 43758.5453;
+        beam(center + ((hop - Math.floor(hop)) - 0.5) * 2 * (current.half - 3), r, 1, 0.45);
+      } else {
+        const swing = 40;
+        const target = center + Math.sin(t * 0.5) * swing;
+        wedge(center, swing + current.half, r, 'rgba(201, 133, 0, 0.04)', color('--line-strong'));
+        beam(target, r, Math.max(1.5, current.half), 0.6);
+        const tr = r * 0.8;
+        ctx.fillStyle = color('--text');
+        ctx.beginPath(); ctx.arc(cx + Math.cos(rad(target)) * tr, cy + Math.sin(rad(target)) * tr, 4, 0, TAU); ctx.fill();
+      }
+      if (current.rangeKm) {
+        ctx.fillStyle = color('--text');
+        ctx.font = '13px Consolas, monospace';
+        ctx.textAlign = 'left';
+        ctx.fillText(`≈${fmt(current.rangeKm)} км`, cx + Math.cos(rad(120)) * r + 8, cy + Math.sin(rad(120)) * r + 4);
+      }
+      ctx.fillStyle = color('--text');
+      ctx.beginPath(); ctx.moveTo(cx, cy - 12); ctx.lineTo(cx + 6, cy + 9); ctx.lineTo(cx - 6, cy + 9); ctx.closePath(); ctx.fill();
+    }
+
+    function frame(now: number) {
+      if (!paused) clock += (now - (last || now)) / 1000;
+      last = now;
+      drawBase();
+      drawOthers();
+      drawCurrent(clock);
+      if (!reduce) requestAnimationFrame(frame);
+    }
+
+    function select(id: string) {
+      const next = items.find((item) => item.id === id);
+      if (!next) return;
+      current = next;
+      tabs.forEach((tab) => tab.setAttribute('aria-selected', String(tab.dataset.sensor === id)));
+      set('.scope-type', current.typeName);
+      set('.scope-name', current.name);
+      set('.scope-role', current.role + '.');
+      const az = current.type === 'array' ? `360°, ${current.faces ?? 4} полотна` : current.half >= 180 ? '360°' : current.type === 'track' ? `луч ≈${fmt(current.half * 2, 1)}°, антенна наводится на цель` : `≈${fmt(current.half * 2)}°`;
+      set('.scope-az', az);
+      set('.scope-range', current.rangeKm ? `≈${fmt(current.rangeKm)} км` : 'открытых данных нет');
+      set('.scope-period', current.period ? `≈${fmt(current.period, 1)} с` : current.type === 'rotating' ? 'открытых данных нет' : 'электронное сканирование');
+      set('.scope-band', current.band ?? 'не указан');
+      set('.scope-note', current.note ?? '');
+      if (reduce) requestAnimationFrame(frame);
+    }
+
+    tabs.forEach((tab) => tab.addEventListener('click', () => select(tab.dataset.sensor!)));
+    toggle.hidden = reduce;
+    toggle.addEventListener('click', () => {
+      paused = !paused;
+      toggle.setAttribute('aria-pressed', String(paused));
+      toggle.textContent = paused ? 'Продолжить' : 'Пауза';
+    });
+    document.addEventListener('sensorselect', (event) => select((event as CustomEvent<{ id: string }>).detail.id));
+    select(current.id);
+    if (!reduce) requestAnimationFrame(frame);
+  });
+</script>

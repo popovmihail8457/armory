@@ -9,6 +9,11 @@ import TrajectoryDemo from '../../components/TrajectoryDemo.astro';
 import CoverageDiagram from '../../components/CoverageDiagram.astro';
 import OperationsReel from '../../components/OperationsReel.astro';
 import BallisticsLab from '../../components/BallisticsLab.astro';
+import ShipExplorer from '../../components/ShipExplorer.astro';
+import SensorScope from '../../components/SensorScope.astro';
+import NavalLaunchDemo from '../../components/NavalLaunchDemo.astro';
+import { shipSchemes, launchScenes } from '../../data/ships';
+import { samSensors, type Sensor } from '../../data/sensors';
 import { gunsOfPlatform, shellsOfGun, shellTypeById } from '../../data/shells';
 import { operations } from '../../data/operations';
 import { videos } from '../../data/videos';
@@ -54,12 +59,19 @@ const isAircraft = domain.id === 'aviation';
 const cov = isAircraft ? coverageFor(item.id) : undefined;
 const defense = defenseByItem[item.id];
 const itemGuns = gunsOfPlatform(item.id);
+const ship = shipSchemes[item.id];
+const shipSensors = ship ? ship.modules.map((module) => module.sensor).filter((sensor): sensor is Sensor => Boolean(sensor)) : [];
+const sensors = shipSensors.length > 0 ? shipSensors : samSensors[item.id] ?? [];
+const launches = launchScenes[item.id] ?? [];
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
 const placeWord = { aviation: 'Ангар', fleet: 'Док', ground: 'Бокс' }[domain.id];
 const tocItems = [
   story && { id: 'story', label: 'История' },
   ops.length > 0 && { id: 'operations', label: 'Операции' },
   { id: 'specs', label: 'Характеристики' },
+  ship && { id: 'ship', label: 'Схема корабля' },
+  sensors.length > 0 && { id: 'sensors', label: 'Радары и секторы' },
+  launches.length > 0 && { id: 'launch', label: 'Пуск ракет' },
   arms && { id: 'armament', label: 'Вооружение' },
   trajScene && { id: 'trajectory', label: 'Траектория' },
   itemGuns.length > 0 && { id: 'shells', label: 'Снаряды и баллистика' },
@@ -144,6 +156,42 @@ const tocItems = [
       </div>
     </div>
   </section>
+
+  {ship && (
+    <section class="section" id="ship" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Схема корабля и системы</h2>
+          <p class="lead">Нажмите на номер на силуэте или на строку списка, чтобы открыть характеристики радара, пусковой установки или орудия.</p>
+        </div>
+        <ShipExplorer scheme={ship} name={item.name} />
+      </div>
+    </section>
+  )}
+
+  {sensors.length > 0 && (
+    <section class="section" id="sensors" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Радары и секторы обзора</h2>
+          <p class="lead">{ship ? 'Вид сверху: какой сектор просматривает каждая станция и как она его обходит.' : 'Вид сверху: станции обнаружения дают круговой обзор, а станции наведения работают в секторе или узким лучом.'}</p>
+        </div>
+        <SensorScope sensors={sensors} forward={ship ? 'Нос' : 'Ось комплекса'} />
+      </div>
+    </section>
+  )}
+
+  {launches.length > 0 && (
+    <section class="section" id="launch" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Выход ракет на траекторию</h2>
+          <p class="lead">Упрощённая схема: как ракета покидает пусковую установку и ложится на курс к цели.</p>
+        </div>
+        <NavalLaunchDemo scenes={launches} />
+      </div>
+    </section>
+  )}
 
   {arms && (
     <section class="section" id="armament">

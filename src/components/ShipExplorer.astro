@@ -1,0 +1,122 @@
+---
+import { moduleKindName, type ModuleKind, type ShipScheme } from '../data/ships';
+import { sensorTypeName } from '../data/sensors';
+import { weapons } from '../data/weapons/data';
+
+interface Props {
+  scheme: ShipScheme;
+  name: string;
+}
+
+const { scheme, name } = Astro.props;
+const kinds = [...new Set(scheme.modules.map((module) => module.kind))] as ModuleKind[];
+const weaponName = (id?: string) => weapons.find((weapon) => weapon.id === id)?.name;
+const sensorRows = (module: (typeof scheme.modules)[number]): [string, string][] => {
+  const sensor = module.sensor;
+  if (!sensor) return [];
+  return [
+    ['Тип обзора', sensorTypeName[sensor.type]],
+    ['Сектор по азимуту', sensor.type === 'array' || sensor.half >= 180 ? '360°' : sensor.type === 'track' ? 'узкий луч, антенна наводится на цель' : `≈${sensor.half * 2}°`],
+  ];
+};
+---
+<div class="ship" data-ship>
+  <div class="ship-filters" role="group" aria-label="Тип систем">
+    <button type="button" class="ball-btn" data-kind="all" aria-pressed="true">Все системы</button>
+    {kinds.map((kind) => <button type="button" class="ball-btn" data-kind={kind} aria-pressed="false"><i class={`ship-dot k-${kind}`}></i>{moduleKindName[kind]}</button>)}
+  </div>
+
+  <div class="ship-stage">
+    <svg class="ship-svg" viewBox="0 0 1000 290" role="group" aria-label={`Схема корабля ${name}, вид сбоку, нос слева`}>
+      <line class="ship-water" x1="0" y1="240" x2="1000" y2="240" />
+      <g class="ship-shapes">
+        {scheme.shapes.map((shape) => (
+          shape.t === 'rect' ? <rect x={shape.x} y={shape.y} width={shape.w} height={shape.h} />
+          : shape.t === 'poly' ? <polygon points={shape.p} />
+          : <line x1={shape.x1} y1={shape.y1} x2={shape.x2} y2={shape.y2} />
+        ))}
+      </g>
+      <text class="ship-label" x="18" y="278">Нос</text>
+      <text class="ship-label" x="982" y="278" text-anchor="end">Корма</text>
+      {scheme.modules.map((module, i) => (
+        <g class={`ship-pin k-${module.kind}`} data-module={module.id} data-kind={module.kind} role="button" tabindex="0" aria-label={`${module.name}: ${moduleKindName[module.kind]}`} aria-pressed={i === 0}>
+          <circle class="ship-pin-hit" cx={module.x} cy={module.y} r="26" />
+          <circle class="ship-pin-ring" cx={module.x} cy={module.y} r="15" />
+          <circle class="ship-pin-dot" cx={module.x} cy={module.y} r="11" />
+          <text x={module.x} y={module.y + 4} text-anchor="middle">{i + 1}</text>
+        </g>
+      ))}
+    </svg>
+    <small class="ship-note">Условная схема: показывает расположение систем, а не точные обводы корабля.</small>
+  </div>
+
+  <div class="ship-body">
+    <ol class="ship-list">
+      {scheme.modules.map((module, i) => (
+        <li>
+          <button type="button" class="ship-item" data-module={module.id} data-kind={module.kind} aria-pressed={i === 0}>
+            <span class={`ship-num num k-${module.kind}`}>{i + 1}</span>
+            <span class="ship-item-name">{module.name}</span>
+            <span class="ship-item-kind">{moduleKindName[module.kind]}</span>
+          </button>
+        </li>
+      ))}
+    </ol>
+    <div class="ship-panels" aria-live="polite">
+      {scheme.modules.map((module, i) => (
+        <article class="ship-panel" data-module={module.id} hidden={i !== 0}>
+          <span class="eyebrow">{moduleKindName[module.kind]}</span>
+          <h3>{module.name}</h3>
+          <p>{module.text}</p>
+          <dl class="radar-readout">
+            {[...sensorRows(module), ...module.specs].map(([label, value]) => <div><dt>{label}</dt><dd>{value}</dd></div>)}
+          </dl>
+          {module.sensor && <button type="button" class="ball-btn ship-show" data-sensor={module.sensor.id}>Показать сектор обзора на схеме</button>}
+          {module.weaponId && weaponName(module.weaponId) && <a class="ship-link" href={`/weapons/${module.weaponId}/`}>Подробнее в каталоге: {weaponName(module.weaponId)}</a>}
+        </article>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-ship]').forEach((root) => {
+    const pins = [...root.querySelectorAll<SVGGElement>('.ship-pin')];
+    const items = [...root.querySelectorAll<HTMLButtonElement>('.ship-item')];
+    const panels = [...root.querySelectorAll<HTMLElement>('.ship-panel')];
+    const filters = [...root.querySelectorAll<HTMLButtonElement>('[data-kind].ball-btn')];
+
+    const select = (id: string) => {
+      pins.forEach((pin) => pin.setAttribute('aria-pressed', String(pin.dataset.module === id)));
+      items.forEach((item) => item.setAttribute('aria-pressed', String(item.dataset.module === id)));
+      panels.forEach((panel) => { panel.hidden = panel.dataset.module !== id; });
+      const sensor = panels.find((panel) => panel.dataset.module === id)?.querySelector<HTMLElement>('.ship-show')?.dataset.sensor;
+      if (sensor) document.dispatchEvent(new CustomEvent('sensorselect', { detail: { id: sensor } }));
+    };
+
+    pins.forEach((pin) => {
+      pin.addEventListener('click', () => select(pin.dataset.module!));
+      pin.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); select(pin.dataset.module!); }
+      });
+    });
+    items.forEach((item) => {
+      item.addEventListener('click', () => select(item.dataset.module!));
+      item.addEventListener('mouseenter', () => pins.find((pin) => pin.dataset.module === item.dataset.module)?.classList.add('hover'));
+      item.addEventListener('mouseleave', () => pins.forEach((pin) => pin.classList.remove('hover')));
+    });
+    filters.forEach((filter) => filter.addEventListener('click', () => {
+      const kind = filter.dataset.kind!;
+      filters.forEach((other) => other.setAttribute('aria-pressed', String(other === filter)));
+      const visible = (el: Element) => kind === 'all' || (el as HTMLElement | SVGElement).dataset.kind === kind;
+      pins.forEach((pin) => pin.classList.toggle('dim', !visible(pin)));
+      items.forEach((item) => { item.parentElement!.hidden = !visible(item); });
+      const firstVisible = items.find(visible);
+      if (firstVisible && kind !== 'all') select(firstVisible.dataset.module!);
+    }));
+    root.querySelectorAll<HTMLButtonElement>('.ship-show').forEach((button) => button.addEventListener('click', () => {
+      document.dispatchEvent(new CustomEvent('sensorselect', { detail: { id: button.dataset.sensor } }));
+      document.querySelector('#sensors')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }));
+  });
+</script>
