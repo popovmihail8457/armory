@@ -10,17 +10,6 @@
   "width": 4752,
   "query": "MiG-15 fighter"
  },
- "f-86": {
-  "file": "f-86.jpg",
-  "bytes": 574158,
-  "title": "File:PAF No. 26 Squadron F-86F Sabre (31125).jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/PAF_No._26_Squadron_F-86F_Sabre_%2831125%29.jpg/1920px-PAF_No._26_Squadron_F-86F_Sabre_%2831125%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:PAF_No._26_Squadron_F-86F_Sabre_(31125).jpg",
-  "license": "CC0",
-  "author": "Pr0pulsion 123",
-  "width": 4624,
-  "query": "F-86 Sabre"
- },
  "mig-21": {
   "file": "mig-21.jpg",
   "bytes": 512384,
@@ -64,17 +53,6 @@
   "author": "Hotolmo22",
   "width": 3125,
   "query": "Eurofighter Typhoon"
- },
- "tu-95": {
-  "file": "tu-95.jpg",
-  "bytes": 199387,
-  "title": "File:Tu-95 Bear air-to-air photo 1963 (USN 711248).jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Tu-95_Bear_air-to-air_photo_1963_%28USN_711248%29.jpg/1920px-Tu-95_Bear_air-to-air_photo_1963_%28USN_711248%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Tu-95_Bear_air-to-air_photo_1963_(USN_711248).jpg",
-  "license": "Public domain",
-  "author": "US Navy",
-  "width": 5693,
-  "query": "Tu-95"
  },
  "tu-160": {
   "file": "tu-160.jpg",
@@ -153,17 +131,6 @@
   "width": 6000,
   "query": "SR-71 Blackbird"
  },
- "e-3": {
-  "file": "e-3.jpg",
-  "bytes": 326668,
-  "title": "File:E-3 Sentry above the high Arctic.jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/E-3_Sentry_above_the_high_Arctic.jpg/1920px-E-3_Sentry_above_the_high_Arctic.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:E-3_Sentry_above_the_high_Arctic.jpg",
-  "license": "Public domain",
-  "author": "Airman 1st Class Aaron Guerrisky",
-  "width": 5641,
-  "query": "E-3 Sentry"
- },
  "e-2d": {
   "file": "e-2d.jpg",
   "bytes": 549657,
@@ -174,17 +141,6 @@
   "author": "U.S. Navy photo by Lt. j.g. Andrew Leatherwood",
   "width": 3008,
   "query": "E-2D Advanced Hawkeye"
- },
- "il-76": {
-  "file": "il-76.jpg",
-  "bytes": 188252,
-  "title": "File:Soviet Il-76 Candid loading paratroops.jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/30/Soviet_Il-76_Candid_loading_paratroops.jpg/1920px-Soviet_Il-76_Candid_loading_paratroops.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Soviet_Il-76_Candid_loading_paratroops.jpg",
-  "license": "Public domain",
-  "author": "Unknown authorUnknown author",
-  "width": 2869,
-  "query": "Il-76"
  },
  "forrestal": {
   "file": "forrestal.jpg",
@@ -230,17 +186,6 @@
   "width": 2048,
   "query": "Type 45 destroyer"
  },
- "knox": {
-  "file": "knox.jpg",
-  "bytes": 608670,
-  "title": "File:Two Macks on Knox class frigates.jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0d/Two_Macks_on_Knox_class_frigates.jpg/1920px-Two_Macks_on_Knox_class_frigates.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Two_Macks_on_Knox_class_frigates.jpg",
-  "license": "Public domain",
-  "author": "DON S. MONTGOMERY",
-  "width": 2860,
-  "query": "Knox class frigate"
- },
  "perry": {
   "file": "perry.jpg",
   "bytes": 796643,
@@ -252,50 +197,6 @@
   "width": 2840,
   "query": "Oliver Hazard Perry class frigate"
  },
- "type-23": {
-  "file": "type-23.jpg",
-  "bytes": 236526,
-  "title": "File:US Navy 111024-N-BT887-831 The Royal Navy Duke-class frigate HMS St. Albans (F 83) and the Ticonderoga-class guided-missile cruiser USS Mobile Bay.jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/US_Navy_111024-N-BT887-831_The_Royal_Navy_Duke-class_frigate_HMS_St._Albans_%28F_83%29_and_the_Ticonderoga-class_guided-missile_cruiser_USS_Mobile_Bay.jpg/1920px-US_Navy_111024-N-BT887-831_The_Royal_Navy_Duke-class_frigate_HMS_St._Albans_%28F_83%29_and_the_Ticonderoga-class_guided-missile_cruiser_USS_Mobile_Bay.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:US_Navy_111024-N-BT887-831_The_Royal_Navy_Duke-class_frigate_HMS_St._Albans_(F_83)_and_the_Ticonderoga-class_guided-missile_cruiser_USS_Mobile_Bay.jpg",
-  "license": "Public domain",
-  "author": "U.S. Navy photo by Mass Communication Specialist 3rd Class Benjamin Crossley",
-  "width": 2200,
-  "query": "Type 23 frigate"
- },
- "fremm": {
-  "file": "fremm.jpg",
-  "bytes": 648523,
-  "title": "File:U S Navy Sailors visit the Fremm Normandie (D651) (9195419).jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/U_S_Navy_Sailors_visit_the_Fremm_Normandie_%28D651%29_%289195419%29.jpg/1920px-U_S_Navy_Sailors_visit_the_Fremm_Normandie_%28D651%29_%289195419%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:U_S_Navy_Sailors_visit_the_Fremm_Normandie_(D651)_(9195419).jpg",
-  "license": "Public domain",
-  "author": "U.S. Navy photo by Lt. Sara Wedemeyer",
-  "width": 5184,
-  "query": "FREMM frigate"
- },
- "gorshkov": {
-  "file": "gorshkov.jpg",
-  "bytes": 618118,
-  "title": "File:Admiral Gorshkov frigate 2022-05 Murmansk.jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Admiral_Gorshkov_frigate_2022-05_Murmansk.jpg/1920px-Admiral_Gorshkov_frigate_2022-05_Murmansk.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Admiral_Gorshkov_frigate_2022-05_Murmansk.jpg",
-  "license": "CC0",
-  "author": "Svetlov Artem",
-  "width": 3130,
-  "query": "Admiral Gorshkov frigate"
- },
- "visby": {
-  "file": "visby.jpg",
-  "bytes": 466050,
-  "title": "File:Uusimaa, Visby, Sigyn NOCO2014 01.JPG",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/Uusimaa%2C_Visby%2C_Sigyn_NOCO2014_01.JPG/1920px-Uusimaa%2C_Visby%2C_Sigyn_NOCO2014_01.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Uusimaa,_Visby,_Sigyn_NOCO2014_01.JPG",
-  "license": "Public domain",
-  "author": "MKFI",
-  "width": 5184,
-  "query": "Visby class corvette"
- },
  "t-54": {
   "file": "t-54.jpg",
   "bytes": 742149,
@@ -306,17 +207,6 @@
   "author": "Unknown authorUnknown author",
   "width": 2810,
   "query": "T-54 tank"
- },
- "m48": {
-  "file": "m48.jpg",
-  "bytes": 611472,
-  "title": "File:M48 Patton in the Kubinka.jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/61/M48_Patton_in_the_Kubinka.jpg/1920px-M48_Patton_in_the_Kubinka.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:M48_Patton_in_the_Kubinka.jpg",
-  "license": "Public domain",
-  "author": "Галин Владимир Петрович",
-  "width": 3264,
-  "query": "M48 tank"
  },
  "t-72": {
   "file": "t-72.jpg",
@@ -339,17 +229,6 @@
   "author": "Ministerie van Defensie",
   "width": 3000,
   "query": "CV90"
- },
- "2s3": {
-  "file": "2s3.jpg",
-  "bytes": 265824,
-  "title": "File:2S3 Akatsiya.JPEG",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/2S3_Akatsiya.JPEG/1920px-2S3_Akatsiya.JPEG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:2S3_Akatsiya.JPEG",
-  "license": "Public domain",
-  "author": "",
-  "width": 3000,
-  "query": "2S3 Akatsiya"
  },
  "caesar": {
   "file": "caesar.jpg",
@@ -384,17 +263,6 @@
   "width": 8256,
   "query": "M270 MLRS"
  },
- "s-300": {
-  "file": "s-300.jpg",
-  "bytes": 686606,
-  "title": "File:Artist's concept of a S-300V launcher.JPEG",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/Artist%27s_concept_of_a_S-300V_launcher.JPEG/1920px-Artist%27s_concept_of_a_S-300V_launcher.JPEG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Artist%27s_concept_of_a_S-300V_launcher.JPEG",
-  "license": "Public domain",
-  "author": "Unknown authorUnknown author",
-  "width": 3000,
-  "query": "S-300 launcher"
- },
  "s-125": {
   "file": "s-125.jpg",
   "bytes": 441985,
@@ -428,17 +296,6 @@
   "width": 2592,
   "query": "9K33 Osa"
  },
- "buk": {
-  "file": "buk.jpg",
-  "bytes": 873108,
-  "title": "File:2022 07 18 Ukraine Shield of Europe exhibition 3 Buk M2 missile system 015 (52229679513).jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/86/2022_07_18_Ukraine_Shield_of_Europe_exhibition_3_Buk_M2_missile_system_015_%2852229679513%29.jpg/1920px-2022_07_18_Ukraine_Shield_of_Europe_exhibition_3_Buk_M2_missile_system_015_%2852229679513%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:2022_07_18_Ukraine_Shield_of_Europe_exhibition_3_Buk_M2_missile_system_015_(52229679513).jpg",
-  "license": "CC0",
-  "author": "Jan Helebrant",
-  "width": 4032,
-  "query": "Buk missile system"
- },
  "hawk": {
   "file": "hawk.jpg",
   "bytes": 486257,
@@ -449,28 +306,6 @@
   "author": "CPL. C. COPE",
   "width": 2830,
   "query": "MIM-23 Hawk"
- },
- "nike-ajax": {
-  "file": "nike-ajax.jpg",
-  "bytes": 340520,
-  "title": "File:Nike Ajax Missile (12666903233).jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/38/Nike_Ajax_Missile_%2812666903233%29.jpg/1920px-Nike_Ajax_Missile_%2812666903233%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Nike_Ajax_Missile_(12666903233).jpg",
-  "license": "CC0",
-  "author": "Gary Todd from Xinzheng, China",
-  "width": 3497,
-  "query": "Nike Ajax"
- },
- "nike-hercules": {
-  "file": "nike-hercules.jpg",
-  "bytes": 341204,
-  "title": "File:Nike Hercules (12667218394).jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Nike_Hercules_%2812667218394%29.jpg/1920px-Nike_Hercules_%2812667218394%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Nike_Hercules_(12667218394).jpg",
-  "license": "CC0",
-  "author": "Gary Todd from Xinzheng, China",
-  "width": 3549,
-  "query": "Nike Hercules"
  },
  "thaad": {
   "file": "thaad.jpg",
@@ -505,17 +340,6 @@
   "width": 2850,
   "query": "FIM-92 Stinger"
  },
- "mistral-sam": {
-  "file": "mistral-sam.jpg",
-  "bytes": 273451,
-  "title": "File:2022-07-19 Mistral SAM.jpg",
-  "thumb": "https://upload.wikimedia.org/wikipedia/commons/1/12/2022-07-19_Mistral_SAM.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-  "page": "https://commons.wikimedia.org/wiki/File:2022-07-19_Mistral_SAM.jpg",
-  "license": "Public domain",
-  "author": "Philippine Navy (PN)",
-  "width": 1600,
-  "query": "Mistral missile"
- },
  "starstreak": {
   "file": "starstreak.jpg",
   "bytes": 570570,
@@ -527,17 +351,6 @@
   "width": 2272,
   "query": "Starstreak"
  },
- "malyutka": {
-  "file": "malyutka.jpg",
-  "bytes": 604518,
-  "title": "File:9K11 Malyutka on display.JPEG",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fd/9K11_Malyutka_on_display.JPEG/1920px-9K11_Malyutka_on_display.JPEG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:9K11_Malyutka_on_display.JPEG",
-  "license": "Public domain",
-  "author": "unknown, Released to public",
-  "width": 2830,
-  "query": "9K11 Malyutka"
- },
  "tow": {
   "file": "tow.jpg",
   "bytes": 743120,
@@ -548,17 +361,6 @@
   "author": "PO3 Jeffery Russell",
   "width": 2820,
   "query": "BGM-71 TOW"
- },
- "milan": {
-  "file": "milan.jpg",
-  "bytes": 594095,
-  "title": "File:Milan anti-tank missile striking a target.JPEG",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Milan_anti-tank_missile_striking_a_target.JPEG/1920px-Milan_anti-tank_missile_striking_a_target.JPEG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Milan_anti-tank_missile_striking_a_target.JPEG",
-  "license": "Public domain",
-  "author": "SSGT Patricia Bunting, U.S. Air Force",
-  "width": 2000,
-  "query": "MILAN missile"
  },
  "javelin": {
   "file": "javelin.jpg",
@@ -582,50 +384,6 @@
   "width": 4345,
   "query": "NLAW"
  },
- "r-11": {
-  "file": "r-11.jpg",
-  "bytes": 861127,
-  "title": "File:Scud downed by Patriot missiles.JPEG",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4d/Scud_downed_by_Patriot_missiles.JPEG/1920px-Scud_downed_by_Patriot_missiles.JPEG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Scud_downed_by_Patriot_missiles.JPEG",
-  "license": "Public domain",
-  "author": "Unknown authorUnknown author",
-  "width": 2830,
-  "query": "R-11 Zemlya"
- },
- "pershing-1": {
-  "file": "pershing-1.jpg",
-  "bytes": 354401,
-  "title": "File:Pershing II on EL.jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Pershing_II_on_EL.jpg/1920px-Pershing_II_on_EL.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Pershing_II_on_EL.jpg",
-  "license": "Public domain",
-  "author": "Unknown authorUnknown author",
-  "width": 2075,
-  "query": "MGM-31 Pershing"
- },
- "pershing-2": {
-  "file": "pershing-2.jpg",
-  "bytes": 266639,
-  "title": "File:Pershing 2 warhead section.jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/52/Pershing_2_warhead_section.jpg/1920px-Pershing_2_warhead_section.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Pershing_2_warhead_section.jpg",
-  "license": "Public domain",
-  "author": "US Army/DoE",
-  "width": 5040,
-  "query": "Pershing II"
- },
- "lance": {
-  "file": "lance.jpg",
-  "bytes": 621165,
-  "title": "File:MGM-52 Lance Missile (USA) (17395278169).jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/MGM-52_Lance_Missile_%28USA%29_%2817395278169%29.jpg/1920px-MGM-52_Lance_Missile_%28USA%29_%2817395278169%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:MGM-52_Lance_Missile_(USA)_(17395278169).jpg",
-  "license": "CC0",
-  "author": "Gary Todd from Xinzheng, China",
-  "width": 5184,
-  "query": "MGM-52 Lance"
- },
  "tochka": {
   "file": "tochka.jpg",
   "bytes": 473577,
@@ -637,48 +395,554 @@
   "width": 2569,
   "query": "OTR-21 Tochka"
  },
- "oka": {
-  "file": "oka.jpg",
-  "bytes": 1065269,
-  "title": "File:OTR-23 Oka (from SMP).JPEG",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d2/OTR-23_Oka_%28from_SMP%29.JPEG/1920px-OTR-23_Oka_%28from_SMP%29.JPEG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:OTR-23_Oka_(from_SMP).JPEG",
+ "ka-52": {
+  "file": "ka-52.jpg",
+  "bytes": 302322,
+  "title": "File:Kamov Ka-52 at the MAKS-2013 (02).jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/Kamov_Ka-52_at_the_MAKS-2013_%2802%29.jpg/1920px-Kamov_Ka-52_at_the_MAKS-2013_%2802%29.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Kamov_Ka-52_at_the_MAKS-2013_(02).jpg",
+  "license": "Public domain",
+  "author": "Doomych",
+  "width": 4161,
+  "query": "Kamov Ka-52 helicopter"
+ },
+ "btr-152": {
+  "file": "btr-152.jpg",
+  "bytes": 653247,
+  "title": "File:BTR-152 APC.JPG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/27/BTR-152_APC.JPG/1920px-BTR-152_APC.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:BTR-152_APC.JPG",
+  "license": "CC0",
+  "author": "AlfvanBeem",
+  "width": 3253,
+  "query": "BTR-152 armored personnel carrier"
+ },
+ "tor": {
+  "file": "tor.jpg",
+  "bytes": 336362,
+  "title": "File:SA-15 Gauntlet in the USA.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/SA-15_Gauntlet_in_the_USA.jpg/1920px-SA-15_Gauntlet_in_the_USA.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:SA-15_Gauntlet_in_the_USA.jpg",
+  "license": "Public domain",
+  "author": "Laura Goodgame, U.S. Air Force",
+  "width": 3561,
+  "query": "Tor-M1 missile system"
+ },
+ "strela-2": {
+  "file": "strela-2.jpg",
+  "bytes": 189591,
+  "title": "File:Soldier with a SA-7b MANPADS.jpg",
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Soldier_with_a_SA-7b_MANPADS.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Soldier_with_a_SA-7b_MANPADS.jpg",
+  "license": "Public domain",
+  "author": "U.S. Air Force photo",
+  "width": 1800,
+  "query": "9K32 Strela-2"
+ },
+ "m60": {
+  "file": "m60.jpg",
+  "bytes": 1099670,
+  "title": "File:An M60A3 main battle tank from the 1ST Platoon, 48th Brigade, 108th Armored Division, Georgia National Guard, moves through a recently cleared roadblock during the training exercise Company Team Defense.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/An_M60A3_main_battle_tank_from_the_1ST_Platoon%2C_48th_Brigade%2C_108th_Armored_Division%2C_Georgia_National_Guard%2C_moves_through_a_recently_cleared_roadblock_during_the_training_exercise_Company_Team_Defense.jpg/1920px-thumbnail.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:An_M60A3_main_battle_tank_from_the_1ST_Platoon,_48th_Brigade,_108th_Armored_Division,_Georgia_National_Guard,_moves_through_a_recently_cleared_roadblock_during_the_training_exercise_Company_Team_Defense.jpg",
+  "license": "Public domain",
+  "author": "Long",
+  "width": 2850,
+  "query": "M60A3 tank"
+ },
+ "t-62": {
+  "file": "t-62.jpg",
+  "bytes": 702925,
+  "title": "File:SSGT Loretta Martin, left, wearing a Soviet warrant officer's uniform, and SRA Dayne Padgett, wearing a Soviet special forces captain's uniform, stand in front of a Soviet T-62 battle tank at the Warrior Preparation Center.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/SSGT_Loretta_Martin%2C_left%2C_wearing_a_Soviet_warrant_officer%27s_uniform%2C_and_SRA_Dayne_Padgett%2C_wearing_a_Soviet_special_forces_captain%27s_uniform%2C_stand_in_front_of_a_Soviet_T-62_battle_tank_at_the_Warrior_Preparation_Center.jpg/1920px-thumbnail.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:SSGT_Loretta_Martin,_left,_wearing_a_Soviet_warrant_officer%27s_uniform,_and_SRA_Dayne_Padgett,_wearing_a_Soviet_special_forces_captain%27s_uniform,_stand_in_front_of_a_Soviet_T-62_battle_tank_at_the_Warrior_Preparation_Center.jpg",
+  "license": "Public domain",
+  "author": "MSGT Don Sutherland, Air Force",
+  "width": 2740,
+  "query": "T-62 tank"
+ },
+ "amx-30": {
+  "file": "amx-30.jpg",
+  "bytes": 1148871,
+  "title": "File:French AMX-30 Desert Storm.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/French_AMX-30_Desert_Storm.jpg/1920px-French_AMX-30_Desert_Storm.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:French_AMX-30_Desert_Storm.jpg",
+  "license": "Public domain",
+  "author": "STAFF SGT. DEAN WAGNER",
+  "width": 2833,
+  "query": "AMX-30 tank"
+ },
+ "leclerc": {
+  "file": "leclerc.jpg",
+  "bytes": 448830,
+  "title": "File:French Leclerc main battle tank during Strong Europe Tank Challenge exercise, 2017.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/French_Leclerc_main_battle_tank_during_Strong_Europe_Tank_Challenge_exercise%2C_2017.jpg/1920px-French_Leclerc_main_battle_tank_during_Strong_Europe_Tank_Challenge_exercise%2C_2017.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:French_Leclerc_main_battle_tank_during_Strong_Europe_Tank_Challenge_exercise,_2017.jpg",
+  "license": "Public domain",
+  "author": "Staff Sgt. Kathleen Polanco; 7th Army Training Command",
+  "width": 4950,
+  "query": "Leclerc tank"
+ },
+ "challenger-2": {
+  "file": "challenger-2.jpg",
+  "bytes": 982239,
+  "title": "File:Challenger 2 MBT in Estonia-902250.jpeg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Challenger_2_MBT_in_Estonia-902250.jpeg/1920px-Challenger_2_MBT_in_Estonia-902250.jpeg",
+  "page": "https://commons.wikimedia.org/wiki/File:Challenger_2_MBT_in_Estonia-902250.jpeg",
+  "license": "CC0",
+  "author": "Andrii Nikolaienko",
+  "width": 4531,
+  "query": "Challenger 2 tank"
+ },
+ "type-99": {
+  "file": "type-99.jpg",
+  "bytes": 490765,
+  "title": "File:Type 99 MBT front right.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Type_99_MBT_front_right.jpg/1920px-Type_99_MBT_front_right.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Type_99_MBT_front_right.jpg",
+  "license": "Public domain",
+  "author": "Max Smith",
+  "width": 2000,
+  "query": "Type 99 tank"
+ },
+ "marder": {
+  "file": "marder.jpg",
+  "bytes": 461887,
+  "title": "File:Marder.JPG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1b/Marder.JPG/1920px-Marder.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:Marder.JPG",
+  "license": "Public domain",
+  "author": "P.Eckardt (Pixelnetzwerk)",
+  "width": 3008,
+  "query": "Marder infantry fighting vehicle"
+ },
+ "bmp-2": {
+  "file": "bmp-2.jpg",
+  "bytes": 748289,
+  "title": "File:BMP-2 military parade rehearsal.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/BMP-2_military_parade_rehearsal.jpg/1920px-BMP-2_military_parade_rehearsal.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:BMP-2_military_parade_rehearsal.jpg",
+  "license": "Public domain",
+  "author": "Фальшивомонетчик (original picture) SuperTank17 (crop)",
+  "width": 2492,
+  "query": "BMP-2 infantry fighting vehicle"
+ },
+ "lav-25": {
+  "file": "lav-25.jpg",
+  "bytes": 734478,
+  "title": "File:LAV-25 USMC.JPG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/LAV-25_USMC.JPG/1920px-LAV-25_USMC.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:LAV-25_USMC.JPG",
+  "license": "Public domain",
+  "author": "Lance Cpl. Kamran Sadaghiani, U.S. Marine Corps",
+  "width": 3072,
+  "query": "LAV-25 Marine Corps"
+ },
+ "btr-80": {
+  "file": "btr-80.jpg",
+  "bytes": 401878,
+  "title": "File:A Ukrainian BTR-80 armored personnel carrier.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5e/A_Ukrainian_BTR-80_armored_personnel_carrier.jpg/1920px-A_Ukrainian_BTR-80_armored_personnel_carrier.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_Ukrainian_BTR-80_armored_personnel_carrier.jpg",
+  "license": "Public domain",
+  "author": "Sgt. 1st Class Walter Van Ochten - Vehicle ID corrected by Mike M.",
+  "width": 4288,
+  "query": "BTR-80 armored personnel carrier"
+ },
+ "warrior": {
+  "file": "warrior.jpg",
+  "bytes": 501214,
+  "title": "File:Warrior FV510, Saber Junction 2012.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/12/Warrior_FV510%2C_Saber_Junction_2012.jpg/1920px-Warrior_FV510%2C_Saber_Junction_2012.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Warrior_FV510,_Saber_Junction_2012.jpg",
+  "license": "Public domain",
+  "author": "U.S. Army photo by Spc. Franklin R. Moore",
+  "width": 4288,
+  "query": "Warrior infantry fighting vehicle"
+ },
+ "stryker": {
+  "file": "stryker.jpg",
+  "bytes": 336938,
+  "title": "File:US Navy 030324-A-0000L-044 A Stryker interim armored vehicle speeds away after being offloaded from an Air Force C130 Hercules aircraft.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/aa/US_Navy_030324-A-0000L-044_A_Stryker_interim_armored_vehicle_speeds_away_after_being_offloaded_from_an_Air_Force_C130_Hercules_aircraft.jpg/1920px-US_Navy_030324-A-0000L-044_A_Stryker_interim_armored_vehicle_speeds_away_after_being_offloaded_from_an_Air_Force_C130_Hercules_aircraft.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:US_Navy_030324-A-0000L-044_A_Stryker_interim_armored_vehicle_speeds_away_after_being_offloaded_from_an_Air_Force_C130_Hercules_aircraft.jpg",
+  "license": "Public domain",
+  "author": "U.S. Navy photo",
+  "width": 2000,
+  "query": "Stryker armored vehicle"
+ },
+ "m110": {
+  "file": "m110.jpg",
+  "bytes": 493970,
+  "title": "File:M110 8-Inch Self-Propelled Howitzer (USA) (17552160836).jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/M110_8-Inch_Self-Propelled_Howitzer_%28USA%29_%2817552160836%29.jpg/1920px-M110_8-Inch_Self-Propelled_Howitzer_%28USA%29_%2817552160836%29.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:M110_8-Inch_Self-Propelled_Howitzer_(USA)_(17552160836).jpg",
+  "license": "CC0",
+  "author": "Gary Todd from Xinzheng, China",
+  "width": 5184,
+  "query": "M110 howitzer 8 inch"
+ },
+ "2s1": {
+  "file": "2s1.jpg",
+  "bytes": 787574,
+  "title": "File:2S1 Gvozdika.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/2S1_Gvozdika.jpg/1920px-2S1_Gvozdika.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2S1_Gvozdika.jpg",
+  "license": "Public domain",
+  "author": "One half 3544",
+  "width": 3000,
+  "query": "2S1 Gvozdika"
+ },
+ "2s19": {
+  "file": "2s19.jpg",
+  "bytes": 717633,
+  "title": "File:2s19 msta-s.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8a/2s19_msta-s.jpg/1920px-2s19_msta-s.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2s19_msta-s.jpg",
+  "license": "Public domain",
+  "author": "One half 3544",
+  "width": 3072,
+  "query": "2S19 Msta"
+ },
+ "as-90": {
+  "file": "as-90.jpg",
+  "bytes": 276753,
+  "title": "File:AS-90 self-propelled artillery.JPG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/AS-90_self-propelled_artillery.JPG/1920px-AS-90_self-propelled_artillery.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:AS-90_self-propelled_artillery.JPG",
+  "license": "Public domain",
+  "author": "Pfc. Rhonda J. Roth-Cameron, U.S. Army",
+  "width": 4288,
+  "query": "AS-90 self-propelled gun"
+ },
+ "k9": {
+  "file": "k9.jpg",
+  "bytes": 539657,
+  "title": "File:A Polish K9 howitzer maneuvers on the firing range for a live fire demonstration.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/A_Polish_K9_howitzer_maneuvers_on_the_firing_range_for_a_live_fire_demonstration.jpg/1920px-A_Polish_K9_howitzer_maneuvers_on_the_firing_range_for_a_live_fire_demonstration.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_Polish_K9_howitzer_maneuvers_on_the_firing_range_for_a_live_fire_demonstration.jpg",
+  "license": "Public domain",
+  "author": "Staff Sgt. Matthew Foster",
+  "width": 6218,
+  "query": "K9 Thunder howitzer"
+ },
+ "tb2": {
+  "file": "tb2.jpg",
+  "bytes": 640947,
+  "title": "File:Baykar Bayraktar TB3 Teknofest 2025.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Baykar_Bayraktar_TB3_Teknofest_2025.jpg/1920px-Baykar_Bayraktar_TB3_Teknofest_2025.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Baykar_Bayraktar_TB3_Teknofest_2025.jpg",
+  "license": "CC0",
+  "author": "Carl9311",
+  "width": 4000,
+  "query": "Bayraktar"
+ },
+ "igla": {
+  "file": "igla.jpg",
+  "bytes": 389511,
+  "title": "File:Igla Vojska Srbije.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/98/Igla_Vojska_Srbije.jpg/1920px-Igla_Vojska_Srbije.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Igla_Vojska_Srbije.jpg",
   "license": "Public domain",
   "author": "Unknown authorUnknown author",
-  "width": 2970,
-  "query": "OTR-23 Oka"
+  "width": 2500,
+  "query": "Igla missile"
  },
- "atacms": {
-  "file": "atacms.jpg",
-  "bytes": 778392,
-  "title": "File:MRF-D Marines, Australian Army Soldiers call for ATACMS fire (7942045).jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e5/MRF-D_Marines%2C_Australian_Army_Soldiers_call_for_ATACMS_fire_%287942045%29.jpg/1920px-MRF-D_Marines%2C_Australian_Army_Soldiers_call_for_ATACMS_fire_%287942045%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:MRF-D_Marines,_Australian_Army_Soldiers_call_for_ATACMS_fire_(7942045).jpg",
+ "bmp-3": {
+  "file": "bmp-3.jpg",
+  "bytes": 470648,
+  "title": "File:BMP-3 tank of the UAE.JPEG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5d/BMP-3_tank_of_the_UAE.JPEG/1920px-BMP-3_tank_of_the_UAE.JPEG",
+  "page": "https://commons.wikimedia.org/wiki/File:BMP-3_tank_of_the_UAE.JPEG",
   "license": "Public domain",
-  "author": "U.S. Marine Corps photo by Sgt. Ryan Hageali",
-  "width": 6720,
-  "query": "MGM-140 ATACMS"
+  "author": "Ted Banks, U.S. Navy",
+  "width": 3008,
+  "query": "BMP-3 UAE"
  },
- "prsm": {
-  "file": "prsm.jpg",
-  "bytes": 732048,
-  "title": "File:Precision strike missile aml maritime seeker palau 1.jpg",
-  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/Precision_strike_missile_aml_maritime_seeker_palau_1.jpg/1920px-Precision_strike_missile_aml_maritime_seeker_palau_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-  "page": "https://commons.wikimedia.org/wiki/File:Precision_strike_missile_aml_maritime_seeker_palau_1.jpg",
-  "license": "Public domain",
-  "author": "Sgt. Perla Alfaro",
-  "width": 6720,
-  "query": "Precision Strike Missile PrSM"
+ "mig-19": {
+  "file": "mig-19.jpg",
+  "bytes": 874380,
+  "title": "File:Zhengfeng Garden F-6 Fighter (Chinese MiG-19).jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2a/Zhengfeng_Garden_F-6_Fighter_%28Chinese_MiG-19%29.jpg/1920px-Zhengfeng_Garden_F-6_Fighter_%28Chinese_MiG-19%29.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zhengfeng_Garden_F-6_Fighter_(Chinese_MiG-19).jpg",
+  "license": "CC0",
+  "author": "Gary Todd",
+  "width": 4752,
+  "query": "MiG-19 fighter"
  },
- "su-57": {
-  "file": "su-57.jpg",
-  "bytes": 540603,
-  "title": "File:SU-57 wing.jpg",
-  "thumb": "https://upload.wikimedia.org/wikipedia/commons/1/1d/SU-57_wing.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
-  "page": "https://commons.wikimedia.org/wiki/File:SU-57_wing.jpg",
+ "f-104": {
+  "file": "f-104.jpg",
+  "bytes": 429145,
+  "title": "File:F-104 right side view.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/F-104_right_side_view.jpg/1920px-F-104_right_side_view.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:F-104_right_side_view.jpg",
   "license": "Public domain",
-  "author": "Unknown Russian Military Pilot",
-  "width": 1651,
-  "query": "Su-57"
+  "author": "Camera Operator: Ken Hackman, USAF",
+  "width": 2458,
+  "query": "F-104 Starfighter in flight"
+ },
+ "mig-23": {
+  "file": "mig-23.jpg",
+  "bytes": 604130,
+  "title": "File:MiG-23-red12.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/57/MiG-23-red12.jpg/1920px-MiG-23-red12.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:MiG-23-red12.jpg",
+  "license": "Public domain",
+  "author": "US military",
+  "width": 3017,
+  "query": "MiG-23 Flogger"
+ },
+ "f-16": {
+  "file": "f-16.jpg",
+  "bytes": 722994,
+  "title": "File:A USAF F-16 pilot breaking right on final approach over northern Las Vegas.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/A_USAF_F-16_pilot_breaking_right_on_final_approach_over_northern_Las_Vegas.jpg/1920px-A_USAF_F-16_pilot_breaking_right_on_final_approach_over_northern_Las_Vegas.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_USAF_F-16_pilot_breaking_right_on_final_approach_over_northern_Las_Vegas.jpg",
+  "license": "Public domain",
+  "author": "Master Sgt. Benjamin Bloker",
+  "width": 3240,
+  "query": "F-16 Fighting Falcon in flight"
+ },
+ "mig-31": {
+  "file": "mig-31.jpg",
+  "bytes": 841484,
+  "title": "File:Soviet MiG-31 Foxhound aircraft, 1991.JPEG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f6/Soviet_MiG-31_Foxhound_aircraft%2C_1991.JPEG/1920px-Soviet_MiG-31_Foxhound_aircraft%2C_1991.JPEG",
+  "page": "https://commons.wikimedia.org/wiki/File:Soviet_MiG-31_Foxhound_aircraft,_1991.JPEG",
+  "license": "Public domain",
+  "author": "JO1 Pete Hatzakos",
+  "width": 2810,
+  "query": "MiG-31 Foxhound"
+ },
+ "f-18": {
+  "file": "f-18.jpg",
+  "bytes": 273246,
+  "title": "File:An F-A-18C Hornet launches from the flight deck of the conventionally powered aircraft carrier.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/49/An_F-A-18C_Hornet_launches_from_the_flight_deck_of_the_conventionally_powered_aircraft_carrier.jpg/1920px-An_F-A-18C_Hornet_launches_from_the_flight_deck_of_the_conventionally_powered_aircraft_carrier.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:An_F-A-18C_Hornet_launches_from_the_flight_deck_of_the_conventionally_powered_aircraft_carrier.jpg",
+  "license": "Public domain",
+  "author": "U.S. Navy photo by Photographer's Mate 3rd Class Jonathan Chandler",
+  "width": 2100,
+  "query": "F/A-18C Hornet in flight"
+ },
+ "mig-29": {
+  "file": "mig-29.jpg",
+  "bytes": 798412,
+  "title": "File:MiG-29 Fulcrum B Luftwaffe.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/75/MiG-29_Fulcrum_B_Luftwaffe.jpg/1920px-MiG-29_Fulcrum_B_Luftwaffe.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:MiG-29_Fulcrum_B_Luftwaffe.jpg",
+  "license": "Public domain",
+  "author": "Camera Operator: TSGT GARY TOMOYASU",
+  "width": 2810,
+  "query": "MiG-29 Fulcrum in flight"
+ },
+ "mirage-2000": {
+  "file": "mirage-2000.jpg",
+  "bytes": 180024,
+  "title": "File:A Mirage 2000-5 of the Qatar Emiri Air Force in flight.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/A_Mirage_2000-5_of_the_Qatar_Emiri_Air_Force_in_flight.jpg/1920px-A_Mirage_2000-5_of_the_Qatar_Emiri_Air_Force_in_flight.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_Mirage_2000-5_of_the_Qatar_Emiri_Air_Force_in_flight.jpg",
+  "license": "Public domain",
+  "author": "US Air Force",
+  "width": 2700,
+  "query": "Mirage 2000 in flight"
+ },
+ "su-35": {
+  "file": "su-35.jpg",
+  "bytes": 275253,
+  "title": "File:Russian SU-35 Over Syria.jpg",
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Russian_SU-35_Over_Syria.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Russian_SU-35_Over_Syria.jpg",
+  "license": "Public domain",
+  "author": "United States Air Forces Central",
+  "width": 1901,
+  "query": "Su-35S"
+ },
+ "il-28": {
+  "file": "il-28.jpg",
+  "bytes": 526213,
+  "title": "File:Egyptian Il-28 Beagle.JPEG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f9/Egyptian_Il-28_Beagle.JPEG/1920px-Egyptian_Il-28_Beagle.JPEG",
+  "page": "https://commons.wikimedia.org/wiki/File:Egyptian_Il-28_Beagle.JPEG",
+  "license": "Public domain",
+  "author": "Staff Sgt. Bill Thompson",
+  "width": 2830,
+  "query": "Il-28 Beagle"
+ },
+ "su-24": {
+  "file": "su-24.jpg",
+  "bytes": 371433,
+  "title": "File:Su-24 Fencer left side.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Su-24_Fencer_left_side.jpg/1920px-Su-24_Fencer_left_side.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Su-24_Fencer_left_side.jpg",
+  "license": "Public domain",
+  "author": "Service Depicted: Other Service",
+  "width": 3020,
+  "query": "Su-24 Fencer"
+ },
+ "tornado": {
+  "file": "tornado.jpg",
+  "bytes": 300710,
+  "title": "File:RAF Tornado GR4 Iraq.JPEG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/RAF_Tornado_GR4_Iraq.JPEG/1920px-RAF_Tornado_GR4_Iraq.JPEG",
+  "page": "https://commons.wikimedia.org/wiki/File:RAF_Tornado_GR4_Iraq.JPEG",
+  "license": "Public domain",
+  "author": "SSgt. Lee O. Tucker",
+  "width": 3008,
+  "query": "Panavia Tornado GR4 in flight"
+ },
+ "su-25": {
+  "file": "su-25.jpg",
+  "bytes": 432948,
+  "title": "File:Su-25 in flight 01.JPEG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Su-25_in_flight_01.JPEG/1920px-Su-25_in_flight_01.JPEG",
+  "page": "https://commons.wikimedia.org/wiki/File:Su-25_in_flight_01.JPEG",
+  "license": "Public domain",
+  "author": "Unknown authorUnknown author",
+  "width": 3000,
+  "query": "Su-25 Frogfoot"
+ },
+ "f-117": {
+  "file": "f-117.jpg",
+  "bytes": 387988,
+  "title": "File:F-117 Nighthawk Front.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/F-117_Nighthawk_Front.jpg/1920px-F-117_Nighthawk_Front.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:F-117_Nighthawk_Front.jpg",
+  "license": "Public domain",
+  "author": "Staff Sgt. Aaron Allmon II",
+  "width": 2976,
+  "query": "F-117 Nighthawk in flight"
+ },
+ "b-1b": {
+  "file": "b-1b.jpg",
+  "bytes": 156498,
+  "title": "File:A B-1B Lancer.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/64/A_B-1B_Lancer.jpg/1920px-A_B-1B_Lancer.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_B-1B_Lancer.jpg",
+  "license": "Public domain",
+  "author": "Master Sgt. Nicholas Priest",
+  "width": 5951,
+  "query": "B-1B Lancer in flight"
+ },
+ "mi-8": {
+  "file": "mi-8.jpg",
+  "bytes": 401147,
+  "title": "File:Two Iraqi Mil Mi-17-V5 Hip Helicopters.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Two_Iraqi_Mil_Mi-17-V5_Hip_Helicopters.jpg/1920px-Two_Iraqi_Mil_Mi-17-V5_Hip_Helicopters.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Two_Iraqi_Mil_Mi-17-V5_Hip_Helicopters.jpg",
+  "license": "Public domain",
+  "author": "Airman 1st Class Jason Epley",
+  "width": 3000,
+  "query": "Mi-17 helicopter"
+ },
+ "ah-1": {
+  "file": "ah-1.jpg",
+  "bytes": 231301,
+  "title": "File:AH-1W Super Cobra assigned to HMLA 167.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/AH-1W_Super_Cobra_assigned_to_HMLA_167.jpg/1920px-AH-1W_Super_Cobra_assigned_to_HMLA_167.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:AH-1W_Super_Cobra_assigned_to_HMLA_167.jpg",
+  "license": "Public domain",
+  "author": "Communication Specialist Seaman Mark Hays",
+  "width": 2944,
+  "query": "AH-1 Cobra"
+ },
+ "kiev": {
+  "file": "kiev.jpg",
+  "bytes": 567371,
+  "title": "File:Minsk aircraft carrier.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2d/Minsk_aircraft_carrier.jpg/1920px-Minsk_aircraft_carrier.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Minsk_aircraft_carrier.jpg",
+  "license": "Public domain",
+  "author": "SSGT GLENN LINDSEY",
+  "width": 2426,
+  "query": "Kiev-class aircraft carrier"
+ },
+ "invincible": {
+  "file": "invincible.jpg",
+  "bytes": 846622,
+  "title": "File:HMS Invincible (R05) Dragon Hammer 90.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/HMS_Invincible_%28R05%29_Dragon_Hammer_90.jpg/1920px-HMS_Invincible_%28R05%29_Dragon_Hammer_90.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:HMS_Invincible_(R05)_Dragon_Hammer_90.jpg",
+  "license": "Public domain",
+  "author": "Camera Operator: PH1 TURNER II",
+  "width": 2820,
+  "query": "HMS Invincible R05"
+ },
+ "los-angeles": {
+  "file": "los-angeles.jpg",
+  "bytes": 632446,
+  "title": "File:US Navy 090831-N-8467N-002 The Los Angeles class submarine USS Helena (SSN 725) gets underway from Submarine Base New London.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/US_Navy_090831-N-8467N-002_The_Los_Angeles_class_submarine_USS_Helena_%28SSN_725%29_gets_underway_from_Submarine_Base_New_London.jpg/1920px-US_Navy_090831-N-8467N-002_The_Los_Angeles_class_submarine_USS_Helena_%28SSN_725%29_gets_underway_from_Submarine_Base_New_London.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:US_Navy_090831-N-8467N-002_The_Los_Angeles_class_submarine_USS_Helena_(SSN_725)_gets_underway_from_Submarine_Base_New_London.jpg",
+  "license": "Public domain",
+  "author": "U.S. Navy Photo by John Narewski",
+  "width": 3000,
+  "query": "Los Angeles-class submarine underway"
+ },
+ "akula": {
+  "file": "akula.jpg",
+  "bytes": 908745,
+  "title": "File:Akula class submarine starboard quarter view.JPEG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Akula_class_submarine_starboard_quarter_view.JPEG/1920px-Akula_class_submarine_starboard_quarter_view.JPEG",
+  "page": "https://commons.wikimedia.org/wiki/File:Akula_class_submarine_starboard_quarter_view.JPEG",
+  "license": "Public domain",
+  "author": "",
+  "width": 2820,
+  "query": "Akula-class submarine"
+ },
+ "sovremenny": {
+  "file": "sovremenny.jpg",
+  "bytes": 411820,
+  "title": "File:A port view of the Soviet Sovremenny class destroyer BEZUPRECHNY underway. The ship is observing NATO ships participating in exercise NORTHERN WEDDING '86 DN-SC-87-04473.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b5/A_port_view_of_the_Soviet_Sovremenny_class_destroyer_BEZUPRECHNY_underway._The_ship_is_observing_NATO_ships_participating_in_exercise_NORTHERN_WEDDING_%2786_DN-SC-87-04473.jpg/1920px-thumbnail.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:A_port_view_of_the_Soviet_Sovremenny_class_destroyer_BEZUPRECHNY_underway._The_ship_is_observing_NATO_ships_participating_in_exercise_NORTHERN_WEDDING_%2786_DN-SC-87-04473.jpg",
+  "license": "Public domain",
+  "author": "PHC Jeff Hilton",
+  "width": 2904,
+  "query": "Sovremenny-class destroyer"
+ },
+ "udaloy": {
+  "file": "udaloy.jpg",
+  "bytes": 737595,
+  "title": "File:Soviet Udaloy class destroyer Admiral Vinogradov (1990).JPEG",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fb/Soviet_Udaloy_class_destroyer_Admiral_Vinogradov_%281990%29.JPEG/1920px-Soviet_Udaloy_class_destroyer_Admiral_Vinogradov_%281990%29.JPEG",
+  "page": "https://commons.wikimedia.org/wiki/File:Soviet_Udaloy_class_destroyer_Admiral_Vinogradov_(1990).JPEG",
+  "license": "Public domain",
+  "author": "PH2 P. Muscutt",
+  "width": 2980,
+  "query": "Udaloy-class destroyer"
+ },
+ "zumwalt": {
+  "file": "zumwalt.jpg",
+  "bytes": 495303,
+  "title": "File:USS Zumwalt (DDG 1000).jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9a/USS_Zumwalt_%28DDG_1000%29.jpg/1920px-USS_Zumwalt_%28DDG_1000%29.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:USS_Zumwalt_(DDG_1000).jpg",
+  "license": "Public domain",
+  "author": "National Museum of the U.S. Navy",
+  "width": 5736,
+  "query": "USS Zumwalt DDG-1000"
+ },
+ "krivak": {
+  "file": "krivak.jpg",
+  "bytes": 842307,
+  "title": "File:Krivak I class frigate BDITELNY.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Krivak_I_class_frigate_BDITELNY.jpg/1920px-Krivak_I_class_frigate_BDITELNY.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Krivak_I_class_frigate_BDITELNY.jpg",
+  "license": "Public domain",
+  "author": "CMDR. Nathan Jones",
+  "width": 2780,
+  "query": "Krivak-class frigate"
+ },
+ "tarawa": {
+  "file": "tarawa.jpg",
+  "bytes": 642347,
+  "title": "File:USS Tarawa LHA-1.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/USS_Tarawa_LHA-1.jpg/1920px-USS_Tarawa_LHA-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:USS_Tarawa_LHA-1.jpg",
+  "license": "Public domain",
+  "author": "Jon Husman",
+  "width": 3000,
+  "query": "USS Tarawa LHA-1"
  }
 }

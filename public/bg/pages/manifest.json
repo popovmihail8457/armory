@@ -1,0 +1,46 @@
+{
+ "ballistics": {
+  "file": "ballistics.jpg",
+  "bytes": 558342,
+  "title": "File:M1-A1 Abrams Fire.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/47/M1-A1_Abrams_Fire.jpg/1920px-M1-A1_Abrams_Fire.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:M1-A1_Abrams_Fire.jpg",
+  "license": "Public domain",
+  "author": "U.S. Navy photo by Photographer’s Mate 1st Class Ted Banks.",
+  "width": 3008,
+  "query": "M1 Abrams fires main gun"
+ },
+ "flight": {
+  "file": "flight.jpg",
+  "bytes": 267973,
+  "title": "File:US Navy 040920-N-6213R-031 Cmdr. George Slook, launches an AIM-9M Sidewinder air-to-air missile from an F-A-18C Hornet during a missile exercise.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3a/US_Navy_040920-N-6213R-031_Cmdr._George_Slook%2C_launches_an_AIM-9M_Sidewinder_air-to-air_missile_from_an_F-A-18C_Hornet_during_a_missile_exercise.jpg/1920px-US_Navy_040920-N-6213R-031_Cmdr._George_Slook%2C_launches_an_AIM-9M_Sidewinder_air-to-air_missile_from_an_F-A-18C_Hornet_during_a_missile_exercise.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:US_Navy_040920-N-6213R-031_Cmdr._George_Slook,_launches_an_AIM-9M_Sidewinder_air-to-air_missile_from_an_F-A-18C_Hornet_during_a_missile_exercise.jpg",
+  "license": "Public domain",
+  "author": "U.S. Navy photo by Photographer's Mate 3rd Class Mark J. Rebilas",
+  "width": 2464,
+  "query": "fighter launches missile"
+ },
+ "defense": {
+  "file": "defense.jpg",
+  "bytes": 441277,
+  "title": "File:AC-130H Spectre jettisons flares.jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ab/AC-130H_Spectre_jettisons_flares.jpg/1920px-AC-130H_Spectre_jettisons_flares.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:AC-130H_Spectre_jettisons_flares.jpg",
+  "license": "Public domain",
+  "author": "U.S. Air Force photo/Senior Airman Julianne Showalter",
+  "width": 3066,
+  "query": "C-130 flares countermeasures"
+ },
+ "weapons": {
+  "file": "weapons.jpg",
+  "bytes": 362768,
+  "title": "File:An ordnance-laden F-A-18F Super Hornet is on the flight deck aboard USS George H.W. Bush. (35032320682).jpg",
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/An_ordnance-laden_F-A-18F_Super_Hornet_is_on_the_flight_deck_aboard_USS_George_H.W._Bush._%2835032320682%29.jpg/1920px-An_ordnance-laden_F-A-18F_Super_Hornet_is_on_the_flight_deck_aboard_USS_George_H.W._Bush._%2835032320682%29.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:An_ordnance-laden_F-A-18F_Super_Hornet_is_on_the_flight_deck_aboard_USS_George_H.W._Bush._(35032320682).jpg",
+  "license": "Public domain",
+  "author": "Official U.S. Navy Page from United States of America MC3 Matt Matlage/U.S. Navy",
+  "width": 3000,
+  "query": "ordnance loaded aircraft carrier flight deck"
+ }
+}
