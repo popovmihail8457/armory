@@ -10,6 +10,8 @@ import BallisticsLab from '../../components/BallisticsLab.astro';
 import { gunsOfWeapon } from '../../data/shells';
 import { bgForWeapon } from '../../lib/bg';
 import { modRangesOf } from '../../data/weapons/modRanges';
+import GuidanceDemo from '../../components/GuidanceDemo.astro';
+import { guidanceScenes, groundLaunched } from '../../data/weapons/guidance';
 import FlightLab from '../../components/FlightLab.astro';
 import { flightEntryOf } from '../../data/weapons/flight';
 import { warheadScenes } from '../../data/weapons/warheads';
@@ -44,9 +46,11 @@ const shellGuns = gunsOfWeapon(weapon.id);
 const photo = bgForWeapon(weapon.id, weapon.platforms);
 const carrierName = photo.carrier ? equipment.find((item) => item.id === photo.carrier)?.name : undefined;
 const flight = flightEntryOf(weapon.id);
+const guidance = guidanceScenes[weapon.id] ?? [];
 const scenes = warheadScenes(weapon.id, Math.max(1, mods.length));
 const tocItems = [
   { id: 'principle', label: 'Принцип работы' },
+  guidance.length > 0 && { id: 'guidance', label: 'Наведение' },
   { id: 'specs', label: 'Характеристики' },
   flight && { id: 'flight', label: 'Профиль полёта' },
   { id: 'design', label: 'Устройство' },
@@ -103,6 +107,18 @@ const tocItems = [
       {category.scene && <div style="margin-top: 28px;"><TrajectoryDemo only={[category.scene]} initial={category.scene} /></div>}
     </div>
   </section>
+
+  {guidance.length > 0 && (
+    <section class="section" id="guidance" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Как ракета наводится</h2>
+          <p class="lead">Схема по этапам: когда работает радиолокатор носителя, когда идёт радиокоррекция и когда включается собственная головка ракеты.</p>
+        </div>
+        <GuidanceDemo scenes={guidance} ground={groundLaunched.has(weapon.id)} />
+      </div>
+    </section>
+  )}
 
   <section class="section" id="specs">
     <div class="wrap">

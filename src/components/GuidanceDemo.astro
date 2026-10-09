@@ -1,0 +1,290 @@
+---
+import { guidanceName, type GuidanceScene } from '../data/weapons/guidance';
+
+interface Props {
+  scenes: GuidanceScene[];
+  /** Пуск с земли или корабля: вместо самолёта рисуется станция наведения. */
+  ground?: boolean;
+}
+
+const { scenes, ground = false } = Astro.props;
+---
+<section class="radar guidance" data-guidance data-scenes={JSON.stringify(scenes)} data-ground={String(ground)}>
+  {scenes.length > 1 && (
+    <div class="radar-tabs" role="tablist" aria-label="Схемы наведения">
+      {scenes.map((scene, i) => <button type="button" role="tab" class="radar-tab" data-scene={scene} aria-selected={i === 0}>{guidanceName[scene]}</button>)}
+    </div>
+  )}
+  <div class="radar-body">
+    <div class="radar-stage">
+      <canvas class="radar-canvas" width="760" height="440" role="img" aria-label="Схема наведения ракеты по этапам"></canvas>
+      <button type="button" class="radar-toggle" aria-pressed="false">Пауза</button>
+    </div>
+    <div class="radar-info">
+      <h3 class="radar-title guidance-title"></h3>
+      <p class="radar-text guidance-text"></p>
+      <ol class="naval-stages"></ol>
+      <ul class="guidance-legend">
+        <li><i class="g-radar"></i>Луч радиолокатора носителя или станции</li>
+        <li><i class="g-link"></i>Радиолиния: команды и коррекция</li>
+        <li><i class="g-seeker"></i>Поле зрения головки ракеты</li>
+        <li><i class="g-echo"></i>Отражённый от цели сигнал</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  interface Phase {
+    until: number;
+    label: string;
+    /** Луч носителя: сопровождение (прерывистый) или непрерывный подсвет. */
+    radar?: 'track' | 'light';
+    /** Радиолиния носитель - ракета. */
+    link?: boolean;
+    /** Головка ракеты: тепловая или радиолокационная (активная). */
+    seeker?: 'ir' | 'radar';
+    /** Головка принимает отражённый сигнал подсвета. */
+    echo?: boolean;
+    /** Ракета передаёт принятый сигнал обратно на станцию. */
+    down?: boolean;
+    /** Носитель больше не участвует и отворачивает. */
+    free?: boolean;
+    /** Станция сопровождает лучом и саму ракету. */
+    watch?: boolean;
+  }
+  interface Scene { title: string; text: string; loft: number; phases: Phase[] }
+
+  const SCENES: Record<string, Scene> = {
+    ir: {
+      title: 'Тепловая головка: захват до пуска',
+      text: 'Головка видит тепло двигателей и нагретой обшивки цели. Лётчик или стрелок слышит сигнал захвата и только после этого пускает ракету. Радиолокатор не нужен, поэтому цель не получает предупреждения об облучении.',
+      loft: 0,
+      phases: [
+        { until: 0.14, label: 'Головка захватывает тепло цели ещё на подвеске', seeker: 'ir' },
+        { until: 0.3, label: 'Пуск: ракета сразу наводится сама', seeker: 'ir' },
+        { until: 1, label: 'Самонаведение, носитель свободен и уходит', seeker: 'ir', free: true },
+      ],
+    },
+    'ir-link': {
+      title: 'Тепловая головка с радиокоррекцией',
+      text: 'Ракету можно пустить по цели, которую её головка ещё не видит: сбоку, сзади или дальше дальности захвата. Сначала она летит по инерциальной системе, а носитель по радио уточняет, где сейчас цель. Ближе к цели головка находит её сама.',
+      loft: 30,
+      phases: [
+        { until: 0.12, label: 'Пуск без захвата: цель вне поля зрения головки', radar: 'track' },
+        { until: 0.58, label: 'Полёт по инерциальной системе, носитель передаёт координаты цели по радио', radar: 'track', link: true },
+        { until: 0.7, label: 'Головка находит цель и берёт её на сопровождение', seeker: 'ir', link: true },
+        { until: 1, label: 'Самонаведение по теплу, носитель свободен', seeker: 'ir', free: true },
+      ],
+    },
+    sarh: {
+      title: 'Полуактивная радиолокационная головка',
+      text: 'У ракеты есть приёмник, но нет передатчика. Цель подсвечивает радиолокатор носителя или наземной станции, а головка наводится на отражённый сигнал. Подсвет нужен до самого попадания, поэтому носитель не может отвернуть, а станция занята одной целью.',
+      loft: 20,
+      phases: [
+        { until: 0.12, label: 'Радиолокатор сопровождает цель', radar: 'track' },
+        { until: 0.3, label: 'Пуск, включается непрерывный подсвет цели', radar: 'light' },
+        { until: 1, label: 'Головка принимает отражённый сигнал, подсвет держится до попадания', radar: 'light', echo: true },
+      ],
+    },
+    arh: {
+      title: 'Активная головка с радиокоррекцией',
+      text: 'Большую часть пути ракета летит по инерциальной системе и получает от носителя поправки по радио. На последних километрах она включает собственный радиолокатор и дальше наводится сама. Носитель может отвернуть раньше попадания, а цель узнаёт об атаке только когда включается головка.',
+      loft: 70,
+      phases: [
+        { until: 0.1, label: 'Пуск по данным радиолокатора носителя', radar: 'track' },
+        { until: 0.62, label: 'Инерциальный полёт, поправки приходят по радиолинии', radar: 'track', link: true },
+        { until: 0.74, label: 'Включается собственная радиолокационная головка', radar: 'track', link: true, seeker: 'radar' },
+        { until: 1, label: 'Активное самонаведение, носитель отворачивает', seeker: 'radar', free: true },
+      ],
+    },
+    command: {
+      title: 'Радиокомандное наведение',
+      text: 'На ракете нет головки самонаведения. Станция на земле или корабле сопровождает и цель, и ракету, вычисляет рассогласование и передаёт команды рулям по радио. Ракета получается простой и дешёвой, но точность падает с расстоянием, а станция занята до конца полёта.',
+      loft: 25,
+      phases: [
+        { until: 0.12, label: 'Станция сопровождает цель', radar: 'track' },
+        { until: 0.25, label: 'Пуск, станция захватывает ракету', radar: 'track', watch: true },
+        { until: 1, label: 'Станция следит за целью и ракетой, команды идут по радио', radar: 'track', watch: true, link: true },
+      ],
+    },
+    tvm: {
+      title: 'Наведение через ракету',
+      text: 'Станция подсвечивает цель, ракета принимает отражённый сигнал, но не обрабатывает его сама, а передаёт на землю. Мощная наземная вычислительная система рассчитывает команды и отправляет их обратно. Так сочетаются точность самонаведения вблизи цели и простая бортовая аппаратура.',
+      loft: 60,
+      phases: [
+        { until: 0.1, label: 'Станция сопровождает цель', radar: 'track' },
+        { until: 0.55, label: 'Средний участок: командное наведение', radar: 'track', watch: true, link: true },
+        { until: 1, label: 'Ракета принимает отражённый сигнал и передаёт его станции, команды считает земля', radar: 'light', echo: true, down: true, link: true },
+      ],
+    },
+  };
+  const LOOP = 8;
+  const HOLD = 1.2;
+  const COLORS = { radar: '#3987e5', link: '#199e70', seeker: '#c98500', ir: '#d95926', echo: '#d7d6cd' };
+
+  document.querySelectorAll<HTMLElement>('[data-guidance]').forEach((root) => {
+    const ids: string[] = JSON.parse(root.dataset.scenes ?? '[]');
+    if (ids.length === 0) return;
+    const ground = root.dataset.ground === 'true';
+    const canvas = root.querySelector<HTMLCanvasElement>('canvas')!;
+    const ctx = canvas.getContext('2d')!;
+    const css = getComputedStyle(root);
+    const color = (name: string) => css.getPropertyValue(name).trim();
+    const toggle = root.querySelector<HTMLButtonElement>('.radar-toggle')!;
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-scene]')];
+    const stageList = root.querySelector<HTMLOListElement>('.naval-stages')!;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let scene = SCENES[ids[0]];
+    let clock = reduce ? LOOP * 0.5 : 0;
+    let paused = reduce;
+    let last = 0;
+    let activeStage = -1;
+
+    const GROUND_Y = 392;
+    const start = ground ? { x: 96, y: GROUND_Y - 22 } : { x: 110, y: 300 };
+    const targetAt = (t: number) => ({ x: 690 - t * 70, y: 96 + t * 22 });
+    const hit = targetAt(1);
+
+    function missileAt(t: number) {
+      const launch = scene.phases[0].until * (scene.phases[0].seeker === 'ir' ? 1 : 0.9);
+      const u = Math.max(0, (t - launch) / (1 - launch));
+      const cx = (start.x + hit.x) / 2;
+      const cy = Math.min(start.y, hit.y) - scene.loft - 20;
+      const x = (1 - u) * (1 - u) * start.x + 2 * (1 - u) * u * cx + u * u * hit.x;
+      const y = (1 - u) * (1 - u) * start.y + 2 * (1 - u) * u * cy + u * u * hit.y;
+      const dx = 2 * (1 - u) * (cx - start.x) + 2 * u * (hit.x - cx);
+      const dy = 2 * (1 - u) * (cy - start.y) + 2 * u * (hit.y - cy);
+      return { x, y, angle: Math.atan2(dy, dx), flying: u > 0 };
+    }
+
+    function carrierAt(t: number, freeFrom: number) {
+      if (ground) return { ...start, angle: 0 };
+      if (t < freeFrom) return { x: start.x + t * 60, y: start.y, angle: -0.08 };
+      const k = (t - freeFrom) / (1 - freeFrom);
+      return { x: start.x + freeFrom * 60 + Math.sin(k * 1.4) * 40, y: start.y + k * 70, angle: -0.08 + k * 2.2 };
+    }
+
+    function line(a: { x: number; y: number }, b: { x: number; y: number }, stroke: string, dash: number[], width = 1.5, offset = 0) {
+      ctx.strokeStyle = stroke; ctx.lineWidth = width; ctx.setLineDash(dash); ctx.lineDashOffset = offset;
+      ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      ctx.setLineDash([]); ctx.lineDashOffset = 0;
+    }
+
+    function cone(from: { x: number; y: number }, to: { x: number; y: number }, halfDeg: number, fill: string, alpha: number) {
+      const angle = Math.atan2(to.y - from.y, to.x - from.x);
+      const length = Math.hypot(to.x - from.x, to.y - from.y) + 12;
+      const half = (halfDeg * Math.PI) / 180;
+      ctx.globalAlpha = alpha;
+      ctx.fillStyle = fill;
+      ctx.beginPath(); ctx.moveTo(from.x, from.y); ctx.arc(from.x, from.y, length, angle - half, angle + half); ctx.closePath(); ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    function drawCarrier(c: { x: number; y: number; angle: number }, faded: boolean) {
+      ctx.globalAlpha = faded ? 0.45 : 1;
+      ctx.fillStyle = color('--text');
+      ctx.strokeStyle = color('--text-2');
+      if (ground) {
+        ctx.strokeStyle = color('--line-strong'); ctx.lineWidth = 1.5;
+        ctx.beginPath(); ctx.moveTo(0, GROUND_Y); ctx.lineTo(canvas.width, GROUND_Y); ctx.stroke();
+        ctx.fillStyle = color('--surface-2'); ctx.strokeStyle = color('--text-2');
+        ctx.fillRect(c.x - 34, GROUND_Y - 16, 68, 16); ctx.strokeRect(c.x - 34, GROUND_Y - 16, 68, 16);
+        ctx.beginPath(); ctx.moveTo(c.x, GROUND_Y - 16); ctx.lineTo(c.x, c.y); ctx.stroke();
+        ctx.fillStyle = color('--text'); ctx.fillRect(c.x - 4, c.y - 12, 8, 24);
+      } else {
+        ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(c.angle);
+        ctx.beginPath(); ctx.moveTo(20, 0); ctx.lineTo(-14, -9); ctx.lineTo(-8, 0); ctx.lineTo(-14, 9); ctx.closePath(); ctx.fill();
+        ctx.restore();
+      }
+      ctx.globalAlpha = 1;
+    }
+
+    function frame(now: number) {
+      if (!paused) clock += (now - (last || now)) / 1000;
+      last = now;
+      if (clock > LOOP + HOLD) clock = 0;
+      const t = Math.min(1, clock / LOOP);
+      const index = scene.phases.findIndex((phase) => t <= phase.until);
+      const phase = scene.phases[index] ?? scene.phases[scene.phases.length - 1];
+      const freePhase = scene.phases.find((p) => p.free);
+      const freeFrom = freePhase ? scene.phases[scene.phases.indexOf(freePhase) - 1]?.until ?? 0 : 2;
+      const target = targetAt(t);
+      const missile = missileAt(t);
+      const carrier = carrierAt(t, freeFrom);
+      const pulse = clock * 60;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (phase.radar) {
+        cone(carrier, target, phase.radar === 'light' ? 2.2 : 4, COLORS.radar, phase.radar === 'light' ? 0.4 : Math.floor(clock * 6) % 2 ? 0.26 : 0.12);
+        if (phase.watch && missile.flying) cone(carrier, missile, 3, COLORS.radar, 0.18);
+      }
+      if (phase.echo && missile.flying) line(target, missile, COLORS.echo, [3, 6], 1.5, pulse);
+      if (phase.link && missile.flying) line(carrier, missile, COLORS.link, [10, 8], 2, -pulse);
+      if (phase.down && missile.flying) line({ x: missile.x, y: missile.y + 7 }, { x: carrier.x, y: carrier.y + 7 }, COLORS.echo, [3, 6], 1.5, -pulse);
+      if (phase.seeker) {
+        const from = missile.flying ? missile : carrier;
+        cone(from, target, phase.seeker === 'ir' ? 7 : 5, phase.seeker === 'ir' ? COLORS.ir : COLORS.seeker, 0.3);
+      }
+
+      drawCarrier(carrier, Boolean(phase.free));
+      if (t < 0.985) {
+        ctx.fillStyle = color('--text');
+        ctx.beginPath(); ctx.moveTo(target.x - 16, target.y); ctx.lineTo(target.x + 12, target.y - 7); ctx.lineTo(target.x + 6, target.y); ctx.lineTo(target.x + 12, target.y + 7); ctx.closePath(); ctx.fill();
+      }
+      if (missile.flying) {
+        ctx.strokeStyle = color('--text-3'); ctx.lineWidth = 1; ctx.setLineDash([2, 5]);
+        ctx.beginPath();
+        for (let u = scene.phases[0].until * 0.9; u <= t; u += 0.01) { const p = missileAt(u); ctx.lineTo(p.x, p.y); }
+        ctx.stroke(); ctx.setLineDash([]);
+        if (t >= 0.985) {
+          ctx.strokeStyle = color('--text'); ctx.lineWidth = 2;
+          ctx.beginPath(); ctx.arc(hit.x, hit.y, 6 + (t - 0.985) * 900, 0, Math.PI * 2); ctx.stroke();
+        } else {
+          ctx.save(); ctx.translate(missile.x, missile.y); ctx.rotate(missile.angle);
+          ctx.fillStyle = color('--text');
+          ctx.beginPath(); ctx.moveTo(11, 0); ctx.lineTo(5, -3); ctx.lineTo(-9, -3); ctx.lineTo(-9, 3); ctx.lineTo(5, 3); ctx.closePath(); ctx.fill();
+          ctx.restore();
+        }
+      }
+
+      ctx.font = '13px Consolas, monospace';
+      ctx.fillStyle = color('--text-2');
+      ctx.textAlign = 'left';
+      ctx.fillText(ground ? 'Станция наведения' : 'Носитель', 16, ground ? GROUND_Y + 22 : 24);
+      ctx.textAlign = 'right';
+      ctx.fillText('Цель', canvas.width - 16, 24);
+      const state = [phase.radar === 'light' ? 'подсвет' : phase.radar === 'track' ? 'сопровождение' : '', phase.link ? 'радиолиния' : '', phase.seeker ? 'головка включена' : missile.flying ? 'головка выключена' : ''].filter(Boolean).join(' · ');
+      ctx.textAlign = 'center';
+      ctx.fillStyle = color('--text');
+      ctx.fillText(state, canvas.width / 2, canvas.height - 14);
+
+      if (index !== activeStage) {
+        activeStage = index;
+        [...stageList.children].forEach((li, i) => li.classList.toggle('active', i === index));
+      }
+      if (!reduce) requestAnimationFrame(frame);
+    }
+
+    function select(id: string) {
+      scene = SCENES[id];
+      clock = reduce ? LOOP * 0.5 : 0;
+      activeStage = -1;
+      tabs.forEach((tab) => tab.setAttribute('aria-selected', String(tab.dataset.scene === id)));
+      root.querySelector('.guidance-title')!.textContent = scene.title;
+      root.querySelector('.guidance-text')!.textContent = scene.text;
+      stageList.replaceChildren(...scene.phases.map((phase) => { const li = document.createElement('li'); li.textContent = phase.label; return li; }));
+      if (reduce) requestAnimationFrame(frame);
+    }
+
+    tabs.forEach((tab) => tab.addEventListener('click', () => select(tab.dataset.scene!)));
+    toggle.hidden = reduce;
+    toggle.addEventListener('click', () => {
+      paused = !paused;
+      toggle.setAttribute('aria-pressed', String(paused));
+      toggle.textContent = paused ? 'Продолжить' : 'Пауза';
+    });
+    select(ids[0]);
+    if (!reduce) requestAnimationFrame(frame);
+  });
+</script>

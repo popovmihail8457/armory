@@ -663,3 +663,9 @@ a.card:active { transform: translateY(-1px) scale(0.985); }
 
 .cost-chart + .cost-chart { margin-top: 16px; }
 .range-chart .cost-track i { transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+
+/* Схема наведения */
+.guidance-legend { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: 0.85rem; color: var(--text-2); }
+.guidance-legend li { display: flex; align-items: center; gap: 10px; }
+.guidance-legend i { width: 22px; height: 4px; border-radius: 2px; flex: none; }
+.g-radar { background: #3987e5; } .g-link { background: #199e70; } .g-seeker { background: linear-gradient(90deg, #c98500 50%, #d95926 50%); } .g-echo { background: #d7d6cd; }
