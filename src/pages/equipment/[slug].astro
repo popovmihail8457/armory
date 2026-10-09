@@ -55,6 +55,7 @@ const cov = isAircraft ? coverageFor(item.id) : undefined;
 const defense = defenseByItem[item.id];
 const itemGuns = gunsOfPlatform(item.id);
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
+const placeWord = { aviation: 'Ангар', fleet: 'Док', ground: 'Бокс' }[domain.id];
 const tocItems = [
   story && { id: 'story', label: 'История' },
   ops.length > 0 && { id: 'operations', label: 'Операции' },
@@ -68,7 +69,7 @@ const tocItems = [
   radar && { id: 'radar', label: 'Радар' },
   specRows.length > 0 && { id: 'compare', label: 'Аналоги' },
 ].filter(Boolean) as { id: string; label: string }[];---
-<Base title={item.name} era={era.id} photoUrl={itemPhoto} noPhoto={!itemPhoto} description={`${item.name} (${item.country}, ${item.year}): ${item.text}`}>
+<Base title={item.name} vt={domain.id} place={`${placeWord} · ${group.name} · ${item.name}`} era={era.id} photoUrl={itemPhoto} noPhoto={!itemPhoto} description={`${item.name} (${item.country}, ${item.year}): ${item.text}`}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
       <a href="/">Главная</a><span>/</span>

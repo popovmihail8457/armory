@@ -55,7 +55,7 @@ const tocItems = [
   specRows.length > 0 && others.length > 0 && { id: 'compare', label: 'Сравнение' },
 ].filter(Boolean) as { id: string; label: string }[];
 ---
-<Base title={weapon.name} era={era.id} noPhoto description={`${weapon.name} (${weapon.country}, ${weapon.year}): ${text.summary}`}>
+<Base title={weapon.name} vt="weapon" place={`Арсенал · ${category.name} · ${weapon.name}`} era={era.id} noPhoto description={`${weapon.name} (${weapon.country}, ${weapon.year}): ${text.summary}`}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
       <a href="/">Главная</a><span>/</span>
