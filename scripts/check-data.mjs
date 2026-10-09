@@ -75,7 +75,7 @@ const UNARMED = new Set(['c-17', 'c-130', 'il-76', 'u-2', 'sr-71', 'e-3', 'a-50'
   'p-12', 'p-18', 'an-tps-43', 'an-tps-75', 'giraffe', 'an-mpq-64', 'an-tpq-36', 'arthur', 'an-tpq-53', 'kolchuga', 'tamara', 'krasukha-4',
   // транспортные, разведывательные, станции и аппараты, вооружение которых в открытых данных не раскрыто
   'a400m', 'an-124', 'e-7a', 'rq-4', 'mi-26', 'hermes-900', 's-70', 'b-21', 'nebo-m', 'ground-master-400', 'an-tpy-2', 'zoopark-1', 'moskva-1']);
-const NO_MISSILES = new Set(['queen-elizabeth', 'nautilus', 'skipjack', 'kotlin', 'pbr', 'swift-boat']);
+const NO_MISSILES = new Set(['queen-elizabeth', 'nautilus', 'skipjack', 'kotlin', 'pbr', 'swift-boat', 'type-212']);
 const NO_HANGAR_DATA = new Set(['invincible', 'kitty-hawk', 'enterprise']);
 
 // Покрытие
