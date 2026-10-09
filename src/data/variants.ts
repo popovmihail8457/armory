@@ -1,5 +1,6 @@
 import type { MetricId } from './taxonomy';
 import { moreVariants } from './variants-more';
+import { moreVariants2 } from './variants-more2';
 
 /**
  * Версии техники для переключателя на странице модели.
@@ -117,7 +118,7 @@ const detailedVariants: Record<string, Variant[]> = {
   ],
 };
 
-export const variants: Record<string, Variant[]> = { ...detailedVariants, ...moreVariants };
+export const variants: Record<string, Variant[]> = { ...detailedVariants, ...moreVariants, ...moreVariants2 };
 
 /**
  * Версии для переключателя. Если для машины нет подробного описания, переключатель собирается из списка
