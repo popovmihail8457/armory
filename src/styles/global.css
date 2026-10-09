@@ -669,3 +669,45 @@ a.card:active { transform: translateY(-1px) scale(0.985); }
 .guidance-legend li { display: flex; align-items: center; gap: 10px; }
 .guidance-legend i { width: 22px; height: 4px; border-radius: 2px; flex: none; }
 .g-radar { background: #3987e5; } .g-link { background: #199e70; } .g-seeker { background: linear-gradient(90deg, #c98500 50%, #d95926 50%); } .g-echo { background: #d7d6cd; }
+
+/* Модель брони */
+.armor { display: grid; gap: var(--gap); }
+.armor-head { display: grid; gap: 6px; max-width: 78ch; }
+.armor-head p { color: var(--text-2); }
+.armor .radar-canvas { cursor: pointer; }
+.armor-replay { position: absolute; }
+.armor-outcome { padding: 10px 14px; border-radius: var(--radius); border-left: 4px solid var(--text-3); background: var(--surface-2); color: var(--text); font-weight: 600; }
+.armor-outcome[data-state='stop'] { border-left-color: #199e70; }
+.armor-outcome[data-state='edge'] { border-left-color: #c98500; }
+.armor-outcome[data-state='through'] { border-left-color: #d95926; }
+.armor-layers { list-style: none; margin: 0; padding: 0; counter-reset: layer; border-top: 1px solid var(--line); }
+.armor-layers li { border-bottom: 1px solid var(--line); counter-increment: layer; }
+.armor-layer { font: inherit; color: var(--text-2); background: none; border: 0; cursor: pointer; width: 100%; text-align: left; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px; padding: 9px 8px; min-height: 44px; align-items: center; }
+.armor-layer::before { content: none; }
+.armor-layer:hover { background: var(--surface-2); color: var(--text); }
+.armor-layer[aria-pressed='true'] { color: var(--text); box-shadow: inset 3px 0 0 var(--era-modern); background: var(--surface-2); }
+.armor-layer-effect { font-size: 0.78rem; color: var(--text-3); text-align: right; }
+
+/* Ангар авианосца */
+.hangar { display: grid; gap: var(--gap); }
+.hangar-top { display: grid; gap: 14px; }
+.hangar-types { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 12px; }
+.hangar-type { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--s, var(--line-strong)); border-radius: var(--radius); padding: 14px; display: grid; gap: 8px; align-content: start; }
+.hangar-type-head { display: grid; gap: 2px; }
+.hangar-type-head .num { color: var(--text-3); font-size: 0.8rem; }
+.hangar-swatch { display: none; }
+.hangar-type p { color: var(--text-2); font-size: 0.88rem; }
+.hangar-step { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 8px; }
+.hangar-step .ball-btn { justify-content: center; font-size: 1.2rem; min-height: 44px; }
+.hangar-step output { text-align: center; font-size: 1.3rem; color: var(--text); }
+.hangar-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.hangar-stage { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; display: grid; gap: 8px; overflow-x: auto; }
+.hangar-stage canvas { min-width: 640px; }
+.hangar-stage small { color: var(--text-3); font-size: 0.82rem; }
+.hangar-readout { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 0; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); }
+.hangar-readout div { padding: 12px 14px; border-right: 1px solid var(--line); display: grid; gap: 4px; }
+.hangar-readout div:last-child { border-right: 0; }
+.hangar-readout dt { color: var(--text-3); font-family: var(--mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; }
+.hangar-readout dd { margin: 0; font-size: 1.4rem; color: var(--text); }
+.hangar-list { color: var(--text-2); }
+@media (max-width: 640px) { .hangar-readout { grid-template-columns: repeat(2, minmax(0, 1fr)); } .hangar-readout div:nth-child(2) { border-right: 0; } .hangar-readout div:nth-child(-n+2) { border-bottom: 1px solid var(--line); } }

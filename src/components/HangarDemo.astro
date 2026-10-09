@@ -1,0 +1,178 @@
+---
+import { aircraftTypes, type HangarData } from '../data/hangars';
+
+interface Props {
+  hangar: HangarData;
+}
+
+const { hangar } = Astro.props;
+const types = hangar.wing.map((entry) => ({ ...aircraftTypes.find((type) => type.id === entry.type)!, typical: entry.typical }));
+const data = { length: hangar.length, width: hangar.width, types };
+---
+<div class="hangar" data-hangar data-config={JSON.stringify(data)}>
+  <div class="hangar-top">
+    <div class="hangar-types" role="group" aria-label="Состав авиагруппы">
+      {types.map((type, i) => (
+        <div class="hangar-type" data-type={type.id} style={`--s:var(--h${i})`}>
+          <div class="hangar-type-head">
+            <i class="hangar-swatch"></i>
+            <strong>{type.name}</strong>
+            <span class="num">{type.length} x {type.width} м</span>
+          </div>
+          <p>{type.note}</p>
+          <div class="hangar-step">
+            <button type="button" class="ball-btn" data-step="-1" aria-label={`Убрать один ${type.name}`}>-</button>
+            <output class="num" aria-live="polite">0</output>
+            <button type="button" class="ball-btn" data-step="1" aria-label={`Добавить один ${type.name}`}>+</button>
+          </div>
+        </div>
+      ))}
+    </div>
+    <div class="hangar-actions">
+      <button type="button" class="ball-btn" data-preset="typical">Типовая авиагруппа</button>
+      <button type="button" class="ball-btn" data-preset="clear">Очистить</button>
+    </div>
+  </div>
+
+  <div class="hangar-stage">
+    <canvas class="radar-canvas" width="1040" height="260" role="img" aria-label="Ангарная палуба, вид сверху, в масштабе"></canvas>
+    <small>Вид сверху в масштабе: {hangar.length} x {hangar.width} м{hangar.height ? `, высота ≈${hangar.height} м` : ''}. Подъёмников: {hangar.elevators}.</small>
+  </div>
+
+  <dl class="hangar-readout">
+    <div><dt>В ангаре</dt><dd class="num r-in">0</dd></div>
+    <div><dt>Остаются на палубе</dt><dd class="num r-out">0</dd></div>
+    <div><dt>Занято площади ангара</dt><dd class="num r-area">0 %</dd></div>
+    <div><dt>Всего машин</dt><dd class="num r-total">0</dd></div>
+  </dl>
+  <p class="hangar-list" aria-live="polite"></p>
+  <p class="notice">
+    {hangar.note} Раскладка упрощённая: машины ставятся рядами с зазором около метра, как прямоугольники.
+    На корабле их расставляют плотнее и под углом, поэтому реальная вместимость может отличаться.
+  </p>
+</div>
+
+<script>
+  interface Type { id: string; name: string; kind: 'jet' | 'prop' | 'helo'; length: number; width: number; typical: number }
+  interface Placed { type: Type; index: number; x: number; y: number }
+
+  const GAP = 1;
+  const COLORS = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d7d6cd'];
+
+  /** Раскладка рядами вдоль ангара: машины сортируются по ширине, каждый ряд заполняется по длине. */
+  function pack(length: number, width: number, queue: { type: Type; index: number }[]) {
+    const placed: Placed[] = [];
+    const left: { type: Type; index: number }[] = [];
+    const rows: { y: number; height: number; used: number }[] = [];
+    let nextY = GAP;
+    [...queue].sort((p, q) => q.type.width - p.type.width).forEach((item) => {
+      const { type } = item;
+      let row = rows.find((r) => r.height >= type.width && r.used + type.length + GAP <= length);
+      if (!row && nextY + type.width + GAP <= width && type.length + GAP <= length) {
+        row = { y: nextY, height: type.width, used: GAP };
+        rows.push(row);
+        nextY += type.width + GAP;
+      }
+      if (!row) { left.push(item); return; }
+      placed.push({ ...item, x: row.used, y: row.y });
+      row.used += type.length + GAP;
+    });
+    return { placed, left };
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-hangar]').forEach((root) => {
+    const config: { length: number; width: number; types: Type[] } = JSON.parse(root.dataset.config ?? '{}');
+    const canvas = root.querySelector<HTMLCanvasElement>('canvas')!;
+    const ctx = canvas.getContext('2d')!;
+    const css = getComputedStyle(root);
+    const color = (name: string) => css.getPropertyValue(name).trim();
+    const counts = new Map<string, number>(config.types.map((type) => [type.id, 0]));
+    const set = (selector: string, text: string) => { root.querySelector(selector)!.textContent = text; };
+    const margin = 16;
+    const scale = Math.min((canvas.width - margin * 2) / config.length, (canvas.height - margin * 2) / config.width);
+    const ox = (canvas.width - config.length * scale) / 2;
+    const oy = (canvas.height - config.width * scale) / 2;
+
+    function drawAircraft(item: Placed) {
+      const { type } = item;
+      const x = ox + item.x * scale;
+      const y = oy + item.y * scale;
+      const w = type.length * scale;
+      const h = type.width * scale;
+      const fill = COLORS[item.index % COLORS.length];
+      ctx.fillStyle = fill;
+      ctx.globalAlpha = 0.9;
+      ctx.beginPath();
+      if (type.kind === 'helo') {
+        ctx.ellipse(x + w * 0.38, y + h / 2, w * 0.38, h / 2, 0, 0, Math.PI * 2);
+        ctx.rect(x + w * 0.6, y + h * 0.4, w * 0.4, h * 0.2);
+      } else {
+        ctx.moveTo(x + w, y + h / 2);
+        ctx.lineTo(x + w * 0.72, y + h * 0.36);
+        ctx.lineTo(x + w * 0.5, y);
+        ctx.lineTo(x + w * 0.28, y);
+        ctx.lineTo(x + w * 0.34, y + h * 0.36);
+        ctx.lineTo(x + w * 0.1, y + h * 0.3);
+        ctx.lineTo(x, y + h * 0.12);
+        ctx.lineTo(x, y + h * 0.88);
+        ctx.lineTo(x + w * 0.1, y + h * 0.7);
+        ctx.lineTo(x + w * 0.34, y + h * 0.64);
+        ctx.lineTo(x + w * 0.28, y + h);
+        ctx.lineTo(x + w * 0.5, y + h);
+        ctx.lineTo(x + w * 0.72, y + h * 0.64);
+        ctx.closePath();
+      }
+      ctx.fill();
+      ctx.globalAlpha = 1;
+    }
+
+    function render() {
+      const queue = config.types.flatMap((type, index) => Array.from({ length: counts.get(type.id) ?? 0 }, () => ({ type, index })));
+      const { placed, left } = pack(config.length, config.width, queue);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = color('--surface-2');
+      ctx.strokeStyle = color('--text-2');
+      ctx.lineWidth = 2;
+      ctx.fillRect(ox, oy, config.length * scale, config.width * scale);
+      ctx.strokeRect(ox, oy, config.length * scale, config.width * scale);
+      ctx.strokeStyle = color('--line');
+      ctx.lineWidth = 1;
+      for (let m = 25; m < config.length; m += 25) {
+        ctx.beginPath(); ctx.moveTo(ox + m * scale, oy); ctx.lineTo(ox + m * scale, oy + config.width * scale); ctx.stroke();
+      }
+      placed.forEach(drawAircraft);
+      ctx.fillStyle = color('--text-3');
+      ctx.font = '12px Consolas, monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('Нос', ox, oy - 4);
+      ctx.textAlign = 'right';
+      ctx.fillText('Корма · сетка 25 м', ox + config.length * scale, oy - 4);
+
+      const area = placed.reduce((sum, item) => sum + item.type.length * item.type.width, 0);
+      set('.r-in', String(placed.length));
+      set('.r-out', String(left.length));
+      set('.r-area', `≈${Math.round((area / (config.length * config.width)) * 100)} %`);
+      set('.r-total', String(queue.length));
+      const inside = config.types.map((type) => ({ type, n: placed.filter((item) => item.type.id === type.id).length })).filter((row) => row.n > 0);
+      set('.hangar-list', queue.length === 0
+        ? 'Добавьте машины кнопками «+» или выберите типовую авиагруппу.'
+        : `В ангаре: ${inside.map((row) => `${row.type.name}: ${row.n}`).join(', ') || 'ничего'}.${left.length ? ` Не поместилось и стоит на полётной палубе: ${left.length}.` : ' Вся авиагруппа помещается под палубой.'}`);
+      root.querySelectorAll<HTMLElement>('.hangar-type').forEach((box) => { box.querySelector('output')!.textContent = String(counts.get(box.dataset.type!) ?? 0); });
+    }
+
+    root.querySelectorAll<HTMLElement>('.hangar-type').forEach((box, index) => {
+      box.style.setProperty('--s', COLORS[index % COLORS.length]);
+      box.querySelectorAll<HTMLButtonElement>('[data-step]').forEach((button) => button.addEventListener('click', () => {
+        const id = box.dataset.type!;
+        counts.set(id, Math.max(0, Math.min(99, (counts.get(id) ?? 0) + Number(button.dataset.step))));
+        render();
+      }));
+    });
+    root.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((button) => button.addEventListener('click', () => {
+      config.types.forEach((type) => counts.set(type.id, button.dataset.preset === 'typical' ? type.typical : 0));
+      render();
+    }));
+    config.types.forEach((type) => counts.set(type.id, type.typical));
+    render();
+  });
+</script>

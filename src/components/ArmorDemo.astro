@@ -1,0 +1,261 @@
+---
+import { layerTypes, threats, STOP_BELOW, EDGE_BELOW, type ArmorScheme } from '../data/armor';
+
+interface Props {
+  scheme: ArmorScheme;
+}
+
+const { scheme } = Astro.props;
+const layers = scheme.layers.map((kind) => layerTypes.find((layer) => layer.kind === kind)!);
+const config = { layers, threats, stop: STOP_BELOW, edge: EDGE_BELOW };
+---
+<section class="radar armor" data-armor data-config={JSON.stringify(config)}>
+  <div class="armor-head">
+    <h3>{scheme.name}</h3>
+    <p>{scheme.text}</p>
+  </div>
+  <div class="radar-tabs" role="tablist" aria-label="Тип боеприпаса">
+    {threats.map((threat, i) => <button type="button" role="tab" class="radar-tab" data-threat={threat.id} aria-selected={i === 0} title={threat.name}>{threat.short}</button>)}
+  </div>
+  <div class="radar-body">
+    <div class="radar-stage">
+      <canvas class="radar-canvas" width="760" height="380" role="img" aria-label="Разрез брони: слои и действие боеприпаса"></canvas>
+      <button type="button" class="radar-toggle armor-replay">Повторить</button>
+    </div>
+    <div class="radar-info">
+      <div>
+        <span class="eyebrow">Боеприпас</span>
+        <h3 class="radar-title armor-threat"></h3>
+      </div>
+      <p class="radar-text armor-threat-text"></p>
+      <p class="armor-outcome" aria-live="polite"></p>
+      <ol class="armor-layers">
+        {layers.map((layer, i) => (
+          <li>
+            <button type="button" class="armor-layer" data-layer={i} aria-pressed={i === 0}>
+              <span class="armor-layer-name">{layer.name}</span>
+              <span class="armor-layer-effect num"></span>
+            </button>
+          </li>
+        ))}
+      </ol>
+      <p class="radar-text armor-layer-text"></p>
+    </div>
+  </div>
+  <p class="notice">
+    Качественная схема: слои условные, толщины и стойкость реальных машин здесь не приводятся.
+    Исход показывает общую закономерность для этого типа брони, а не результат конкретного попадания.
+  </p>
+</section>
+
+<script>
+  type ThreatId = 'apfsds' | 'heat' | 'tandem' | 'hesh' | 'autocannon' | 'frag';
+  interface Layer { kind: string; name: string; text: string; absorb: Record<ThreatId, number>; width: number }
+  interface Threat { id: ThreatId; name: string; short: string; text: string; power: number }
+
+  const DURATION = 4.2;
+  const SOLID = ['era', 'nera', 'addon', 'steel', 'ceramic', 'back', 'alu'];
+  const FILL: Record<string, string> = { steel: '#6f7477', back: '#5d6265', ceramic: '#a39a86', nera: '#7c8794', era: '#8a6a3c', addon: '#7a8168', alu: '#9aa3a8', liner: '#c98500' };
+
+  document.querySelectorAll<HTMLElement>('[data-armor]').forEach((root) => {
+    const config: { layers: Layer[]; threats: Threat[]; stop: number; edge: number } = JSON.parse(root.dataset.config ?? '{}');
+    const { layers } = config;
+    const canvas = root.querySelector<HTMLCanvasElement>('canvas')!;
+    const ctx = canvas.getContext('2d')!;
+    const css = getComputedStyle(root);
+    const color = (name: string) => css.getPropertyValue(name).trim();
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[data-threat]')];
+    const layerButtons = [...root.querySelectorAll<HTMLButtonElement>('.armor-layer')];
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const set = (selector: string, text: string) => { root.querySelector(selector)!.textContent = text; };
+
+    const TOP = 46;
+    const BOTTOM = 300;
+    const MID = (TOP + BOTTOM) / 2;
+    const ARMOR_X = 300;
+    const totalWidth = layers.reduce((sum, layer) => sum + layer.width, 0);
+    const unit = Math.min(110, 330 / totalWidth);
+    const xs: number[] = [];
+    layers.reduce((x, layer) => { xs.push(x); return x + layer.width * unit; }, ARMOR_X);
+    const endX = ARMOR_X + totalWidth * unit;
+
+    let threat = config.threats[0];
+    let selectedLayer = 0;
+    let clock = 0;
+    let last = 0;
+    let running = 0;
+    let remaining: number[] = [];
+    let stopIndex = -1;
+
+    function evaluate() {
+      let power = threat.power;
+      remaining = layers.map((layer) => { power *= 1 - layer.absorb[threat.id]; return power; });
+      stopIndex = remaining.findIndex((value) => value < config.stop);
+    }
+
+    const effectWord = (value: number) => (value >= 0.75 ? 'останавливает' : value >= 0.4 ? 'сильно ослабляет' : value >= 0.1 ? 'ослабляет' : 'почти не влияет');
+
+    function renderInfo() {
+      set('.armor-threat', threat.name);
+      set('.armor-threat-text', threat.text);
+      const final = remaining[remaining.length - 1];
+      const hasLiner = layers.some((layer) => layer.kind === 'liner');
+      const outcome = root.querySelector<HTMLElement>('.armor-outcome')!;
+      if (stopIndex >= 0) {
+        outcome.dataset.state = 'stop';
+        outcome.textContent = `Остановлен. Решающий слой: ${layers[stopIndex].name.toLowerCase()}.`;
+      } else if (final < config.edge) {
+        outcome.dataset.state = 'edge';
+        outcome.textContent = 'На пределе. Исход зависит от поколения боеприпаса, угла встречи и места попадания.';
+      } else {
+        outcome.dataset.state = 'through';
+        outcome.textContent = threat.id === 'hesh'
+          ? `Поражение без сквозного пробития: ударная волна откалывает осколки с внутренней стороны.${hasLiner ? ' Подбой задерживает часть осколков.' : ''}`
+          : `Пробитие: эта схема не рассчитана на такую угрозу.${hasLiner ? ' Подбой сужает разлёт вторичных осколков.' : ''}`;
+      }
+      layerButtons.forEach((button, i) => {
+        button.setAttribute('aria-pressed', String(i === selectedLayer));
+        button.querySelector('.armor-layer-effect')!.textContent = stopIndex >= 0 && i > stopIndex ? 'не задействован' : effectWord(layers[i].absorb[threat.id]);
+      });
+      set('.armor-layer-text', layers[selectedLayer].text);
+    }
+
+    function drawLayer(layer: Layer, x: number, w: number, active: boolean, triggered: boolean) {
+      const h = BOTTOM - TOP;
+      if (layer.kind === 'aps') {
+        ctx.strokeStyle = color('--text-3'); ctx.setLineDash([4, 5]); ctx.strokeRect(x, TOP, w, h); ctx.setLineDash([]);
+        ctx.fillStyle = color('--text-2'); ctx.fillRect(x + w - 10, TOP - 14, 10, 14);
+      } else if (layer.kind === 'air') {
+        ctx.strokeStyle = color('--line-strong'); ctx.setLineDash([2, 6]); ctx.strokeRect(x, TOP, w, h); ctx.setLineDash([]);
+      } else if (layer.kind === 'slat') {
+        ctx.fillStyle = FILL.steel;
+        for (let y = TOP; y < BOTTOM; y += 18) ctx.fillRect(x + w * 0.3, y, w * 0.4, 7);
+      } else if (layer.kind === 'era') {
+        for (let y = TOP; y < BOTTOM - 4; y += 42) {
+          const blown = triggered && Math.abs(y + 19 - MID) < 30;
+          if (blown) continue;
+          ctx.fillStyle = FILL.era; ctx.fillRect(x + 3, y + 2, w - 6, 36);
+          ctx.strokeStyle = color('--bg'); ctx.strokeRect(x + 3, y + 2, w - 6, 36);
+        }
+      } else {
+        ctx.fillStyle = FILL[layer.kind] ?? FILL.steel;
+        ctx.fillRect(x, TOP, w, h);
+        ctx.strokeStyle = 'rgba(18, 18, 17, 0.55)'; ctx.lineWidth = 1;
+        if (layer.kind === 'ceramic') for (let y = TOP + 16; y < BOTTOM; y += 16) { ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + w, y); ctx.stroke(); }
+        if (layer.kind === 'nera') for (let y = TOP - w; y < BOTTOM; y += 14) { ctx.beginPath(); ctx.moveTo(x, Math.max(TOP, y)); ctx.lineTo(x + w, Math.min(BOTTOM, y + w)); ctx.stroke(); }
+        ctx.strokeRect(x, TOP, w, h);
+      }
+      if (active) { ctx.strokeStyle = color('--text'); ctx.lineWidth = 2; ctx.strokeRect(x - 1, TOP - 1, w + 2, h + 2); }
+    }
+
+    function draw(t: number) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const firstSolid = layers.findIndex((layer) => SOLID.includes(layer.kind) || layer.kind === 'slat');
+      const contactX = xs[Math.max(0, firstSolid)];
+      const stopX = stopIndex >= 0 ? xs[stopIndex] + layers[stopIndex].width * unit * (layers[stopIndex].kind === 'aps' ? 0.5 : 0.7) : endX + 70;
+      const approach = 0.38;
+      const pos = t < approach ? 30 + (xs[0] - 30) * (t / approach) : Math.min(stopX, xs[0] + (stopX - xs[0]) * ((t - approach) / (0.9 - approach)));
+      const inside = layers.findIndex((layer, i) => pos >= xs[i] && pos < xs[i] + layer.width * unit);
+      const eraIndex = layers.findIndex((layer) => layer.kind === 'era');
+      const eraTriggered = eraIndex >= 0 && pos >= xs[eraIndex] && threat.id !== 'frag' && threat.id !== 'autocannon';
+
+      layers.forEach((layer, i) => drawLayer(layer, xs[i], layer.width * unit, i === selectedLayer, layer.kind === 'era' && eraTriggered));
+      ctx.fillStyle = color('--text-3');
+      ctx.font = '12px Consolas, monospace';
+      ctx.textAlign = 'left';
+      ctx.fillText('Снаружи', 20, TOP - 16);
+      ctx.textAlign = 'right';
+      ctx.fillText('Внутри машины', canvas.width - 16, TOP - 16);
+
+      if (eraTriggered && t < 0.75) {
+        const k = Math.min(1, (pos - xs[eraIndex]) / 120);
+        ctx.fillStyle = FILL.era;
+        ctx.save(); ctx.translate(xs[eraIndex] - 40 * k, MID - 26 * k); ctx.rotate(-k); ctx.fillRect(-12, -3, 24, 6); ctx.restore();
+        ctx.save(); ctx.translate(xs[eraIndex] - 34 * k, MID + 28 * k); ctx.rotate(k * 1.3); ctx.fillRect(-12, -3, 24, 6); ctx.restore();
+      }
+
+      const stopped = stopIndex >= 0 && pos >= stopX;
+      const apsStop = stopped && layers[stopIndex].kind === 'aps';
+      const jet = (threat.id === 'heat' || threat.id === 'tandem') && pos >= contactX && !apsStop;
+      const squash = threat.id === 'hesh' && pos >= contactX && !apsStop;
+      ctx.fillStyle = color('--text');
+      ctx.strokeStyle = color('--text');
+      if (apsStop) {
+        ctx.strokeStyle = '#d95926'; ctx.lineWidth = 2;
+        for (let i = 0; i < 8; i += 1) { const a = (i / 8) * Math.PI * 2; ctx.beginPath(); ctx.moveTo(stopX + Math.cos(a) * 6, MID + Math.sin(a) * 6); ctx.lineTo(stopX + Math.cos(a) * 22, MID + Math.sin(a) * 22); ctx.stroke(); }
+        ctx.strokeStyle = color('--text-2'); ctx.setLineDash([3, 4]);
+        ctx.beginPath(); ctx.moveTo(xs[stopIndex] + layers[stopIndex].width * unit - 5, TOP - 8); ctx.lineTo(stopX, MID); ctx.stroke(); ctx.setLineDash([]);
+      } else if (jet) {
+        ctx.fillStyle = '#d95926';
+        ctx.beginPath(); ctx.arc(contactX - 4, MID, 9, 0, Math.PI * 2); ctx.fill();
+        const power = inside >= 0 ? remaining[inside] : remaining[remaining.length - 1];
+        ctx.strokeStyle = '#f2b24a'; ctx.lineWidth = Math.max(1, 5 * Math.min(1, power + 0.2));
+        ctx.beginPath(); ctx.moveTo(contactX, MID); ctx.lineTo(pos, MID); ctx.stroke();
+      } else if (squash) {
+        ctx.fillStyle = '#d95926';
+        ctx.beginPath(); ctx.ellipse(contactX - 5, MID, 7, 30, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#f2b24a'; ctx.lineWidth = 1.5;
+        const reach = Math.min(pos, stopX) - contactX;
+        for (let r = 14; r < reach; r += 16) { ctx.beginPath(); ctx.arc(contactX, MID, r, -0.7, 0.7); ctx.stroke(); }
+      } else if (threat.id === 'frag') {
+        [-34, -12, 8, 30].forEach((dy, i) => { ctx.beginPath(); ctx.arc(pos - i * 9, MID + dy, 3, 0, Math.PI * 2); ctx.fill(); });
+      } else {
+        const long = threat.id === 'apfsds';
+        const length = long ? 70 : threat.id === 'autocannon' ? 22 : 34;
+        const thick = long ? 5 : threat.id === 'autocannon' ? 6 : 16;
+        ctx.beginPath(); ctx.moveTo(pos, MID); ctx.lineTo(pos - 10, MID - thick / 2); ctx.lineTo(pos - length, MID - thick / 2); ctx.lineTo(pos - length, MID + thick / 2); ctx.lineTo(pos - 10, MID + thick / 2); ctx.closePath(); ctx.fill();
+        if (long) { ctx.fillRect(pos - length - 2, MID - 10, 10, 20); }
+      }
+
+      const final = remaining[remaining.length - 1];
+      if (stopIndex < 0 && pos >= endX) {
+        const liner = layers.some((layer) => layer.kind === 'liner');
+        const spread = (liner ? 0.25 : 0.6) * Math.min(1, final * 1.5 + 0.3);
+        const k = Math.min(1, (pos - endX) / 70);
+        ctx.fillStyle = '#d95926';
+        for (let i = -3; i <= 3; i += 1) { ctx.beginPath(); ctx.arc(endX + 70 * k * Math.cos(i * spread / 3), MID + 70 * k * Math.sin(i * spread / 3) * 2.2, 2.5, 0, Math.PI * 2); ctx.fill(); }
+      }
+
+      const barX = 30; const barY = BOTTOM + 44; const barW = canvas.width - 60;
+      const power = pos < xs[0] ? threat.power : inside >= 0 ? remaining[inside] : stopped ? 0 : final;
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.08)'; ctx.fillRect(barX, barY, barW, 8);
+      ctx.fillStyle = color('--era-modern') || '#c98500'; ctx.fillRect(barX, barY, barW * Math.min(1, power / 1.3), 8);
+      ctx.fillStyle = color('--text-3'); ctx.textAlign = 'left';
+      ctx.fillText('Остаток воздействия после пройденных слоёв (условно)', barX, barY - 8);
+    }
+
+    function frame(now: number) {
+      clock += (now - (last || now)) / 1000;
+      last = now;
+      const t = Math.min(1, clock / DURATION);
+      draw(t);
+      running = t < 1 ? requestAnimationFrame(frame) : 0;
+    }
+
+    function play() {
+      if (running) cancelAnimationFrame(running);
+      if (reduce) { draw(1); return; }
+      clock = 0; last = 0;
+      running = requestAnimationFrame(frame);
+    }
+
+    function selectThreat(id: string) {
+      threat = config.threats.find((item) => item.id === id) ?? config.threats[0];
+      tabs.forEach((tab) => tab.setAttribute('aria-selected', String(tab.dataset.threat === id)));
+      evaluate();
+      renderInfo();
+      play();
+    }
+
+    tabs.forEach((tab) => tab.addEventListener('click', () => selectThreat(tab.dataset.threat!)));
+    layerButtons.forEach((button) => button.addEventListener('click', () => { selectedLayer = Number(button.dataset.layer); renderInfo(); if (!running) draw(1); }));
+    root.querySelector('.armor-replay')!.addEventListener('click', play);
+    canvas.addEventListener('click', (event) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = ((event.clientX - rect.left) / rect.width) * canvas.width;
+      const index = layers.findIndex((layer, i) => x >= xs[i] && x < xs[i] + layer.width * unit);
+      if (index >= 0) { selectedLayer = index; renderInfo(); if (!running) draw(1); }
+    });
+    selectThreat(config.threats[0].id);
+  });
+</script>

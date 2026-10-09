@@ -1,167 +1,1572 @@
 {
   "items": {
-    "ka-52": [["Kamov Ka-52 helicopter", "Ka-52 Alligator flight", "Ka-52"], "Ka-52"],
-    "tb2": [["Bayraktar TB2 UAV", "Bayraktar TB2 drone", "TB2 unmanned"], "TB2|Bayraktar"],
-    "borei": [["Borei-class submarine", "Yury Dolgorukiy submarine", "Project 955 submarine"], "Borei|Borey|Dolgoruk|955"],
-    "ohio": [["USS Ohio SSGN 726 underway", "Ohio-class submarine underway", "USS Michigan SSGN 727"], "Ohio|SSGN|SSBN|Michigan|Florida|Georgia"],
-    "a-50": [["Beriev A-50 aircraft", "A-50 Mainstay", "A-50U"], "A-50"],
-    "type-055": [["Type 055 destroyer", "Nanchang 101 destroyer", "Renhai-class cruiser"], "Type 055|Nanchang|Renhai"],
-    "t-90": [["T-90 tank", "T-90A tank", "T-90S Bhishma"], "T-90"],
-    "merkava-4": [["Merkava Mark IV", "Merkava Mk 4 tank", "Merkava IV"], "Merkava"],
-    "btr-152": [["BTR-152 armored personnel carrier", "BTR-152"], "BTR-152"],
-    "s-400": [["S-400 Triumf", "S-400 launcher", "SA-21 Growler"], "S-400|SA-21"],
-    "iron-dome": [["Iron Dome launcher", "Iron Dome battery", "Iron Dome intercept"], "Iron Dome"],
-    "s-200": [["S-200 Angara missile", "SA-5 Gammon", "S-200 Vega launcher"], "S-200|SA-5"],
-    "tor": [["Tor-M1 missile system", "9K330 Tor", "SA-15 Gauntlet"], "Tor-M|9K33[012]|SA-15"],
-    "samp-t": [["SAMP/T launcher", "SAMP-T Mamba", "Aster 30 SAMP/T"], "SAMP"],
-    "pantsir": [["Pantsir-S1", "Pantsir S1 air defense", "SA-22 Greyhound"], "Pantsir|SA-22"],
-    "strela-2": [["9K32 Strela-2", "SA-7 Grail", "Strela-2M"], "Strela-2|9K32|SA-7"],
-    "igla": [["9K38 Igla", "SA-18 Grouse", "Igla MANPADS"], "Igla|9K38|SA-18|SA-16"],
-    "kornet": [["9M133 Kornet", "Kornet anti-tank missile", "Kornet-E"], "Kornet"],
-    "r-17": [["Scud missile launcher", "R-17 Elbrus", "Scud-B MAZ-543"], "Scud|R-17|9K72"],
-    "iskander": [["Iskander-M launcher", "9K720 Iskander", "Iskander missile system"], "Iskander"],
-    "m60": [["M60A3 tank", "M60 Patton tank", "M60A1 tank"], "M60"],
-    "t-62": [["T-62 tank", "T-62M tank"], "T-62"],
-    "leopard-1": [["Leopard 1 tank", "Leopard 1A5", "Leopard C2 tank"], "Leopard (1|C)"],
-    "t-64": [["T-64 tank", "T-64BV tank", "T-64BM Bulat"], "T-64"],
-    "chieftain": [["Chieftain tank", "Chieftain main battle tank", "FV4201 Chieftain"], "Chieftain"],
-    "amx-30": [["AMX-30 tank", "AMX-30B2", "AMX 30"], "AMX.?30"],
-    "t-80": [["T-80 tank", "T-80U tank", "T-80BV"], "T-80"],
-    "leclerc": [["Leclerc tank", "Char Leclerc", "AMX-56 Leclerc"], "Leclerc"],
-    "challenger-2": [["Challenger 2 tank", "Challenger 2 main battle tank"], "Challenger"],
-    "type-99": [["Type 99 tank", "ZTZ-99 tank", "Type 99A tank"], "Type 99|ZTZ-?99"],
-    "marder": [["Marder infantry fighting vehicle", "Schutzenpanzer Marder", "Marder 1A3"], "Marder"],
-    "bmp-2": [["BMP-2 infantry fighting vehicle", "BMP-2"], "BMP-2"],
-    "lav-25": [["LAV-25 Marine Corps", "LAV-25 light armored vehicle"], "LAV-25|LAV 25|Light Armored Vehicle"],
-    "btr-80": [["BTR-80 armored personnel carrier", "BTR-80"], "BTR-8[02]"],
-    "bmp-3": [["BMP-3 infantry fighting vehicle", "BMP-3"], "BMP-3"],
-    "warrior": [["Warrior infantry fighting vehicle", "Warrior IFV British Army", "FV510 Warrior"], "Warrior"],
-    "stryker": [["Stryker armored vehicle", "M1126 Stryker", "Stryker ICV"], "Stryker"],
-    "m110": [["M110 howitzer 8 inch", "M110A2 howitzer", "M110 self-propelled howitzer"], "M110"],
-    "2s1": [["2S1 Gvozdika", "2S1 self-propelled howitzer"], "2S1|Gvozdika"],
-    "2s7": [["2S7 Pion", "2S7M Malka", "2S7 self-propelled gun"], "2S7|Pion|Malka"],
-    "2s19": [["2S19 Msta-S", "2S19 Msta", "Msta-S howitzer"], "2S19|Msta"],
-    "as-90": [["AS-90 self-propelled gun", "AS90 howitzer", "AS-90 British Army"], "AS-?90"],
-    "k9": [["K9 Thunder howitzer", "K9 Thunder", "K9A1 Thunder"], "K9|K-9"]
+    "ka-52": [
+      [
+        "Kamov Ka-52 helicopter",
+        "Ka-52 Alligator flight",
+        "Ka-52"
+      ],
+      "Ka-52"
+    ],
+    "tb2": [
+      [
+        "Bayraktar TB2",
+        "Bayraktar"
+      ],
+      "Bayraktar"
+    ],
+    "borei": [
+      [
+        "Borei-class submarine",
+        "Yury Dolgorukiy submarine",
+        "Project 955 submarine"
+      ],
+      "Borei|Borey|Dolgoruk|955"
+    ],
+    "ohio": [
+      [
+        "USS Ohio SSGN 726 underway",
+        "Ohio-class submarine underway",
+        "USS Michigan SSGN 727"
+      ],
+      "Ohio|SSGN|SSBN|Michigan|Florida|Georgia"
+    ],
+    "a-50": [
+      [
+        "Beriev A-50 aircraft",
+        "A-50 Mainstay",
+        "A-50U"
+      ],
+      "A-50"
+    ],
+    "type-055": [
+      [
+        "Type 055 destroyer",
+        "Nanchang 101 destroyer",
+        "Renhai-class cruiser"
+      ],
+      "Type 055|Nanchang|Renhai"
+    ],
+    "t-90": [
+      [
+        "T-90 tank",
+        "T-90A tank",
+        "T-90S Bhishma"
+      ],
+      "T-90"
+    ],
+    "merkava-4": [
+      [
+        "Merkava Mark IV",
+        "Merkava Mk 4 tank",
+        "Merkava IV"
+      ],
+      "Merkava"
+    ],
+    "btr-152": [
+      [
+        "BTR-152 armored personnel carrier",
+        "BTR-152"
+      ],
+      "BTR-152"
+    ],
+    "s-400": [
+      [
+        "S-400 Triumf",
+        "S-400 launcher",
+        "SA-21 Growler"
+      ],
+      "S-400|SA-21"
+    ],
+    "iron-dome": [
+      [
+        "Iron Dome"
+      ],
+      "Iron Dome"
+    ],
+    "s-200": [
+      [
+        "S-200 Angara missile",
+        "SA-5 Gammon",
+        "S-200 Vega launcher"
+      ],
+      "S-200|SA-5"
+    ],
+    "tor": [
+      [
+        "Tor-M1 missile system",
+        "9K330 Tor",
+        "SA-15 Gauntlet"
+      ],
+      "Tor-M|9K33[012]|SA-15"
+    ],
+    "samp-t": [
+      [
+        "SAMP/T launcher",
+        "SAMP-T Mamba",
+        "Aster 30 SAMP/T"
+      ],
+      "SAMP"
+    ],
+    "pantsir": [
+      [
+        "Pantsir",
+        "Pantsir-S"
+      ],
+      "Pantsir"
+    ],
+    "strela-2": [
+      [
+        "9K32 Strela-2",
+        "SA-7 Grail",
+        "Strela-2M"
+      ],
+      "Strela-2|9K32|SA-7"
+    ],
+    "igla": [
+      [
+        "Igla missile",
+        "SA-18"
+      ],
+      "Igla|SA-18|SA-16"
+    ],
+    "kornet": [
+      [
+        "Kornet"
+      ],
+      "Kornet"
+    ],
+    "r-17": [
+      [
+        "Scud missile launcher",
+        "R-17 Elbrus",
+        "Scud-B MAZ-543"
+      ],
+      "Scud|R-17|9K72"
+    ],
+    "iskander": [
+      [
+        "Iskander",
+        "Iskander-M"
+      ],
+      "Iskander"
+    ],
+    "m60": [
+      [
+        "M60A3 tank",
+        "M60 Patton tank",
+        "M60A1 tank"
+      ],
+      "M60"
+    ],
+    "t-62": [
+      [
+        "T-62 tank",
+        "T-62M tank"
+      ],
+      "T-62"
+    ],
+    "leopard-1": [
+      [
+        "Leopard 1 tank",
+        "Leopard 1A5",
+        "Leopard C2 tank"
+      ],
+      "Leopard (1|C)"
+    ],
+    "t-64": [
+      [
+        "T-64 tank",
+        "T-64BV tank",
+        "T-64BM Bulat"
+      ],
+      "T-64"
+    ],
+    "chieftain": [
+      [
+        "Chieftain tank",
+        "Chieftain main battle tank",
+        "FV4201 Chieftain"
+      ],
+      "Chieftain"
+    ],
+    "amx-30": [
+      [
+        "AMX-30 tank",
+        "AMX-30B2",
+        "AMX 30"
+      ],
+      "AMX.?30"
+    ],
+    "t-80": [
+      [
+        "T-80 tank",
+        "T-80U tank",
+        "T-80BV"
+      ],
+      "T-80"
+    ],
+    "leclerc": [
+      [
+        "Leclerc tank",
+        "Char Leclerc",
+        "AMX-56 Leclerc"
+      ],
+      "Leclerc"
+    ],
+    "challenger-2": [
+      [
+        "Challenger 2 tank",
+        "Challenger 2 main battle tank"
+      ],
+      "Challenger"
+    ],
+    "type-99": [
+      [
+        "Type 99 tank",
+        "ZTZ-99 tank",
+        "Type 99A tank"
+      ],
+      "Type 99|ZTZ-?99"
+    ],
+    "marder": [
+      [
+        "Marder infantry fighting vehicle",
+        "Schutzenpanzer Marder",
+        "Marder 1A3"
+      ],
+      "Marder"
+    ],
+    "bmp-2": [
+      [
+        "BMP-2 infantry fighting vehicle",
+        "BMP-2"
+      ],
+      "BMP-2"
+    ],
+    "lav-25": [
+      [
+        "LAV-25 Marine Corps",
+        "LAV-25 light armored vehicle"
+      ],
+      "LAV-25|LAV 25|Light Armored Vehicle"
+    ],
+    "btr-80": [
+      [
+        "BTR-80 armored personnel carrier",
+        "BTR-80"
+      ],
+      "BTR-8[02]"
+    ],
+    "bmp-3": [
+      [
+        "BMP-3",
+        "BMP-3 UAE"
+      ],
+      "BMP-3"
+    ],
+    "warrior": [
+      [
+        "Warrior infantry fighting vehicle",
+        "Warrior IFV British Army",
+        "FV510 Warrior"
+      ],
+      "Warrior"
+    ],
+    "stryker": [
+      [
+        "Stryker armored vehicle",
+        "M1126 Stryker",
+        "Stryker ICV"
+      ],
+      "Stryker"
+    ],
+    "m110": [
+      [
+        "M110 howitzer 8 inch",
+        "M110A2 howitzer",
+        "M110 self-propelled howitzer"
+      ],
+      "M110"
+    ],
+    "2s1": [
+      [
+        "2S1 Gvozdika",
+        "2S1 self-propelled howitzer"
+      ],
+      "2S1|Gvozdika"
+    ],
+    "2s7": [
+      [
+        "2S7 Pion",
+        "2S7M Malka",
+        "2S7 self-propelled gun"
+      ],
+      "2S7|Pion|Malka"
+    ],
+    "2s19": [
+      [
+        "2S19 Msta-S",
+        "2S19 Msta",
+        "Msta-S howitzer"
+      ],
+      "2S19|Msta"
+    ],
+    "as-90": [
+      [
+        "AS-90 self-propelled gun",
+        "AS90 howitzer",
+        "AS-90 British Army"
+      ],
+      "AS-?90"
+    ],
+    "k9": [
+      [
+        "K9 Thunder howitzer",
+        "K9 Thunder",
+        "K9A1 Thunder"
+      ],
+      "K9|K-9"
+    ],
+    "mig-19": [
+      [
+        "MiG-19 fighter",
+        "Shenyang J-6",
+        "MiG-19"
+      ],
+      "MiG-19|J-6"
+    ],
+    "f-104": [
+      [
+        "F-104 Starfighter in flight",
+        "F-104G Starfighter"
+      ],
+      "F-104"
+    ],
+    "mig-23": [
+      [
+        "MiG-23 Flogger",
+        "MiG-23 fighter",
+        "MiG-23MLD"
+      ],
+      "MiG-23"
+    ],
+    "f-14": [
+      [
+        "F-14 Tomcat in flight",
+        "F-14D Tomcat"
+      ],
+      "F-14"
+    ],
+    "f-16": [
+      [
+        "F-16 Fighting Falcon in flight",
+        "F-16C Fighting Falcon"
+      ],
+      "F-16"
+    ],
+    "mig-31": [
+      [
+        "MiG-31 Foxhound",
+        "MiG-31BM",
+        "MiG-31"
+      ],
+      "MiG-31"
+    ],
+    "f-18": [
+      [
+        "F/A-18C Hornet in flight",
+        "F/A-18 Hornet"
+      ],
+      "F.?A-18|Hornet"
+    ],
+    "mig-29": [
+      [
+        "MiG-29 Fulcrum in flight",
+        "MiG-29 fighter"
+      ],
+      "MiG-29"
+    ],
+    "mirage-2000": [
+      [
+        "Mirage 2000 in flight",
+        "Mirage 2000C",
+        "Mirage 2000-5"
+      ],
+      "Mirage 2000"
+    ],
+    "rafale": [
+      [
+        "Dassault Rafale in flight",
+        "Rafale M",
+        "Rafale fighter"
+      ],
+      "Rafale"
+    ],
+    "su-35": [
+      [
+        "Su-35S",
+        "Sukhoi Su-35",
+        "Su-35 Flanker-E"
+      ],
+      "Su-35"
+    ],
+    "il-28": [
+      [
+        "Il-28 Beagle",
+        "Ilyushin Il-28"
+      ],
+      "Il-28|Beagle"
+    ],
+    "su-24": [
+      [
+        "Su-24 Fencer",
+        "Sukhoi Su-24M",
+        "Su-24"
+      ],
+      "Su-24"
+    ],
+    "tu-22m": [
+      [
+        "Tu-22M3 Backfire",
+        "Tupolev Tu-22M",
+        "Tu-22M"
+      ],
+      "Tu-22M|Backfire"
+    ],
+    "tornado": [
+      [
+        "Panavia Tornado GR4 in flight",
+        "Tornado IDS",
+        "Tornado GR4"
+      ],
+      "Tornado"
+    ],
+    "su-25": [
+      [
+        "Su-25 Frogfoot",
+        "Sukhoi Su-25",
+        "Su-25"
+      ],
+      "Su-25"
+    ],
+    "f-117": [
+      [
+        "F-117 Nighthawk in flight",
+        "F-117A Nighthawk"
+      ],
+      "F-117"
+    ],
+    "b-1b": [
+      [
+        "B-1B Lancer in flight",
+        "B-1B Lancer"
+      ],
+      "B-1"
+    ],
+    "mi-8": [
+      [
+        "Mi-8 helicopter",
+        "Mi-17 helicopter",
+        "Mil Mi-8"
+      ],
+      "Mi-8|Mi-17"
+    ],
+    "ah-1": [
+      [
+        "AH-1 Cobra",
+        "AH-1W Super Cobra",
+        "AH-1Z Viper"
+      ],
+      "AH-1"
+    ],
+    "mi-28": [
+      [
+        "Mi-28N",
+        "Mil Mi-28 Havoc",
+        "Mi-28"
+      ],
+      "Mi-28"
+    ],
+    "kotlin": [
+      [
+        "Kotlin-class destroyer",
+        "Soviet destroyer Kotlin class"
+      ],
+      "Kotlin"
+    ],
+    "skipjack": [
+      [
+        "USS Skipjack SSN-585",
+        "Skipjack-class submarine",
+        "USS Scorpion SSN-589"
+      ],
+      "Skipjack|Scorpion|Scamp|Sculpin|Shark|Snook"
+    ],
+    "kiev": [
+      [
+        "Kiev-class aircraft carrier",
+        "Soviet aircraft carrier Kiev",
+        "Soviet carrier Minsk"
+      ],
+      "Kiev|Minsk|Novorossiysk"
+    ],
+    "invincible": [
+      [
+        "HMS Invincible R05",
+        "HMS Illustrious R06",
+        "HMS Ark Royal R07"
+      ],
+      "Invincible|Illustrious|Ark Royal"
+    ],
+    "los-angeles": [
+      [
+        "Los Angeles-class submarine underway",
+        "USS Los Angeles SSN-688"
+      ],
+      "Los Angeles|SSN-7|SSN 7|SSN-6"
+    ],
+    "akula": [
+      [
+        "Akula-class submarine",
+        "Project 971 submarine",
+        "Soviet Akula class"
+      ],
+      "Akula|971"
+    ],
+    "astute": [
+      [
+        "HMS Astute S119",
+        "Astute-class submarine"
+      ],
+      "Astute|Ambush|Artful"
+    ],
+    "yasen": [
+      [
+        "Yasen-class submarine",
+        "Severodvinsk submarine K-560"
+      ],
+      "Yasen|Severodvinsk|Kazan"
+    ],
+    "ticonderoga": [
+      [
+        "Ticonderoga-class cruiser underway",
+        "USS Ticonderoga CG-47"
+      ],
+      "CG-|CG |Ticonderoga|cruiser"
+    ],
+    "slava": [
+      [
+        "Slava-class cruiser",
+        "Russian cruiser Moskva",
+        "cruiser Marshal Ustinov"
+      ],
+      "Slava|Moskva|Ustinov|Varyag"
+    ],
+    "sovremenny": [
+      [
+        "Sovremenny-class destroyer",
+        "Soviet destroyer Sovremenny"
+      ],
+      "Sovremenn|Bespokoyny|Otlichny|Bezuprechny|Nastoychivy"
+    ],
+    "udaloy": [
+      [
+        "Udaloy-class destroyer",
+        "Admiral Panteleyev",
+        "Soviet destroyer Udaloy"
+      ],
+      "Udaloy|Panteleyev|Vinogradov|Tributs|Shaposhnikov|Kulakov|Levchenko|Chabanenko"
+    ],
+    "type-052d": [
+      [
+        "Type 052D destroyer",
+        "Luyang III destroyer",
+        "Kunming 172 destroyer"
+      ],
+      "Type 052D|Luyang|052D"
+    ],
+    "zumwalt": [
+      [
+        "USS Zumwalt DDG-1000",
+        "Zumwalt-class destroyer"
+      ],
+      "Zumwalt|DDG-1000|DDG 1000|Monsoor"
+    ],
+    "krivak": [
+      [
+        "Krivak-class frigate",
+        "Soviet frigate Krivak"
+      ],
+      "Krivak"
+    ],
+    "tarawa": [
+      [
+        "USS Tarawa LHA-1",
+        "Tarawa-class amphibious assault ship",
+        "USS Peleliu LHA-5"
+      ],
+      "Tarawa|Peleliu|Nassau|Saipan|Belleau"
+    ]
   },
   "weapons": {
-    "aim-9": [["AIM-9 Sidewinder missile", "AIM-9X Sidewinder", "AIM-9M Sidewinder"], "AIM-9|Sidewinder"],
-    "aim-7": [["AIM-7 Sparrow missile", "AIM-7M Sparrow"], "AIM-7|Sparrow"],
-    "aim-120": [["AIM-120 AMRAAM", "AMRAAM missile"], "AIM-120|AMRAAM"],
-    "r-73": [["R-73 missile", "Vympel R-73", "AA-11 Archer"], "R-73|AA-11"],
-    "r-27": [["R-27 missile", "Vympel R-27", "AA-10 Alamo"], "R-27|AA-10"],
-    "r-77": [["R-77 missile", "Vympel R-77", "RVV-AE"], "R-77|RVV-AE|AA-12"],
-    "meteor": [["Meteor missile MBDA", "Meteor BVRAAM"], "Meteor"],
-    "agm-65": [["AGM-65 Maverick", "Maverick missile launch"], "AGM-65|Maverick"],
-    "agm-114": [["AGM-114 Hellfire", "Hellfire missile"], "AGM-114|Hellfire"],
-    "gbu-12": [["GBU-12 Paveway II", "GBU-12 bomb"], "GBU-12"],
-    "gbu-31": [["GBU-31 JDAM", "JDAM bomb"], "GBU-31|JDAM"],
-    "agm-88": [["AGM-88 HARM", "HARM missile"], "AGM-88|HARM"],
-    "harpoon": [["Harpoon missile launch", "RGM-84 Harpoon", "AGM-84 Harpoon"], "Harpoon"],
-    "exocet": [["MM40 Exocet", "Exocet missile launch", "Exocet"], "Exocet"],
-    "granit": [["P-700 Granit", "SS-N-19 Shipwreck"], "Granit|SS-N-19|P-700"],
-    "kh-35": [["Kh-35 missile", "Kh-35 Uran", "SS-N-25"], "Kh-35|Uran|SS-N-25"],
-    "tomahawk": [["Tomahawk missile launch", "BGM-109 Tomahawk", "Tomahawk cruise missile"], "Tomahawk"],
-    "storm-shadow": [["Storm Shadow missile", "SCALP EG missile"], "Storm Shadow|SCALP"],
-    "jassm": [["AGM-158 JASSM", "JASSM missile"], "JASSM|AGM-158"],
-    "sm-2": [["SM-2 missile launch", "RIM-66 Standard", "Standard Missile 2"], "SM-2|RIM-66|Standard Missile"],
-    "pac-2": [["Patriot missile launch", "MIM-104 Patriot launch", "Patriot PAC-2"], "Patriot"],
-    "48n6": [["48N6 missile", "S-300PMU missile", "S-300 missile launch"], "48N6|S-300"],
-    "aster-30": [["Aster 30 missile", "Aster missile launch", "Aster 15"], "Aster"],
-    "stinger-missile": [["FIM-92 Stinger launch", "Stinger missile fired"], "Stinger|FIM-92"],
-    "9m39": [["9M39 Igla missile", "Igla-S missile"], "Igla|9M39"],
-    "9m14": [["9M14 Malyutka", "AT-3 Sagger"], "Malyutka|9M14|Sagger"],
-    "bgm-71": [["BGM-71 TOW launch", "TOW missile fired"], "TOW|BGM-71"],
-    "fgm-148": [["FGM-148 Javelin launch", "Javelin missile fired"], "Javelin"],
-    "9m133": [["9M133 Kornet missile", "Kornet-EM"], "Kornet|9M133"],
-    "m61": [["M61 Vulcan cannon", "M61A1 Vulcan", "20mm Vulcan"], "M61|Vulcan"],
-    "gau-8": [["GAU-8 Avenger", "GAU-8/A Avenger cannon"], "GAU-8|Avenger"],
-    "2a46": [["T-72 firing main gun", "T-80 firing", "125 mm 2A46"], "T-72|T-80|T-90|2A46"],
-    "rh-120": [["Leopard 2 firing", "M1 Abrams firing main gun", "Rheinmetall 120 mm"], "Leopard 2|Abrams|Rheinmetall|120"],
-    "mk-48": [["Mark 48 torpedo", "Mk 48 ADCAP torpedo"], "Mk.? ?48|Mark 48|ADCAP"],
-    "mk-46": [["Mark 46 torpedo launch", "Mk 46 torpedo"], "Mk.? ?46|Mark 46"],
-    "aim-54": [["AIM-54 Phoenix", "Phoenix missile F-14"], "AIM-54|Phoenix"],
-    "iris-t": [["IRIS-T missile", "IRIS-T Eurofighter"], "IRIS-T"],
-    "mica": [["MICA missile", "MBDA MICA Rafale"], "MICA"],
-    "r-33": [["R-33 missile", "AA-9 Amos", "MiG-31 R-33"], "R-33|AA-9"],
-    "asraam": [["ASRAAM missile", "AIM-132 ASRAAM"], "ASRAAM|AIM-132"],
-    "hawk-missile": [["MIM-23 Hawk launch", "HAWK missile fired"], "HAWK|MIM-23"],
-    "9m38": [["Buk missile launch", "9M38 missile", "Buk-M1 launcher"], "Buk|9M38"],
-    "9m330": [["Tor-M1 missile launch", "9M330 missile", "Tor missile"], "Tor-M|9M33[01]"],
-    "57e6": [["Pantsir-S1 firing", "57E6 missile", "Pantsir missile launch"], "Pantsir|57E6"],
-    "40n6": [["S-400 missile launch", "40N6 missile", "S-400 Triumf"], "S-400|40N6"],
-    "starstreak-missile": [["Starstreak missile launch", "Starstreak HVM"], "Starstreak"],
-    "mistral-missile": [["Mistral missile launch", "Mistral MANPADS firing"], "Mistral"],
-    "rim-7": [["RIM-7 Sea Sparrow launch", "Sea Sparrow missile"], "Sea Sparrow|RIM-7"],
-    "essm": [["RIM-162 ESSM launch", "Evolved Sea Sparrow Missile"], "ESSM|RIM-162|Evolved Sea"],
-    "ram": [["RIM-116 Rolling Airframe Missile launch", "RAM missile launch"], "RIM-116|Rolling Airframe|RAM"],
-    "sm-6": [["SM-6 missile launch", "RIM-174 Standard ERAM", "Standard Missile 6"], "SM-6|RIM-174|Standard Missile"],
-    "kh-29": [["Kh-29 missile", "Kh-29T", "AS-14 Kedge"], "Kh-29|AS-14"],
-    "brimstone": [["Brimstone missile", "Brimstone Tornado"], "Brimstone"],
-    "apkws": [["APKWS rocket", "Advanced Precision Kill Weapon System"], "APKWS|Precision Kill"],
-    "agm-45": [["AGM-45 Shrike", "Shrike missile"], "AGM-45|Shrike"],
-    "kh-58": [["Kh-58 missile", "AS-11 Kilter"], "Kh-58|AS-11"],
-    "alarm": [["ALARM missile Tornado", "ALARM anti-radiation missile"], "ALARM"],
-    "am39": [["AM39 Exocet", "Exocet Super Etendard", "AM-39 Exocet"], "AM.?39|Exocet"],
-    "sea-eagle": [["Sea Eagle missile", "BAe Sea Eagle"], "Sea Eagle"],
-    "nsm": [["Naval Strike Missile launch", "Naval Strike Missile"], "Naval Strike|NSM"],
-    "mk-45": [["Mk 45 5-inch gun firing", "Mark 45 gun fires", "5-inch gun fires destroyer"], "Mk.? ?45|Mark 45|5-inch"],
-    "atacms-missile": [["ATACMS launch", "MGM-140 ATACMS fired"], "ATACMS"],
-    "9m723": [["Iskander-M missile launch", "9M723 missile", "Iskander launch"], "Iskander|9M723"],
-    "r-17-missile": [["Scud missile launch", "Scud-B missile", "R-17 missile"], "Scud|R-17"],
-    "tamir": [["Iron Dome Tamir launch", "Iron Dome missile fired", "Iron Dome interceptor"], "Iron Dome|Tamir"],
-    "thaad-interceptor": [["THAAD interceptor launch", "THAAD missile launch"], "THAAD"],
-    "gbu-39": [["GBU-39 Small Diameter Bomb", "Small Diameter Bomb"], "GBU-39|Small Diameter"],
-    "agm-154": [["AGM-154 JSOW", "Joint Standoff Weapon"], "AGM-154|JSOW|Standoff"],
-    "gbu-57": [["GBU-57 Massive Ordnance Penetrator", "Massive Ordnance Penetrator"], "GBU-57|Ordnance Penetrator|MOP"],
-    "mk-82": [["Mk 82 bombs", "Mark 82 bomb", "MK-82 500 pound bombs"], "Mk.? ?82|Mark 82|MK-82"],
-    "mk-84": [["Mk 84 bomb", "Mark 84 2000 pound bomb", "MK-84"], "Mk.? ?84|Mark 84|MK-84"],
-    "agm-86": [["AGM-86 ALCM", "Air Launched Cruise Missile B-52"], "AGM-86|ALCM|Cruise Missile"],
-    "taurus": [["Taurus KEPD 350", "Taurus missile"], "Taurus|KEPD"],
-    "kh-55": [["Kh-55 missile", "AS-15 Kent"], "Kh-55|AS-15|Kh-555"],
-    "hydra-70": [["Hydra 70 rocket", "2.75 inch rockets fired", "Hydra rockets"], "Hydra|2.75"],
-    "9m22": [["BM-21 Grad firing", "Grad rocket launch", "122 mm rocket Grad"], "Grad|BM-21"],
-    "m26": [["M270 MLRS firing", "MLRS rocket launch"], "MLRS|M270"],
-    "gmlrs": [["HIMARS firing", "GMLRS rocket launch", "M142 HIMARS launch"], "HIMARS|GMLRS"],
-    "m242": [["M242 Bushmaster", "Bradley firing 25mm", "25 mm chain gun"], "M242|Bushmaster|Bradley"],
-    "m2hb": [["M2 Browning .50 caliber firing", "M2HB machine gun"], "M2|\\.50|Browning"],
-    "m240": [["M240 machine gun firing", "M240B"], "M240"],
-    "gsh-30-1": [["GSh-30-1 cannon", "GSh-301"], "GSh-30"],
-    "2a28": [["BMP-1 firing", "2A28 Grom", "BMP-1"], "BMP-1|2A28|Grom"],
-    "mk-54": [["Mark 54 torpedo", "Mk 54 lightweight torpedo launch"], "Mk.? ?54|Mark 54"],
-    "r-60": [["R-60 missile", "AA-8 Aphid"], "R-60|AA-8"],
-    "python-5": [["Python 5 missile", "Rafael Python missile"], "Python"],
-    "super-530": [["Super 530 missile", "Matra Super 530D"], "Super 530"],
-    "r-37": [["R-37 missile", "R-37M", "AA-13 Axehead"], "R-37|AA-13"],
-    "v-750": [["SA-2 Guideline missile", "S-75 Dvina missile launcher", "V-750 missile"], "SA-2|S-75|V-750|Guideline"],
-    "5v27": [["S-125 Neva missile", "SA-3 Goa", "S-125 Pechora launcher"], "S-125|SA-3|Pechora|Neva"],
-    "3m9": [["2K12 Kub launcher", "SA-6 Gainful", "3M9 missile"], "2K12|SA-6|Kub|Kvadrat"],
-    "9m33": [["9K33 Osa", "SA-8 Gecko", "Osa-AKM"], "9K33|SA-8|Osa"],
-    "redeye-missile": [["FIM-43 Redeye", "Redeye missile launch"], "Redeye|FIM-43"],
-    "9m32": [["Strela-2 missile", "SA-7 Grail launch", "9K32 Strela"], "Strela|SA-7|9K32"],
-    "pac-3": [["PAC-3 missile launch", "Patriot PAC-3 MSE", "PAC-3 interceptor"], "PAC-3"],
-    "kh-31": [["Kh-31 missile", "AS-17 Krypton"], "Kh-31|AS-17"],
-    "kh-59": [["Kh-59 missile", "Kh-59M", "AS-18 Kazoo"], "Kh-59|AS-18"],
-    "kab-500": [["KAB-500 bomb", "KAB-500L", "KAB-500Kr"], "KAB-500"],
-    "fab-500": [["FAB-500 bomb", "FAB-500 M-62"], "FAB-500"],
-    "gbu-10": [["GBU-10 Paveway II", "GBU-10 bomb"], "GBU-10"],
-    "gbu-28": [["GBU-28 bomb", "GBU-28 bunker buster"], "GBU-28"],
-    "kalibr": [["Kalibr missile launch", "3M14 Kalibr", "Kalibr cruise missile"], "Kalibr|3M14|3M54"],
-    "oniks": [["P-800 Oniks", "Yakhont missile", "Bastion-P launcher"], "Oniks|Onyx|Yakhont|Bastion|P-800"],
-    "p-15": [["P-15 Termit missile", "SS-N-2 Styx"], "P-15|Styx|Termit"],
-    "s-8": [["S-8 rocket", "B-8 rocket pod", "S-8 rockets Mi-24"], "S-8|B-8"],
-    "2a42": [["2A42 autocannon", "BMP-2 firing", "30 mm 2A42"], "2A42|BMP-2"],
-    "l7": [["Royal Ordnance L7", "M68 105 mm gun", "M60 tank firing"], "L7|M68|M60|Leopard 1"],
-    "m230": [["M230 chain gun", "Apache 30mm gun", "AH-64 M230"], "M230|30.?mm|chain gun"],
-    "phalanx": [["Phalanx CIWS firing", "Phalanx close-in weapon system"], "Phalanx|CIWS"],
-    "ak-630": [["AK-630", "AK-630 CIWS", "AK-630M"], "AK-630"],
-    "milan-missile": [["MILAN missile launch", "MILAN anti-tank missile fired"], "MILAN"]
+    "aim-9": [
+      [
+        "AIM-9 Sidewinder missile",
+        "AIM-9X Sidewinder",
+        "AIM-9M Sidewinder"
+      ],
+      "AIM-9|Sidewinder"
+    ],
+    "aim-7": [
+      [
+        "AIM-7 Sparrow missile",
+        "AIM-7M Sparrow"
+      ],
+      "AIM-7|Sparrow"
+    ],
+    "aim-120": [
+      [
+        "AIM-120 AMRAAM",
+        "AMRAAM missile"
+      ],
+      "AIM-120|AMRAAM"
+    ],
+    "r-73": [
+      [
+        "R-73 missile",
+        "Vympel R-73",
+        "AA-11 Archer"
+      ],
+      "R-73|AA-11"
+    ],
+    "r-27": [
+      [
+        "R-27 missile",
+        "Vympel R-27",
+        "AA-10 Alamo"
+      ],
+      "R-27|AA-10"
+    ],
+    "r-77": [
+      [
+        "R-77 missile",
+        "Vympel R-77",
+        "RVV-AE"
+      ],
+      "R-77|RVV-AE|AA-12"
+    ],
+    "meteor": [
+      [
+        "Meteor missile MBDA",
+        "Meteor BVRAAM"
+      ],
+      "Meteor"
+    ],
+    "agm-65": [
+      [
+        "AGM-65 Maverick",
+        "Maverick missile launch"
+      ],
+      "AGM-65|Maverick"
+    ],
+    "agm-114": [
+      [
+        "AGM-114 Hellfire",
+        "Hellfire missile"
+      ],
+      "AGM-114|Hellfire"
+    ],
+    "gbu-12": [
+      [
+        "GBU-12 Paveway II",
+        "GBU-12 bomb"
+      ],
+      "GBU-12"
+    ],
+    "gbu-31": [
+      [
+        "GBU-31 JDAM",
+        "JDAM bomb"
+      ],
+      "GBU-31|JDAM"
+    ],
+    "agm-88": [
+      [
+        "AGM-88 HARM",
+        "HARM missile"
+      ],
+      "AGM-88|HARM"
+    ],
+    "harpoon": [
+      [
+        "Harpoon missile launch",
+        "RGM-84 Harpoon",
+        "AGM-84 Harpoon"
+      ],
+      "Harpoon"
+    ],
+    "exocet": [
+      [
+        "MM40 Exocet",
+        "Exocet missile launch",
+        "Exocet"
+      ],
+      "Exocet"
+    ],
+    "granit": [
+      [
+        "P-700 Granit",
+        "SS-N-19 Shipwreck"
+      ],
+      "Granit|SS-N-19|P-700"
+    ],
+    "kh-35": [
+      [
+        "Kh-35 missile",
+        "Kh-35 Uran",
+        "SS-N-25"
+      ],
+      "Kh-35|Uran|SS-N-25"
+    ],
+    "tomahawk": [
+      [
+        "Tomahawk missile launch",
+        "BGM-109 Tomahawk",
+        "Tomahawk cruise missile"
+      ],
+      "Tomahawk"
+    ],
+    "storm-shadow": [
+      [
+        "Storm Shadow missile",
+        "SCALP EG missile"
+      ],
+      "Storm Shadow|SCALP"
+    ],
+    "jassm": [
+      [
+        "AGM-158 JASSM",
+        "JASSM missile"
+      ],
+      "JASSM|AGM-158"
+    ],
+    "sm-2": [
+      [
+        "SM-2 missile launch",
+        "RIM-66 Standard",
+        "Standard Missile 2"
+      ],
+      "SM-2|RIM-66|Standard Missile"
+    ],
+    "pac-2": [
+      [
+        "Patriot missile launch",
+        "MIM-104 Patriot launch",
+        "Patriot PAC-2"
+      ],
+      "Patriot"
+    ],
+    "48n6": [
+      [
+        "48N6 missile",
+        "S-300PMU missile",
+        "S-300 missile launch"
+      ],
+      "48N6|S-300"
+    ],
+    "aster-30": [
+      [
+        "Aster 30 missile",
+        "Aster missile launch",
+        "Aster 15"
+      ],
+      "Aster"
+    ],
+    "stinger-missile": [
+      [
+        "FIM-92 Stinger launch",
+        "Stinger missile fired"
+      ],
+      "Stinger|FIM-92"
+    ],
+    "9m39": [
+      [
+        "9M39 Igla missile",
+        "Igla-S missile"
+      ],
+      "Igla|9M39"
+    ],
+    "9m14": [
+      [
+        "9M14 Malyutka",
+        "AT-3 Sagger"
+      ],
+      "Malyutka|9M14|Sagger"
+    ],
+    "bgm-71": [
+      [
+        "BGM-71 TOW launch",
+        "TOW missile fired"
+      ],
+      "TOW|BGM-71"
+    ],
+    "fgm-148": [
+      [
+        "FGM-148 Javelin launch",
+        "Javelin missile fired"
+      ],
+      "Javelin"
+    ],
+    "9m133": [
+      [
+        "9M133 Kornet missile",
+        "Kornet-EM"
+      ],
+      "Kornet|9M133"
+    ],
+    "m61": [
+      [
+        "M61 Vulcan cannon",
+        "M61A1 Vulcan",
+        "20mm Vulcan"
+      ],
+      "M61|Vulcan"
+    ],
+    "gau-8": [
+      [
+        "GAU-8 Avenger",
+        "GAU-8/A Avenger cannon"
+      ],
+      "GAU-8|Avenger"
+    ],
+    "2a46": [
+      [
+        "T-72 firing main gun",
+        "T-80 firing",
+        "125 mm 2A46"
+      ],
+      "T-72|T-80|T-90|2A46"
+    ],
+    "rh-120": [
+      [
+        "Leopard 2 firing",
+        "M1 Abrams firing main gun",
+        "Rheinmetall 120 mm"
+      ],
+      "Leopard 2|Abrams|Rheinmetall|120"
+    ],
+    "mk-48": [
+      [
+        "Mark 48 torpedo",
+        "Mk 48 ADCAP torpedo"
+      ],
+      "Mk.? ?48|Mark 48|ADCAP"
+    ],
+    "mk-46": [
+      [
+        "Mark 46 torpedo launch",
+        "Mk 46 torpedo"
+      ],
+      "Mk.? ?46|Mark 46"
+    ],
+    "aim-54": [
+      [
+        "AIM-54 Phoenix",
+        "Phoenix missile F-14"
+      ],
+      "AIM-54|Phoenix"
+    ],
+    "iris-t": [
+      [
+        "IRIS-T missile",
+        "IRIS-T Eurofighter"
+      ],
+      "IRIS-T"
+    ],
+    "mica": [
+      [
+        "MICA missile",
+        "MBDA MICA Rafale"
+      ],
+      "MICA"
+    ],
+    "r-33": [
+      [
+        "R-33 missile",
+        "AA-9 Amos",
+        "MiG-31 R-33"
+      ],
+      "R-33|AA-9"
+    ],
+    "asraam": [
+      [
+        "ASRAAM missile",
+        "AIM-132 ASRAAM"
+      ],
+      "ASRAAM|AIM-132"
+    ],
+    "hawk-missile": [
+      [
+        "MIM-23 Hawk launch",
+        "HAWK missile fired"
+      ],
+      "HAWK|MIM-23"
+    ],
+    "9m38": [
+      [
+        "Buk missile launch",
+        "9M38 missile",
+        "Buk-M1 launcher"
+      ],
+      "Buk|9M38"
+    ],
+    "9m330": [
+      [
+        "Tor-M1 missile launch",
+        "9M330 missile",
+        "Tor missile"
+      ],
+      "Tor-M|9M33[01]"
+    ],
+    "57e6": [
+      [
+        "Pantsir-S1 firing",
+        "57E6 missile",
+        "Pantsir missile launch"
+      ],
+      "Pantsir|57E6"
+    ],
+    "40n6": [
+      [
+        "S-400 missile launch",
+        "40N6 missile",
+        "S-400 Triumf"
+      ],
+      "S-400|40N6"
+    ],
+    "starstreak-missile": [
+      [
+        "Starstreak missile launch",
+        "Starstreak HVM"
+      ],
+      "Starstreak"
+    ],
+    "mistral-missile": [
+      [
+        "Mistral missile launch",
+        "Mistral MANPADS firing"
+      ],
+      "Mistral"
+    ],
+    "rim-7": [
+      [
+        "RIM-7 Sea Sparrow launch",
+        "Sea Sparrow missile"
+      ],
+      "Sea Sparrow|RIM-7"
+    ],
+    "essm": [
+      [
+        "RIM-162 ESSM launch",
+        "Evolved Sea Sparrow Missile"
+      ],
+      "ESSM|RIM-162|Evolved Sea"
+    ],
+    "ram": [
+      [
+        "RIM-116 Rolling Airframe Missile launch",
+        "RAM missile launch"
+      ],
+      "RIM-116|Rolling Airframe|RAM"
+    ],
+    "sm-6": [
+      [
+        "SM-6 missile launch",
+        "RIM-174 Standard ERAM",
+        "Standard Missile 6"
+      ],
+      "SM-6|RIM-174|Standard Missile"
+    ],
+    "kh-29": [
+      [
+        "Kh-29 missile",
+        "Kh-29T",
+        "AS-14 Kedge"
+      ],
+      "Kh-29|AS-14"
+    ],
+    "brimstone": [
+      [
+        "Brimstone missile",
+        "Brimstone Tornado"
+      ],
+      "Brimstone"
+    ],
+    "apkws": [
+      [
+        "APKWS rocket",
+        "Advanced Precision Kill Weapon System"
+      ],
+      "APKWS|Precision Kill"
+    ],
+    "agm-45": [
+      [
+        "AGM-45 Shrike",
+        "Shrike missile"
+      ],
+      "AGM-45|Shrike"
+    ],
+    "kh-58": [
+      [
+        "Kh-58 missile",
+        "AS-11 Kilter"
+      ],
+      "Kh-58|AS-11"
+    ],
+    "alarm": [
+      [
+        "ALARM missile Tornado",
+        "ALARM anti-radiation missile"
+      ],
+      "ALARM"
+    ],
+    "am39": [
+      [
+        "AM39 Exocet",
+        "Exocet Super Etendard",
+        "AM-39 Exocet"
+      ],
+      "AM.?39|Exocet"
+    ],
+    "sea-eagle": [
+      [
+        "Sea Eagle missile",
+        "BAe Sea Eagle"
+      ],
+      "Sea Eagle"
+    ],
+    "nsm": [
+      [
+        "Naval Strike Missile launch",
+        "Naval Strike Missile"
+      ],
+      "Naval Strike|NSM"
+    ],
+    "mk-45": [
+      [
+        "Mk 45 5-inch gun firing",
+        "Mark 45 gun fires",
+        "5-inch gun fires destroyer"
+      ],
+      "Mk.? ?45|Mark 45|5-inch"
+    ],
+    "atacms-missile": [
+      [
+        "ATACMS launch",
+        "MGM-140 ATACMS fired"
+      ],
+      "ATACMS"
+    ],
+    "9m723": [
+      [
+        "Iskander-M missile launch",
+        "9M723 missile",
+        "Iskander launch"
+      ],
+      "Iskander|9M723"
+    ],
+    "r-17-missile": [
+      [
+        "Scud missile launch",
+        "Scud-B missile",
+        "R-17 missile"
+      ],
+      "Scud|R-17"
+    ],
+    "tamir": [
+      [
+        "Iron Dome Tamir launch",
+        "Iron Dome missile fired",
+        "Iron Dome interceptor"
+      ],
+      "Iron Dome|Tamir"
+    ],
+    "thaad-interceptor": [
+      [
+        "THAAD interceptor launch",
+        "THAAD missile launch"
+      ],
+      "THAAD"
+    ],
+    "gbu-39": [
+      [
+        "GBU-39 Small Diameter Bomb",
+        "Small Diameter Bomb"
+      ],
+      "GBU-39|Small Diameter"
+    ],
+    "agm-154": [
+      [
+        "AGM-154 JSOW",
+        "Joint Standoff Weapon"
+      ],
+      "AGM-154|JSOW|Standoff"
+    ],
+    "gbu-57": [
+      [
+        "GBU-57 Massive Ordnance Penetrator",
+        "Massive Ordnance Penetrator"
+      ],
+      "GBU-57|Ordnance Penetrator|MOP"
+    ],
+    "mk-82": [
+      [
+        "Mk 82 bombs",
+        "Mark 82 bomb",
+        "MK-82 500 pound bombs"
+      ],
+      "Mk.? ?82|Mark 82|MK-82"
+    ],
+    "mk-84": [
+      [
+        "Mk 84 bomb",
+        "Mark 84 2000 pound bomb",
+        "MK-84"
+      ],
+      "Mk.? ?84|Mark 84|MK-84"
+    ],
+    "agm-86": [
+      [
+        "AGM-86 ALCM",
+        "Air Launched Cruise Missile B-52"
+      ],
+      "AGM-86|ALCM|Cruise Missile"
+    ],
+    "taurus": [
+      [
+        "Taurus KEPD 350",
+        "Taurus missile"
+      ],
+      "Taurus|KEPD"
+    ],
+    "kh-55": [
+      [
+        "Kh-55 missile",
+        "AS-15 Kent"
+      ],
+      "Kh-55|AS-15|Kh-555"
+    ],
+    "hydra-70": [
+      [
+        "Hydra 70 rocket",
+        "2.75 inch rockets fired",
+        "Hydra rockets"
+      ],
+      "Hydra|2.75"
+    ],
+    "9m22": [
+      [
+        "BM-21 Grad firing",
+        "Grad rocket launch",
+        "122 mm rocket Grad"
+      ],
+      "Grad|BM-21"
+    ],
+    "m26": [
+      [
+        "M270 MLRS firing",
+        "MLRS rocket launch"
+      ],
+      "MLRS|M270"
+    ],
+    "gmlrs": [
+      [
+        "HIMARS firing",
+        "GMLRS rocket launch",
+        "M142 HIMARS launch"
+      ],
+      "HIMARS|GMLRS"
+    ],
+    "m242": [
+      [
+        "M242 Bushmaster",
+        "Bradley firing 25mm",
+        "25 mm chain gun"
+      ],
+      "M242|Bushmaster|Bradley"
+    ],
+    "m2hb": [
+      [
+        "M2 Browning .50 caliber firing",
+        "M2HB machine gun"
+      ],
+      "M2|\\.50|Browning"
+    ],
+    "m240": [
+      [
+        "M240 machine gun firing",
+        "M240B"
+      ],
+      "M240"
+    ],
+    "gsh-30-1": [
+      [
+        "GSh-30-1 cannon",
+        "GSh-301"
+      ],
+      "GSh-30"
+    ],
+    "2a28": [
+      [
+        "BMP-1 firing",
+        "2A28 Grom",
+        "BMP-1"
+      ],
+      "BMP-1|2A28|Grom"
+    ],
+    "mk-54": [
+      [
+        "Mark 54 torpedo",
+        "Mk 54 lightweight torpedo launch"
+      ],
+      "Mk.? ?54|Mark 54"
+    ],
+    "r-60": [
+      [
+        "R-60 missile",
+        "AA-8 Aphid"
+      ],
+      "R-60|AA-8"
+    ],
+    "python-5": [
+      [
+        "Python 5 missile",
+        "Rafael Python missile"
+      ],
+      "Python"
+    ],
+    "super-530": [
+      [
+        "Super 530 missile",
+        "Matra Super 530D"
+      ],
+      "Super 530"
+    ],
+    "r-37": [
+      [
+        "R-37 missile",
+        "R-37M",
+        "AA-13 Axehead"
+      ],
+      "R-37|AA-13"
+    ],
+    "v-750": [
+      [
+        "SA-2 Guideline missile",
+        "S-75 Dvina missile launcher",
+        "V-750 missile"
+      ],
+      "SA-2|S-75|V-750|Guideline"
+    ],
+    "5v27": [
+      [
+        "S-125 Neva missile",
+        "SA-3 Goa",
+        "S-125 Pechora launcher"
+      ],
+      "S-125|SA-3|Pechora|Neva"
+    ],
+    "3m9": [
+      [
+        "2K12 Kub launcher",
+        "SA-6 Gainful",
+        "3M9 missile"
+      ],
+      "2K12|SA-6|Kub|Kvadrat"
+    ],
+    "9m33": [
+      [
+        "9K33 Osa",
+        "SA-8 Gecko",
+        "Osa-AKM"
+      ],
+      "9K33|SA-8|Osa"
+    ],
+    "redeye-missile": [
+      [
+        "FIM-43 Redeye",
+        "Redeye missile launch"
+      ],
+      "Redeye|FIM-43"
+    ],
+    "9m32": [
+      [
+        "Strela-2 missile",
+        "SA-7 Grail launch",
+        "9K32 Strela"
+      ],
+      "Strela|SA-7|9K32"
+    ],
+    "pac-3": [
+      [
+        "PAC-3 missile launch",
+        "Patriot PAC-3 MSE",
+        "PAC-3 interceptor"
+      ],
+      "PAC-3"
+    ],
+    "kh-31": [
+      [
+        "Kh-31 missile",
+        "AS-17 Krypton"
+      ],
+      "Kh-31|AS-17"
+    ],
+    "kh-59": [
+      [
+        "Kh-59 missile",
+        "Kh-59M",
+        "AS-18 Kazoo"
+      ],
+      "Kh-59|AS-18"
+    ],
+    "kab-500": [
+      [
+        "KAB-500 bomb",
+        "KAB-500L",
+        "KAB-500Kr"
+      ],
+      "KAB-500"
+    ],
+    "fab-500": [
+      [
+        "FAB-500 bomb",
+        "FAB-500 M-62"
+      ],
+      "FAB-500"
+    ],
+    "gbu-10": [
+      [
+        "GBU-10 Paveway II",
+        "GBU-10 bomb"
+      ],
+      "GBU-10"
+    ],
+    "gbu-28": [
+      [
+        "GBU-28 bomb",
+        "GBU-28 bunker buster"
+      ],
+      "GBU-28"
+    ],
+    "kalibr": [
+      [
+        "Kalibr missile launch",
+        "3M14 Kalibr",
+        "Kalibr cruise missile"
+      ],
+      "Kalibr|3M14|3M54"
+    ],
+    "oniks": [
+      [
+        "P-800 Oniks",
+        "Yakhont missile",
+        "Bastion-P launcher"
+      ],
+      "Oniks|Onyx|Yakhont|Bastion|P-800"
+    ],
+    "p-15": [
+      [
+        "P-15 Termit missile",
+        "SS-N-2 Styx"
+      ],
+      "P-15|Styx|Termit"
+    ],
+    "s-8": [
+      [
+        "S-8 rocket",
+        "B-8 rocket pod",
+        "S-8 rockets Mi-24"
+      ],
+      "S-8|B-8"
+    ],
+    "2a42": [
+      [
+        "2A42 autocannon",
+        "BMP-2 firing",
+        "30 mm 2A42"
+      ],
+      "2A42|BMP-2"
+    ],
+    "l7": [
+      [
+        "Royal Ordnance L7",
+        "M68 105 mm gun",
+        "M60 tank firing"
+      ],
+      "L7|M68|M60|Leopard 1"
+    ],
+    "m230": [
+      [
+        "M230 chain gun",
+        "Apache 30mm gun",
+        "AH-64 M230"
+      ],
+      "M230|30.?mm|chain gun"
+    ],
+    "phalanx": [
+      [
+        "Phalanx CIWS firing",
+        "Phalanx close-in weapon system"
+      ],
+      "Phalanx|CIWS"
+    ],
+    "ak-630": [
+      [
+        "AK-630",
+        "AK-630 CIWS",
+        "AK-630M"
+      ],
+      "AK-630"
+    ],
+    "milan-missile": [
+      [
+        "MILAN missile launch",
+        "MILAN anti-tank missile fired"
+      ],
+      "MILAN"
+    ],
+    "r-23": [
+      [
+        "R-23 missile",
+        "AA-7 Apex",
+        "R-24 missile"
+      ],
+      "R-23|R-24|AA-7"
+    ],
+    "kh-22": [
+      [
+        "Kh-22 missile",
+        "AS-4 Kitchen",
+        "Tu-22M Kh-22"
+      ],
+      "Kh-22|AS-4"
+    ],
+    "moskit": [
+      [
+        "P-270 Moskit",
+        "SS-N-22 Sunburn"
+      ],
+      "Moskit|SS-N-22|Sunburn"
+    ],
+    "bazalt": [
+      [
+        "P-500 Bazalt",
+        "SS-N-12 Sandbox",
+        "P-1000 Vulkan"
+      ],
+      "Bazalt|SS-N-12|Vulkan|Sandbox"
+    ],
+    "sea-dart": [
+      [
+        "Sea Dart missile launch",
+        "Sea Dart missile"
+      ],
+      "Sea Dart"
+    ],
+    "asroc": [
+      [
+        "ASROC launch",
+        "RUR-5 ASROC",
+        "ASROC launcher fires"
+      ],
+      "ASROC"
+    ],
+    "rbu-6000": [
+      [
+        "RBU-6000",
+        "RBU-6000 rocket launcher firing"
+      ],
+      "RBU"
+    ],
+    "gsh-23": [
+      [
+        "GSh-23 cannon",
+        "GSh-23L"
+      ],
+      "GSh-23"
+    ],
+    "gsh-30-2": [
+      [
+        "GSh-30-2 cannon",
+        "Su-25 cannon"
+      ],
+      "GSh-30-2"
+    ],
+    "bk-27": [
+      [
+        "Mauser BK-27",
+        "BK 27 cannon"
+      ],
+      "BK.?27|Mauser"
+    ],
+    "shturm": [
+      [
+        "9K114 Shturm",
+        "AT-6 Spiral",
+        "9M114"
+      ],
+      "Shturm|AT-6|9M114|9P149"
+    ],
+    "ataka": [
+      [
+        "9M120 Ataka",
+        "AT-9 Spiral-2"
+      ],
+      "Ataka|AT-9|9M120"
+    ]
   },
   "pages": {
-    "ballistics": [["M1 Abrams fires main gun", "tank fires main gun live fire", "Abrams live fire muzzle"], "fire|firing|fires"],
-    "flight": [["F-16 fires AIM-120 missile", "fighter launches missile", "AIM-120 launch"], "launch|fires|firing"],
-    "radar": [["AN/TPS-75 radar", "air surveillance radar antenna", "AN/TPS-59 radar"], "radar|TPS"],
-    "defense": [["C-130 flares countermeasures", "aircraft releases flares", "flares countermeasure"], "flare"],
-    "weapons": [["ordnance loaded aircraft carrier flight deck", "aviation ordnancemen load missile", "weapons load crew missile"], "ordnance|load|weapons"]
+    "ballistics": [
+      [
+        "M1 Abrams fires main gun",
+        "tank fires main gun live fire",
+        "Abrams live fire muzzle"
+      ],
+      "fire|firing|fires"
+    ],
+    "flight": [
+      [
+        "F-16 fires AIM-120 missile",
+        "fighter launches missile",
+        "AIM-120 launch"
+      ],
+      "launch|fires|firing"
+    ],
+    "radar": [
+      [
+        "AN/TPS-75 radar",
+        "air surveillance radar antenna",
+        "AN/TPS-59 radar"
+      ],
+      "radar|TPS"
+    ],
+    "defense": [
+      [
+        "C-130 flares countermeasures",
+        "aircraft releases flares",
+        "flares countermeasure"
+      ],
+      "flare"
+    ],
+    "weapons": [
+      [
+        "ordnance loaded aircraft carrier flight deck",
+        "aviation ordnancemen load missile",
+        "weapons load crew missile"
+      ],
+      "ordnance|load|weapons"
+    ]
   }
 }

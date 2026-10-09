@@ -12,6 +12,10 @@ import BallisticsLab from '../../components/BallisticsLab.astro';
 import ShipExplorer from '../../components/ShipExplorer.astro';
 import SensorScope from '../../components/SensorScope.astro';
 import NavalLaunchDemo from '../../components/NavalLaunchDemo.astro';
+import ArmorDemo from '../../components/ArmorDemo.astro';
+import HangarDemo from '../../components/HangarDemo.astro';
+import { armorOf, armorSchemes } from '../../data/armor';
+import { hangars } from '../../data/hangars';
 import { shipSchemes, launchScenes } from '../../data/ships';
 import { samSensors, type Sensor } from '../../data/sensors';
 import { gunsOfPlatform, shellsOfGun, shellTypeById } from '../../data/shells';
@@ -63,12 +67,16 @@ const ship = shipSchemes[item.id];
 const shipSensors = ship ? ship.modules.map((module) => module.sensor).filter((sensor): sensor is Sensor => Boolean(sensor)) : [];
 const sensors = shipSensors.length > 0 ? shipSensors : samSensors[item.id] ?? [];
 const launches = launchScenes[item.id] ?? [];
+const armor = armorSchemes.find((scheme) => scheme.id === armorOf[item.id]);
+const hangar = hangars[item.id];
 const defenseScenes = defense ? [...new Set(defense.map((d) => d.scene))] : [];
 const placeWord = { aviation: 'Ангар', fleet: 'Док', ground: 'Бокс' }[domain.id];
 const tocItems = [
   story && { id: 'story', label: 'История' },
   ops.length > 0 && { id: 'operations', label: 'Операции' },
   { id: 'specs', label: 'Характеристики' },
+  armor && { id: 'armor', label: 'Броня' },
+  hangar && { id: 'hangar', label: 'Ангар' },
   ship && { id: 'ship', label: 'Схема корабля' },
   sensors.length > 0 && { id: 'sensors', label: 'Радары и секторы' },
   launches.length > 0 && { id: 'launch', label: 'Пуск ракет' },
@@ -156,6 +164,30 @@ const tocItems = [
       </div>
     </div>
   </section>
+
+  {armor && (
+    <section class="section" id="armor" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Броня: из чего состоит и как работает</h2>
+          <p class="lead">Выберите боеприпас, чтобы увидеть, какой слой что делает. Нажмите на слой на схеме или в списке, чтобы прочитать о нём.</p>
+        </div>
+        <ArmorDemo scheme={armor} />
+      </div>
+    </section>
+  )}
+
+  {hangar && (
+    <section class="section" id="hangar" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Ангар: что и сколько помещается</h2>
+          <p class="lead">Меняйте состав авиагруппы кнопками: схема покажет, сколько машин встаёт в ангар, а сколько остаётся на полётной палубе.</p>
+        </div>
+        <HangarDemo hangar={hangar} />
+      </div>
+    </section>
+  )}
 
   {ship && (
     <section class="section" id="ship" style={`--c:var(--era-${era.id})`}>

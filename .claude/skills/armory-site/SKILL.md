@@ -26,6 +26,8 @@ description: Работа с сайтом «Арсенал» (справочни
 - `src/data/sensors.ts` - радары зенитных комплексов (`samSensors`) и тип `Sensor` (тип обзора, полуширина сектора, дальность, период). Компонент `SensorScope` (вид сверху, выбор станции). Дальность и период без уверенных данных не заполнять.
 - `src/data/weapons/guidance.ts` - схемы наведения по образцам (`ir`, `ir-link`, `sarh`, `arh`, `command`, `tvm`) и набор `groundLaunched`; компонент `GuidanceDemo` показывает этапы: луч носителя, радиолиния, включение головки. `src/data/weapons/modRanges.ts` - дальность по версиям для графика во вкладках модификаций; `flightMods` в `flight.ts` - то же для ракет с графиком полёта.
 - `scripts/fetch-photos.mjs` и `scripts/photo-queries.json` - загрузка фото с Commons (наборы `items`, `weapons`, `pages`); после загрузки каждое фото просмотреть глазами.
+- `src/data/hangars.ts` и `HangarDemo` - ангары авианесущих кораблей, подробности в скилле `armory-hangar`.
+- `src/data/armor.ts` и `ArmorDemo` - качественная модель брони: типы слоёв, угрозы, схемы бронирования и привязка к технике `armorOf`. Пока тестовый набор машин.
 - `public/bg/items/` - фото отдельных моделей и их `manifest.json`; на странице модели показывается только её фото (`bgForItem`).
 - `src/lib/data.ts`, `src/lib/bg.ts` - выборки, ранги, выбор фото-фона из `public/bg/manifest.json`.
 - `src/components/` - `BarChart`, `Scatter`, `Timeline`, `ArmamentMap`, `RadarDemo`, `DefenseDemo`, `TrajectoryDemo`, `StorySection`.
