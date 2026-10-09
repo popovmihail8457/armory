@@ -797,12 +797,14 @@ a.card:active { transform: translateY(-1px) scale(0.985); }
 .hp-body-shape { fill: color-mix(in srgb, var(--text-3) 38%, transparent); stroke: var(--text-3); stroke-width: 0.4; }
 .hp-rotor { fill: none; stroke: var(--text-3); stroke-width: 0.3; stroke-dasharray: 1.5 1.5; }
 .hp-bay { fill: none; stroke: var(--text-2); stroke-width: 0.4; stroke-dasharray: 1.4 1; }
-.hp-st { cursor: pointer; transform-box: fill-box; transform-origin: center; transition: opacity 0.35s ease, scale 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); outline: none; }
-.hp-st circle { fill: var(--era-modern); stroke: var(--bg, #121211); stroke-width: 0.6; }
+.hp-st { cursor: pointer; transition: opacity 0.35s ease; outline: none; }
+.hp-hit { fill: transparent; }
+.hp-dot { transform-box: fill-box; transform-origin: center; transition: scale 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); pointer-events: none; }
+.hp-st .hp-dot { fill: var(--era-modern); stroke: var(--bg, #121211); stroke-width: 0.6; }
 .hp-st text { fill: #121211; font-size: 3.2px; font-weight: 700; font-family: var(--mono); pointer-events: none; }
-.hp-st.hp-in circle { fill: var(--surface-2); stroke: var(--era-modern); stroke-dasharray: 1 0.8; }
+.hp-st.hp-in .hp-dot { fill: var(--surface-2); stroke: var(--era-modern); stroke-dasharray: 1 0.8; }
 .hp-st.hp-in text { fill: var(--text); }
-.hp-st.active, .hp-st:focus-visible { scale: 1.35; }
+.hp-st.active .hp-dot, .hp-st:focus-visible .hp-dot { scale: 1.35; }
 .hp-st.dim { opacity: 0.22; }
 .hp-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; max-height: 560px; overflow-y: auto; scrollbar-width: thin; }
 .hp-list li { display: grid; grid-template-columns: auto 1fr; gap: 12px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); transition: border-color 0.3s ease, opacity 0.35s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), background 0.3s ease; }
