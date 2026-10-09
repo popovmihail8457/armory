@@ -9,6 +9,7 @@ import WarheadDemo from '../../components/WarheadDemo.astro';
 import BallisticsLab from '../../components/BallisticsLab.astro';
 import { gunsOfWeapon } from '../../data/shells';
 import { bgForWeapon } from '../../lib/bg';
+import { modRangesOf } from '../../data/weapons/modRanges';
 import FlightLab from '../../components/FlightLab.astro';
 import { flightEntryOf } from '../../data/weapons/flight';
 import { warheadScenes } from '../../data/weapons/warheads';
@@ -201,7 +202,7 @@ const tocItems = [
           <h2>Модификации</h2>
           <p class="lead">{mods.length > 1 ? 'Выберите версию, чтобы увидеть, чем она отличается от предыдущей.' : 'Для этого образца в справочнике одна серийная версия.'}</p>
         </div>
-        <ModTabs mods={mods} cost={cost} />
+        <ModTabs mods={mods} cost={cost} ranges={modRangesOf(weapon)} />
       </div>
     </section>
   )}

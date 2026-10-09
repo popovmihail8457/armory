@@ -660,3 +660,6 @@ a.card:active { transform: translateY(-1px) scale(0.985); }
 .flight-modnote[hidden] { display: none; }
 
 .photo-note { color: var(--text-3); font-size: 0.85rem; font-family: var(--mono); }
+
+.cost-chart + .cost-chart { margin-top: 16px; }
+.range-chart .cost-track i { transition: width 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }

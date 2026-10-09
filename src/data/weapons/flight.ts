@@ -33,7 +33,7 @@ export const flightKinds: Record<FlightKind, KindPreset> = {
 /** Класс профиля полёта для образцов каталога. Образцы без записи на графики не попадают. */
 export const flightKindOf: Record<string, FlightKind> = {
   'aim-9': 'short', 'r-73': 'short', 'iris-t': 'short', 'asraam': 'short', 'r-60': 'short', 'python-5': 'short',
-  'aim-7': 'medium', 'aim-120': 'medium', 'r-27': 'medium', 'r-77': 'medium', 'mica': 'medium', 'super-530': 'medium',
+  'aim-7': 'medium', 'aim-120': 'medium', 'r-27': 'medium', 'r-77': 'medium', 'mica': 'medium', 'super-530': 'medium', 'r-23': 'medium',
   'aim-54': 'long', 'r-33': 'long', 'r-37': 'long',
   'meteor': 'ramjet',
   'stinger-missile': 'manpads', '9m39': 'manpads', 'starstreak-missile': 'manpads', 'mistral-missile': 'manpads',
@@ -96,6 +96,7 @@ export const flightMods: Record<string, (FlightModSpec | null)[]> = {
   'sm-2': [r(74), same, same],
   'aster-30': [same, r(150)],
   'sm-6': [same, same, null],
+  'r-23': [same, null, r(50)],
 };
 
 export interface FlightModEntry {
