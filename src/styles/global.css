@@ -528,3 +528,14 @@ html { scroll-padding-top: 116px; }
 .shell-list div span { color: var(--text-2); font-size: 0.92rem; }
 .shell-list .num { color: var(--text-2); white-space: nowrap; }
 @media (max-width: 560px) { .shell-list li { grid-template-columns: 1fr; gap: 4px; } }
+
+/* Полёт ракет */
+.flight-pick .ball-compare { justify-self: start; }
+.flight-slider { display: grid; grid-template-columns: 1fr auto; gap: 4px 12px; align-items: center; }
+.flight-slider .eyebrow { grid-column: 1 / -1; }
+.flight-slider input { width: 100%; accent-color: var(--era-modern); min-height: 28px; }
+.flight-slider output { min-width: 9ch; text-align: right; color: var(--text); }
+.flight-verdict { min-height: 4.5em; }
+.flight-link { color: var(--text-2); font-size: 0.9rem; }
+.flight-table thead span { display: block; font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-3); padding: 12px 14px; }
+.flight-table tr.flight-current th { box-shadow: inset 3px 0 0 var(--era-modern); }

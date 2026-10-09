@@ -8,6 +8,8 @@ import { weaponCosts } from '../../data/weapons/costs';
 import WarheadDemo from '../../components/WarheadDemo.astro';
 import BallisticsLab from '../../components/BallisticsLab.astro';
 import { gunsOfWeapon } from '../../data/shells';
+import FlightLab from '../../components/FlightLab.astro';
+import { flightEntryOf } from '../../data/weapons/flight';
 import { warheadScenes } from '../../data/weapons/warheads';
 import { equipment } from '../../data/equipment';
 import { weaponMetrics } from '../../data/weapons/taxonomy';
@@ -37,10 +39,12 @@ const others = peers.filter((p) => p.id !== weapon.id);
 const mods = weaponMods[weapon.id] ?? [];
 const cost = weaponCosts[weapon.id];
 const shellGuns = gunsOfWeapon(weapon.id);
+const flight = flightEntryOf(weapon.id);
 const scenes = warheadScenes(weapon.id, Math.max(1, mods.length));
 const tocItems = [
   { id: 'principle', label: 'Принцип работы' },
   { id: 'specs', label: 'Характеристики' },
+  flight && { id: 'flight', label: 'Профиль полёта' },
   { id: 'design', label: 'Устройство' },
   { id: 'warhead', label: 'Боевая часть' },
   shellGuns.length > 0 && { id: 'shells', label: 'Снаряды и баллистика' },
@@ -113,6 +117,18 @@ const tocItems = [
       </div>
     </div>
   </section>
+
+  {flight && (
+    <section class="section" id="flight" style={`--c:var(--era-${era.id})`}>
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Профиль полёта</h2>
+          <p class="lead">Меняйте условия пуска и положение точки встречи. В режиме сравнения можно добавить другие ракеты этого класса. <a href="/flight/">Все ракеты и сводная таблица</a>.</p>
+        </div>
+        <FlightLab group={flight.group} initial={weapon.id} summary={false} />
+      </div>
+    </section>
+  )}
 
   <section class="section" id="design" style={`--c:var(--era-${era.id})`}>
     <div class="wrap">

@@ -1,0 +1,427 @@
+---
+import { flightEntries, flightKinds, type FlightGroup } from '../data/weapons/flight';
+
+interface Props {
+  group: FlightGroup;
+  /** Ракета, выбранная при открытии. */
+  initial?: string;
+  /** Показывать сводную таблицу по всем ракетам группы. */
+  summary?: boolean;
+}
+
+const { group, initial, summary = true } = Astro.props;
+const entries = flightEntries.filter((entry) => entry.group === group);
+const first = entries.find((entry) => entry.id === initial) ?? entries[0];
+const reference = flightKinds[first.kind].reference;
+const air = group === 'air';
+---
+<section class="ball flight" data-flight data-entries={JSON.stringify(entries)} data-initial={first.id} data-air={String(air)}>
+  <div class="ball-top">
+    <div class="ball-field flight-pick">
+      <span class="eyebrow">Ракета</span>
+      <div class="ball-shells" role="group" aria-label="Ракеты"></div>
+      <button type="button" class="ball-btn ball-compare" aria-pressed="false">Сравнение: выкл.</button>
+    </div>
+    <div class="ball-field">
+      {air && (
+        <label class="flight-slider">
+          <span class="eyebrow">Высота пуска</span>
+          <input type="range" data-key="launchAlt" min="500" max="15000" step="500" value={reference.launchAlt} />
+          <output class="num"></output>
+        </label>
+      )}
+      {air && (
+        <label class="flight-slider">
+          <span class="eyebrow">Скорость носителя</span>
+          <input type="range" data-key="launchSpeed" min="150" max="700" step="10" value={reference.launchSpeed} />
+          <output class="num"></output>
+        </label>
+      )}
+      <label class="flight-slider">
+        <span class="eyebrow">Высота точки встречи</span>
+        <input type="range" data-key="targetAlt" min="100" max="25000" step="100" value={reference.targetAlt} />
+        <output class="num"></output>
+      </label>
+      <label class="flight-slider">
+        <span class="eyebrow">Дистанция до точки встречи</span>
+        <input type="range" data-key="distance" min="1000" max="100000" step="500" value="30000" />
+        <output class="num"></output>
+      </label>
+    </div>
+  </div>
+
+  <div class="radar-body">
+    <div class="radar-stage ball-stage">
+      <div class="radar-tabs" role="tablist" aria-label="Вид графика">
+        <button type="button" role="tab" class="radar-tab" data-view="alt" aria-selected="true">Высота полёта</button>
+        <button type="button" role="tab" class="radar-tab" data-view="speed-time" aria-selected="false">Скорость по времени</button>
+        <button type="button" role="tab" class="radar-tab" data-view="speed-dist" aria-selected="false">Скорость по дистанции</button>
+      </div>
+      <canvas class="radar-canvas ball-canvas" width="760" height="460" role="img" aria-label="График полёта ракеты"></canvas>
+      <div class="ball-legend" aria-label="Ракеты на графике"></div>
+      <div class="ball-play">
+        <button type="button" class="ball-btn ball-run">Пуск</button>
+        <input type="range" class="ball-time" min="0" max="1000" value="0" aria-label="Положение ракеты на траектории" />
+        <output class="ball-clock num">0,0 с</output>
+      </div>
+      <dl class="ball-marker">
+        <div><dt>Дистанция</dt><dd class="num k-x">0 км</dd></div>
+        <div><dt>Высота</dt><dd class="num k-y">0 км</dd></div>
+        <div><dt>Скорость</dt><dd class="num k-v">0 м/с</dd></div>
+        <div><dt>Число Маха</dt><dd class="num k-m">0</dd></div>
+      </dl>
+    </div>
+    <div class="radar-info">
+      <div>
+        <span class="eyebrow ball-type"></span>
+        <h3 class="radar-title ball-name"></h3>
+      </div>
+      <p class="radar-text flight-verdict"></p>
+      <dl class="radar-readout">
+        <div><dt>Время полёта</dt><dd class="num r-time">-</dd></div>
+        <div><dt>Скорость в точке встречи</dt><dd class="num r-end">-</dd></div>
+        <div><dt>Наибольшая скорость</dt><dd class="num r-peak">-</dd></div>
+        <div><dt>Наибольшая высота</dt><dd class="num r-alt">-</dd></div>
+        <div><dt>Средняя скорость</dt><dd class="num r-avg">-</dd></div>
+        <div><dt>Дальность по открытым данным</dt><dd class="num r-pub">-</dd></div>
+        <div><dt>Скорость по открытым данным</dt><dd class="num r-pubv">-</dd></div>
+      </dl>
+      <a class="flight-link" href="#">Страница ракеты в каталоге</a>
+    </div>
+  </div>
+
+  {summary && (
+    <div class="heat-wrap">
+      <table class="heat flight-table">
+        <caption>Сводка по всем ракетам группы в выбранных условиях. Заливка показывает место значения в столбце.</caption>
+        <thead>
+          <tr>
+            <th scope="col"><span>Ракета</span></th>
+            <th scope="col"><span>Долетает</span></th>
+            <th scope="col" class="heat-num"><span>Время, с</span></th>
+            <th scope="col" class="heat-num"><span>Скорость в конце, м/с</span></th>
+            <th scope="col" class="heat-num"><span>Наибольшая скорость, м/с</span></th>
+            <th scope="col" class="heat-num"><span>Наибольшая высота, км</span></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  )}
+
+  <p class="notice">
+    Учебная модель: ракета летит в неподвижную точку встречи, цель не маневрирует, наведение, перегрузки и помехи не учитываются.
+    Запас топлива и сопротивление подобраны так, чтобы в благоприятных условиях модель давала опубликованные дальность и скорость.
+    График показывает, как высота и скорость носителя меняют профиль полёта, и не описывает реальные боевые возможности.
+  </p>
+</section>
+
+<script>
+  import { fly, type FlightProfile, type FlightResult, type FlightPoint, type FlightScenario } from '../lib/missileFlight';
+
+  interface Entry { id: string; name: string; kindLabel: string; rangeKm: number; speedKmh?: number; profile: FlightProfile }
+  type View = 'alt' | 'speed-time' | 'speed-dist';
+
+  const SERIES = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d7d6cd'];
+  const MAX_COMPARE = 5;
+  const PLAY_SECONDS = 5;
+  const PAD = { left: 56, right: 18, top: 18, bottom: 44 };
+  const fmt = (value: number, digits = 0) => value.toLocaleString('ru-RU', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+
+  function niceStep(span: number, target: number): number {
+    const raw = span / target;
+    const power = Math.pow(10, Math.floor(Math.log10(raw)));
+    const unit = raw / power;
+    return (unit < 1.5 ? 1 : unit < 3.5 ? 2 : unit < 7.5 ? 5 : 10) * power;
+  }
+
+  function pointAt(points: FlightPoint[], t: number): FlightPoint {
+    let low = 0;
+    let high = points.length - 1;
+    while (low < high) { const mid = (low + high) >> 1; if (points[mid].t < t) low = mid + 1; else high = mid; }
+    return points[low];
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-flight]').forEach((root) => {
+    const entries: Entry[] = JSON.parse(root.dataset.entries ?? '[]');
+    if (entries.length === 0) return;
+    const air = root.dataset.air === 'true';
+    const $ = <T extends HTMLElement>(selector: string) => root.querySelector<T>(selector)!;
+    const setText = (selector: string, text: string) => { $(selector).textContent = text; };
+    const canvas = $<HTMLCanvasElement>('.ball-canvas');
+    const ctx = canvas.getContext('2d')!;
+    const css = getComputedStyle(root);
+    const color = (name: string) => css.getPropertyValue(name).trim();
+    const shellBox = $('.ball-shells');
+    const compareBtn = $<HTMLButtonElement>('.ball-compare');
+    const runBtn = $<HTMLButtonElement>('.ball-run');
+    const timeSlider = $<HTMLInputElement>('.ball-time');
+    const legend = $('.ball-legend');
+    const tableBody = root.querySelector<HTMLTableSectionElement>('.flight-table tbody');
+    const sliders = [...root.querySelectorAll<HTMLInputElement>('.flight-slider input')];
+
+    const scenario: FlightScenario = { launchAlt: 0, launchSpeed: 20, targetAlt: 5000, distance: 30000 };
+    let selected: string[] = [root.dataset.initial ?? entries[0].id];
+    let compare = false;
+    let view: View = 'alt';
+    let time = 0;
+    let playing = 0;
+    let series: { entry: Entry; result: FlightResult; color: string }[] = [];
+
+    const sliderLabel = (key: string, value: number) => {
+      if (key === 'launchSpeed') return `${fmt(value * 3.6)} км/ч`;
+      return `${fmt(value / 1000, 1)} км`;
+    };
+
+    function readSliders() {
+      sliders.forEach((input) => {
+        const key = input.dataset.key as keyof FlightScenario;
+        scenario[key] = Number(input.value);
+        input.parentElement!.querySelector('output')!.textContent = sliderLabel(key, scenario[key]);
+      });
+    }
+
+    function fitDistance() {
+      const input = sliders.find((slider) => slider.dataset.key === 'distance')!;
+      const longest = Math.max(...selected.map((id) => entries.find((e) => e.id === id)!.rangeKm));
+      const max = Math.max(4000, Math.ceil((longest * 1300) / 500) * 500);
+      input.max = String(max);
+      input.step = String(max > 60000 ? 1000 : max > 12000 ? 500 : 100);
+      input.min = String(max > 12000 ? 1000 : 500);
+      if (Number(input.value) > max) input.value = String(max);
+    }
+
+    function compute() {
+      series = selected.map((id, i) => {
+        const entry = entries.find((e) => e.id === id)!;
+        return { entry, color: SERIES[i % SERIES.length], result: fly(entry.profile, scenario) };
+      });
+      time = Math.min(time, series[0].result.time);
+    }
+
+    function renderButtons() {
+      shellBox.replaceChildren(...entries.map((entry) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'ball-btn ball-shell';
+        button.dataset.id = entry.id;
+        button.title = entry.kindLabel;
+        button.textContent = entry.name;
+        button.addEventListener('click', () => {
+          if (!compare) selected = [entry.id];
+          else if (selected.includes(entry.id)) selected = selected.length > 1 ? selected.filter((s) => s !== entry.id) : selected;
+          else if (selected.length < MAX_COMPARE) selected = [...selected, entry.id];
+          stop();
+          time = 0;
+          fitDistance();
+          update();
+        });
+        return button;
+      }));
+    }
+
+    function renderInfo() {
+      const { entry, result } = series[0];
+      shellBox.querySelectorAll<HTMLButtonElement>('.ball-shell').forEach((button) => {
+        const index = selected.indexOf(button.dataset.id!);
+        button.setAttribute('aria-pressed', String(index >= 0));
+        button.style.setProperty('--s', index >= 0 ? SERIES[index % SERIES.length] : 'transparent');
+      });
+      legend.replaceChildren(...series.map((item) => {
+        const row = document.createElement('span');
+        row.innerHTML = '<i></i><b></b><em class="num"></em>';
+        (row.children[0] as HTMLElement).style.background = item.color;
+        row.children[1].textContent = item.entry.name;
+        row.children[2].textContent = item.result.reached ? `≈${fmt(item.result.time, 1)} с` : `не долетает, ≈${fmt(item.result.reach / 1000, 1)} км`;
+        return row;
+      }));
+      setText('.ball-type', entry.kindLabel);
+      setText('.ball-name', entry.name);
+      setText('.flight-verdict', result.reached
+        ? `В этих условиях ракета долетает до точки встречи и сохраняет скорость ≈${fmt(result.endMach, 1)} Маха.`
+        : `В этих условиях запаса скорости не хватает: модель останавливается на ≈${fmt(result.reach / 1000, 1)} км, когда скорость падает до скорости звука.`);
+      setText('.r-time', `≈${fmt(result.time, 1)} с`);
+      setText('.r-end', `≈${fmt(result.endSpeed)} м/с (${fmt(result.endMach, 1)} М)`);
+      setText('.r-peak', `≈${fmt(result.peakSpeed)} м/с (${fmt(result.peakMach, 1)} М)`);
+      setText('.r-alt', `≈${fmt(result.maxAlt / 1000, 1)} км`);
+      setText('.r-avg', `≈${fmt(result.reach / result.time)} м/с`);
+      setText('.r-pub', `≈${fmt(entry.rangeKm, entry.rangeKm < 20 ? 1 : 0)} км`);
+      setText('.r-pubv', entry.speedKmh ? `≈${fmt(entry.speedKmh)} км/ч` : 'открытых данных нет');
+      $<HTMLAnchorElement>('.flight-link').href = `/weapons/${entry.id}/`;
+    }
+
+    function renderTable() {
+      if (!tableBody) return;
+      const rows = entries.map((entry) => ({ entry, result: fly(entry.profile, scenario) }));
+      const columns = [
+        { get: (r: FlightResult) => (r.reached ? r.time : undefined), digits: 1, low: true },
+        { get: (r: FlightResult) => (r.reached ? r.endSpeed : undefined), digits: 0, low: false },
+        { get: (r: FlightResult) => r.peakSpeed, digits: 0, low: false },
+        { get: (r: FlightResult) => r.maxAlt / 1000, digits: 1, low: false },
+      ];
+      const bounds = columns.map((column) => {
+        const values = rows.map((row) => column.get(row.result)).filter((v): v is number => v !== undefined);
+        return { min: Math.min(...values), max: Math.max(...values) };
+      });
+      tableBody.replaceChildren(...rows.map(({ entry, result }) => {
+        const tr = document.createElement('tr');
+        const head = document.createElement('th');
+        head.scope = 'row';
+        head.textContent = entry.name;
+        const reach = document.createElement('td');
+        reach.textContent = result.reached ? 'да' : `нет, ≈${fmt(result.reach / 1000, 1)} км`;
+        tr.append(head, reach);
+        columns.forEach((column, i) => {
+          const td = document.createElement('td');
+          td.className = 'heat-num num';
+          const value = column.get(result);
+          if (value === undefined) { td.innerHTML = '<span class="heat-none">не долетает</span>'; }
+          else {
+            const span = bounds[i].max - bounds[i].min;
+            const position = span > 0 ? (value - bounds[i].min) / span : 0;
+            td.style.setProperty('--h', (column.low ? 1 - position : position).toFixed(2));
+            td.textContent = `≈${fmt(value, column.digits)}`;
+          }
+          tr.append(td);
+        });
+        if (selected.includes(entry.id)) tr.classList.add('flight-current');
+        return tr;
+      }));
+    }
+
+    function renderMarker() {
+      const point = pointAt(series[0].result.points, time);
+      setText('.k-x', `${fmt(point.x / 1000, 1)} км`);
+      setText('.k-y', `${fmt(point.y / 1000, 2)} км`);
+      setText('.k-v', `${fmt(point.v)} м/с`);
+      setText('.k-m', fmt(point.mach, 2));
+      setText('.ball-clock', `${fmt(time, 1)} с`);
+      timeSlider.value = String(Math.round((time / series[0].result.time) * 1000));
+    }
+
+    const xOf = (p: FlightPoint) => (view === 'speed-time' ? p.t : p.x / 1000);
+    const yOf = (p: FlightPoint) => (view === 'alt' ? p.y / 1000 : p.v);
+
+    function draw() {
+      const { width, height } = canvas;
+      ctx.clearRect(0, 0, width, height);
+      ctx.font = '12px Consolas, monospace';
+      const plotW = width - PAD.left - PAD.right;
+      const plotH = height - PAD.top - PAD.bottom;
+      const all = series.flatMap((s) => s.result.points);
+      const maxX = Math.max(...all.map(xOf), view === 'speed-time' ? 1 : scenario.distance / 1000) * 1.04;
+      const maxY = Math.max(...all.map(yOf), view === 'alt' ? scenario.targetAlt / 1000 : 1) * 1.12;
+      const sx = (x: number) => PAD.left + (x / maxX) * plotW;
+      const sy = (y: number) => PAD.top + plotH - (y / maxY) * plotH;
+
+      ctx.lineWidth = 1;
+      ctx.strokeStyle = color('--line');
+      ctx.fillStyle = color('--text-3');
+      const stepX = niceStep(maxX, 7);
+      ctx.textAlign = 'center';
+      for (let x = 0; x <= maxX; x += stepX) {
+        ctx.beginPath(); ctx.moveTo(sx(x), PAD.top); ctx.lineTo(sx(x), PAD.top + plotH); ctx.stroke();
+        ctx.fillText(fmt(x, stepX < 1 ? 1 : 0), sx(x), PAD.top + plotH + 16);
+      }
+      const stepY = niceStep(maxY, 5);
+      ctx.textAlign = 'right';
+      for (let y = 0; y <= maxY; y += stepY) {
+        ctx.beginPath(); ctx.moveTo(PAD.left, sy(y)); ctx.lineTo(PAD.left + plotW, sy(y)); ctx.stroke();
+        ctx.fillText(fmt(y, stepY < 1 ? 1 : 0), PAD.left - 8, sy(y) + 4);
+      }
+      ctx.strokeStyle = color('--line-strong');
+      ctx.beginPath(); ctx.moveTo(PAD.left, PAD.top); ctx.lineTo(PAD.left, PAD.top + plotH); ctx.lineTo(PAD.left + plotW, PAD.top + plotH); ctx.stroke();
+      ctx.fillText(view === 'speed-time' ? 'Время, с' : 'Дистанция, км', PAD.left + plotW, height - 8);
+      ctx.textAlign = 'left';
+      ctx.fillText(view === 'alt' ? 'Высота, км' : 'Скорость, м/с', PAD.left + 8, PAD.top + 12);
+
+      if (view !== 'speed-time') {
+        const tx = sx(scenario.distance / 1000);
+        ctx.setLineDash([5, 5]);
+        ctx.strokeStyle = color('--text-3');
+        ctx.beginPath(); ctx.moveTo(tx, PAD.top); ctx.lineTo(tx, PAD.top + plotH); ctx.stroke();
+        if (view === 'alt') { ctx.beginPath(); ctx.moveTo(PAD.left, sy(scenario.targetAlt / 1000)); ctx.lineTo(PAD.left + plotW, sy(scenario.targetAlt / 1000)); ctx.stroke(); }
+        ctx.setLineDash([]);
+        ctx.fillStyle = color('--text-2');
+        ctx.textAlign = tx > width - 130 ? 'right' : 'left';
+        ctx.fillText('Точка встречи', tx + (ctx.textAlign === 'left' ? 6 : -6), PAD.top + 28);
+      }
+
+      series.forEach((item, index) => {
+        const { points } = item.result;
+        ctx.strokeStyle = item.color;
+        ctx.lineWidth = index === 0 ? 2.5 : 2;
+        ctx.beginPath();
+        points.forEach((p, i) => { if (i === 0) ctx.moveTo(sx(xOf(p)), sy(yOf(p))); else ctx.lineTo(sx(xOf(p)), sy(yOf(p))); });
+        ctx.stroke();
+        const marker = pointAt(points, Math.min(time, item.result.time));
+        ctx.fillStyle = item.color;
+        ctx.strokeStyle = color('--surface');
+        ctx.lineWidth = 2;
+        ctx.beginPath(); ctx.arc(sx(xOf(marker)), sy(yOf(marker)), index === 0 ? 6 : 5, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+      });
+    }
+
+    function update() {
+      readSliders();
+      compute();
+      renderInfo();
+      renderMarker();
+      renderTable();
+      draw();
+    }
+
+    function stop() {
+      if (playing) cancelAnimationFrame(playing);
+      playing = 0;
+      runBtn.textContent = 'Пуск';
+    }
+
+    function play() {
+      const total = series[0].result.time;
+      if (time >= total - 0.05) time = 0;
+      runBtn.textContent = 'Пауза';
+      let last = performance.now();
+      const frame = (now: number) => {
+        time += ((now - last) / 1000) * (total / PLAY_SECONDS);
+        last = now;
+        const finished = time >= total;
+        if (finished) time = total;
+        renderMarker();
+        draw();
+        if (finished) stop(); else playing = requestAnimationFrame(frame);
+      };
+      playing = requestAnimationFrame(frame);
+    }
+
+    sliders.forEach((input) => input.addEventListener('input', () => { stop(); update(); }));
+    compareBtn.addEventListener('click', () => {
+      compare = !compare;
+      compareBtn.setAttribute('aria-pressed', String(compare));
+      compareBtn.textContent = compare ? 'Сравнение: вкл.' : 'Сравнение: выкл.';
+      if (!compare) selected = selected.slice(0, 1);
+      fitDistance();
+      update();
+    });
+    root.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((tab) => tab.addEventListener('click', () => {
+      view = tab.dataset.view as View;
+      root.querySelectorAll('[data-view]').forEach((other) => other.setAttribute('aria-selected', String(other === tab)));
+      draw();
+    }));
+    runBtn.addEventListener('click', () => (playing ? stop() : play()));
+    timeSlider.addEventListener('input', () => {
+      stop();
+      time = (Number(timeSlider.value) / 1000) * series[0].result.time;
+      renderMarker();
+      draw();
+    });
+
+    if (!air) { scenario.launchAlt = 0; scenario.launchSpeed = 20; }
+    renderButtons();
+    fitDistance();
+    const start = entries.find((e) => e.id === selected[0])!;
+    const distanceInput = sliders.find((slider) => slider.dataset.key === 'distance')!;
+    distanceInput.value = String(Math.round((start.rangeKm * 500) / Number(distanceInput.step)) * Number(distanceInput.step));
+    update();
+  });
+</script>

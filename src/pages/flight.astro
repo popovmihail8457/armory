@@ -1,0 +1,58 @@
+---
+import Base from '../layouts/Base.astro';
+import FlightLab from '../components/FlightLab.astro';
+import { flightEntries } from '../data/weapons/flight';
+
+const airCount = flightEntries.filter((entry) => entry.group === 'air').length;
+const groundCount = flightEntries.filter((entry) => entry.group === 'ground').length;
+---
+<Base title="Полёт ракет" era="post" noPhoto description="Профили полёта ракет воздух-воздух и зенитных ракет: высота, скорость и время в зависимости от условий пуска.">
+  <div class="wrap">
+    <nav class="crumbs" aria-label="Навигация">
+      <a href="/">Главная</a><span>/</span>
+      <a href="/weapons/">Вооружение</a><span>/</span>
+      <span>Полёт ракет</span>
+    </nav>
+  </div>
+
+  <section class="section" id="air" style="--c:var(--era-post)">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="stripe"></span>
+        <span class="eyebrow">Воздух-воздух · ракет: {airCount}</span>
+        <h1>Полёт ракет</h1>
+        <p class="lead">Меняйте высоту пуска, скорость носителя и положение точки встречи: график покажет, как изменятся высота и скорость ракеты на всём участке полёта. В режиме сравнения видны сразу несколько ракет.</p>
+      </div>
+      <FlightLab group="air" initial="aim-120" />
+    </div>
+  </section>
+
+  <section class="section" id="ground" style="--c:var(--era-late)">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="stripe"></span>
+        <span class="eyebrow">Земля-воздух и море-воздух · ракет: {groundCount}</span>
+        <h2>Зенитные ракеты</h2>
+        <p class="lead">Пуск с поверхности. Задайте высоту и удаление точки встречи, чтобы увидеть горку, разгон и потерю скорости после выгорания топлива.</p>
+      </div>
+      <FlightLab group="ground" initial="9m38" />
+    </div>
+  </section>
+
+  <section class="section" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Как читать графики</h2>
+      </div>
+      <ul class="feature-list">
+        <li>Двигатель работает только первые секунды. Дальше ракета летит по инерции и теряет скорость, поэтому скорость в конце полёта намного ниже наибольшей.</li>
+        <li>На большой высоте воздух разрежён и сопротивление меньше. Поэтому ракеты большой дальности сначала набирают высоту и только потом снижаются к точке встречи.</li>
+        <li>Скорость и высота носителя добавляются к энергии ракеты: тот же образец с высотного сверхзвукового пуска летит заметно дальше, чем с малой высоты.</li>
+        <li>Опубликованная наибольшая дальность относится к идеальным условиям. По маневрирующей цели реальная дальность в несколько раз меньше, и эта модель её не оценивает.</li>
+      </ul>
+      <p class="notice" style="margin-top: 28px;">
+        Описание модели и источники значений: <a href="/sources/#flight">источники и методика</a>.
+      </p>
+    </div>
+  </section>
+</Base>

@@ -79,6 +79,7 @@ const DEFAULT: Record<string, WarheadScene> = {
   'kh-35': 'penetrator', 'nsm': 'penetrator', 'kh-29': 'penetrator', 'gbu-57': 'penetrator', 'gbu-39': 'penetrator',
   'storm-shadow': 'penetrator', 'jassm': 'penetrator', 'taurus': 'penetrator', 'tomahawk': 'penetrator',
   'atacms-missile': 'cluster', 'agm-154': 'cluster', 'm26': 'cluster',
+  'r-60': 'frag', 'python-5': 'frag', 'super-530': 'frag', 'r-37': 'frag', 'v-750': 'frag', '5v27': 'frag', '3m9': 'frag', '9m33': 'frag', 'redeye-missile': 'frag', '9m32': 'frag', 'pac-3': 'kinetic', 'kh-31': 'frag', 'kh-59': 'penetrator', 'kab-500': 'blast', 'fab-500': 'blast', 'gbu-10': 'blast', 'gbu-28': 'penetrator', 'kalibr': 'blast', 'oniks': 'penetrator', 'p-15': 'shaped', 's-8': 'shaped', '2a42': 'frag', 'l7': 'kinetic', 'm230': 'shaped', 'phalanx': 'kinetic', 'ak-630': 'frag', 'milan-missile': 'shaped',
 };
 
 /** Сцена по версиям там, где боевая часть меняется от версии к версии (порядок как в mods.ts). */
@@ -99,6 +100,8 @@ const BY_MOD: Record<string, WarheadScene[]> = {
   'm242': ['frag', 'kinetic'],
   '9m723': ['blast', 'cluster'],
   'storm-shadow': ['penetrator', 'penetrator', 'penetrator'],
+  'kh-31': ['frag', 'penetrator', 'frag'],
+  'milan-missile': ['shaped', 'shaped', 'tandem'],
 };
 
 export function warheadScenes(weaponId: string, modCount: number): WarheadScene[] {
