@@ -554,6 +554,7 @@ const base: WeaponData[] = [
 
 /** Дополнительные классы образцов, которые применяются по нескольким схемам. */
 const ALSO: Record<string, WeaponCategoryId[]> = {
+  'kortik': ['naval-guns'],
   'harpoon': ['air-sea', 'ground-sea'],
   'exocet': ['ground-sea'],
   'kh-35': ['air-sea', 'ground-sea'],
