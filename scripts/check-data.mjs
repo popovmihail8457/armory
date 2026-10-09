@@ -64,7 +64,7 @@ gunPlatforms.forEach((id) => { if (!equipmentIds.has(id)) errors.push(`shells: �
 ids(shellsText, /weaponId: '([a-z0-9-]+)'/g).forEach((id) => { if (!weaponIds.has(id)) errors.push(`shells: weaponId ${id} не найден`); });
 ids(read('src/data/ships.ts'), /weaponId: '([a-z0-9-]+)'/g).forEach((id) => { if (!weaponIds.has(id)) errors.push(`ships: weaponId ${id} не найден`); });
 
-const variantsText = read('src/data/variants.ts');
+const variantsText = read('src/data/variants.ts') + read('src/data/variants-more.ts');
 keysOf(variantsText).forEach((id) => { if (!equipmentIds.has(id)) errors.push(`variants: ключ ${id} не найден в технике`); });
 [...variantsText.matchAll(/(?:add|remove): \[([^\]]*)\]/g)].flatMap((m) => ids(m[1], /'([a-z0-9-]+)'/g)).forEach((id) => { if (!weaponIds.has(id)) errors.push(`variants: образец ${id} не найден в вооружении`); });
 const detailText = read('src/data/armor-details.ts');
