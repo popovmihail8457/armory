@@ -8,8 +8,10 @@ import { itemUrl } from '../lib/data';
 const rows = equipment
   .filter((item) => defenseByItem[item.id])
   .map((item) => ({ item, systems: defenseByItem[item.id] }));
+import { bgForPage } from '../lib/bg';
+const pagePhoto = bgForPage('defense');
 ---
-<Base title="Системы защиты" description="Анимации работы СПО, бортового комплекса обороны, ловушек, РЭБ, активной защиты танка и эшелонированной обороны корабля.">
+<Base title="Системы защиты" photoUrl={pagePhoto} noPhoto={!pagePhoto} description="Анимации работы СПО, бортового комплекса обороны, ловушек, РЭБ, активной защиты танка и эшелонированной обороны корабля.">
   <section class="section">
     <div class="wrap">
       <div class="section-head">

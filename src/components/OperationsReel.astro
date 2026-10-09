@@ -42,18 +42,40 @@ const { ops, clips } = Astro.props;
     if (!video || clips.length === 0 || reduce || small || saveData) return;
     let visible = false;
     let currentSrc = '';
+    /** Облегчённая версия ролика на Commons (480p): загружается в разы быстрее оригинала. */
+    const light = (src: string) => {
+      const [file, fragment] = src.split('#');
+      const match = file.match(/^(https:\/\/upload\.wikimedia\.org\/wikipedia\/commons)\/(.+\/([^/]+))$/);
+      if (!match) return undefined;
+      return `${match[1]}/transcoded/${match[2]}/${match[3]}.480p.vp9.webm${fragment ? '#' + fragment : ''}`;
+    };
     const show = (index: number) => {
       const src = clips[index];
       if (!src || src === currentSrc) return;
       currentSrc = src;
-      video.src = src;
+      video.classList.remove('ready');
+      const sources = [light(src), src].filter((url): url is string => Boolean(url)).map((url) => {
+        const source = document.createElement('source');
+        source.src = url;
+        return source;
+      });
+      video.replaceChildren(...sources);
+      video.load();
       if (visible) video.play().catch(() => {});
     };
-    show(0);
+    video.addEventListener('playing', () => video.classList.add('ready'));
+    /* Загрузка начинается заранее, когда блок только приближается к экрану, чтобы ролик шёл без задержки. */
+    const warm = new IntersectionObserver((entries) => {
+      if (!entries[0].isIntersecting) return;
+      video.preload = 'auto';
+      show(0);
+      warm.disconnect();
+    }, { rootMargin: '200% 0px' });
+    warm.observe(root);
     new IntersectionObserver((entries) => {
       visible = entries[0].isIntersecting;
-      if (visible) video.play().catch(() => {}); else video.pause();
-    }, { threshold: 0.05 }).observe(root);
+      if (visible) { if (!currentSrc) show(0); video.play().catch(() => {}); } else video.pause();
+    }, { threshold: 0.01 }).observe(root);
     const cards = root.querySelectorAll<HTMLElement>('.reel-card');
     const cardObserver = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {

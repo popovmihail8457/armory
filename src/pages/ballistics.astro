@@ -7,8 +7,10 @@ import { guns, shells, shellTypes } from '../data/shells';
 
 const typeCount = (id: string) => shells.filter((shell) => shell.type === id).length;
 const scenes = [...new Set(shellTypes.map((type) => type.scene))];
+import { bgForPage } from '../lib/bg';
+const pagePhoto = bgForPage('ballistics');
 ---
-<Base title="Баллистика снарядов" era="late" noPhoto description="Траектории снарядов танковых пушек, автоматических пушек БМП и гаубиц: угол ствола, дальность, скорость и время полёта.">
+<Base title="Баллистика снарядов" era="late" photoUrl={pagePhoto} noPhoto={!pagePhoto} description="Траектории снарядов танковых пушек, автоматических пушек БМП и гаубиц: угол ствола, дальность, скорость и время полёта.">
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
       <a href="/">Главная</a><span>/</span>

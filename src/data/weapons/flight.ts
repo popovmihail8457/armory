@@ -1,5 +1,6 @@
 import { calibrate, type FlightProfile, type FlightScenario } from '../../lib/missileFlight';
 import { weapons } from './data';
+import { weaponMods } from './mods';
 
 export type FlightKind = 'short' | 'medium' | 'long' | 'ramjet' | 'manpads' | 'sam-short' | 'sam-medium' | 'sam-long';
 export type FlightGroup = 'air' | 'ground';
@@ -42,6 +43,69 @@ export const flightKindOf: Record<string, FlightKind> = {
   'pac-2': 'sam-long', '48n6': 'sam-long', '40n6': 'sam-long', 'sm-2': 'sam-long', 'aster-30': 'sam-long', 'sm-6': 'sam-long',
 };
 
+/** Отличия версии от базовой записи каталога. Незаполненные поля берутся из каталога. */
+export interface FlightModSpec {
+  rangeKm?: number;
+  speedKmh?: number;
+  mass?: number;
+  diameter?: number;
+}
+
+const same: FlightModSpec = {};
+const r = (rangeKm: number, extra: FlightModSpec = {}): FlightModSpec => ({ rangeKm, ...extra });
+
+/**
+ * Дальность и скорость по версиям, порядок как в mods.ts.
+ * null: отдельных открытых данных по версии нет, значения не придумываются.
+ */
+export const flightMods: Record<string, (FlightModSpec | null)[]> = {
+  'aim-9': [r(4.8, { speedKmh: 1800, mass: 70 }), null, same, same, r(35)],
+  'r-73': [same, same, r(40)],
+  'iris-t': [same, null],
+  'asraam': [same, null],
+  'r-60': [same, r(10)],
+  'python-5': [r(15, { speedKmh: 3700 }), r(15, { speedKmh: 3700 }), same],
+  'aim-7': [null, r(30, { speedKmh: 4300 }), same, same, same],
+  'aim-120': [r(70), r(70), same, r(160)],
+  'r-27': [same, r(70), r(130, { mass: 350 })],
+  'r-77': [same, r(110)],
+  'mica': [same, same],
+  'super-530': [r(25), same],
+  'aim-54': [same, same, same],
+  'r-33': [same, r(160)],
+  'r-37': [null, same],
+  'meteor': [same],
+  'stinger-missile': [same, same, same],
+  '9m39': [r(5), same, r(6)],
+  'starstreak-missile': [same, null],
+  'mistral-missile': [r(6, { speedKmh: 2900 }), r(6.5, { speedKmh: 3300 }), r(7, { speedKmh: 3300 })],
+  'redeye-missile': [null, same],
+  '9m32': [same, r(4.2, { speedKmh: 1800 })],
+  '9m330': [same, same],
+  '57e6': [r(18), same],
+  'ram': [same, same, null],
+  'rim-7': [null, same, same],
+  '9m33': [same, same, r(15)],
+  '9m38': [r(25), same, r(45, { speedKmh: 4300 })],
+  'essm': [same, same, same],
+  'v-750': [same, same, r(43)],
+  '5v27': [r(15), same],
+  '3m9': [same, same],
+  'pac-2': [null, same, same, r(35, { mass: 312, diameter: 255 }), null],
+  '48n6': [same, r(200), r(250)],
+  'sm-2': [r(74), same, same],
+  'aster-30': [same, r(150)],
+  'sm-6': [same, same, null],
+};
+
+export interface FlightModEntry {
+  name: string;
+  /** null: по версии нет отдельных данных. */
+  profile: FlightProfile | null;
+  rangeKm?: number;
+  speedKmh?: number;
+}
+
 export interface FlightEntry {
   id: string;
   name: string;
@@ -53,6 +117,8 @@ export interface FlightEntry {
   /** Опубликованная скорость, км/ч. */
   speedKmh?: number;
   profile: FlightProfile;
+  /** Профили по версиям в порядке вкладок модификаций. Пусто, если версии не описаны. */
+  mods: FlightModEntry[];
 }
 
 const round = (value: number, digits: number) => Number(value.toFixed(digits));
@@ -69,6 +135,23 @@ export const flightEntries: FlightEntry[] = weapons.flatMap((weapon) => {
     range * 1000,
     speed !== undefined ? speed / 3.6 : undefined,
   );
+  const clean = { ...profile, propFrac: round(profile.propFrac, 3), cd: round(profile.cd, 3) };
+  const names = weaponMods[weapon.id] ?? [];
+  const specs = flightMods[weapon.id] ?? [];
+  if (specs.length > 0 && specs.length !== names.length) throw new Error(`flightMods['${weapon.id}']: версий ${specs.length}, а в mods.ts ${names.length}`);
+  const mods: FlightModEntry[] = specs.map((spec, i) => {
+    if (spec === null) return { name: names[i].name, profile: null };
+    if (Object.keys(spec).length === 0) return { name: names[i].name, profile: clean, rangeKm: range, speedKmh: speed };
+    const modRange = spec.rangeKm ?? range;
+    const modSpeed = spec.speedKmh ?? speed;
+    const fitted = calibrate(
+      { mass: spec.mass ?? mass, diameter: spec.diameter ?? diameter, burn: preset.burn, loft: preset.loft },
+      preset.reference,
+      modRange * 1000,
+      modSpeed !== undefined ? modSpeed / 3.6 : undefined,
+    );
+    return { name: names[i].name, profile: { ...fitted, propFrac: round(fitted.propFrac, 3), cd: round(fitted.cd, 3) }, rangeKm: modRange, speedKmh: modSpeed };
+  });
   return [{
     id: weapon.id,
     name: weapon.name,
@@ -77,7 +160,8 @@ export const flightEntries: FlightEntry[] = weapons.flatMap((weapon) => {
     group: preset.group,
     rangeKm: range,
     speedKmh: speed,
-    profile: { ...profile, propFrac: round(profile.propFrac, 3), cd: round(profile.cd, 3) },
+    profile: clean,
+    mods,
   }];
 });
 

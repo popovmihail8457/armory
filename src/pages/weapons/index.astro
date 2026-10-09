@@ -5,8 +5,10 @@ import { weaponCategories, weapons, weaponsOfCategory, weaponUrl, classesOf } fr
 import { weaponGroups } from '../../data/weapons/taxonomy';
 import { weaponMetrics } from '../../data/weapons/taxonomy';
 import { formatNumber } from '../../lib/data';
+import { bgForPage } from '../../lib/bg';
+const pagePhoto = bgForPage('weapons');
 ---
-<Base title="Вооружение" description="Каталог вооружения: ракеты, пушки, торпеды и управляемые бомбы с характеристиками, принципом работы и модификациями." noPhoto>
+<Base title="Вооружение" photoUrl={pagePhoto} noPhoto={!pagePhoto} description="Каталог вооружения: ракеты, пушки, торпеды и управляемые бомбы с характеристиками, принципом работы и модификациями." noPhoto>
   <section class="section">
     <div class="wrap">
       <div class="section-head">

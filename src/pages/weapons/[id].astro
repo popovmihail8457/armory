@@ -8,6 +8,7 @@ import { weaponCosts } from '../../data/weapons/costs';
 import WarheadDemo from '../../components/WarheadDemo.astro';
 import BallisticsLab from '../../components/BallisticsLab.astro';
 import { gunsOfWeapon } from '../../data/shells';
+import { bgForWeapon } from '../../lib/bg';
 import FlightLab from '../../components/FlightLab.astro';
 import { flightEntryOf } from '../../data/weapons/flight';
 import { warheadScenes } from '../../data/weapons/warheads';
@@ -39,6 +40,8 @@ const others = peers.filter((p) => p.id !== weapon.id);
 const mods = weaponMods[weapon.id] ?? [];
 const cost = weaponCosts[weapon.id];
 const shellGuns = gunsOfWeapon(weapon.id);
+const photo = bgForWeapon(weapon.id, weapon.platforms);
+const carrierName = photo.carrier ? equipment.find((item) => item.id === photo.carrier)?.name : undefined;
 const flight = flightEntryOf(weapon.id);
 const scenes = warheadScenes(weapon.id, Math.max(1, mods.length));
 const tocItems = [
@@ -55,7 +58,7 @@ const tocItems = [
   specRows.length > 0 && others.length > 0 && { id: 'compare', label: 'Сравнение' },
 ].filter(Boolean) as { id: string; label: string }[];
 ---
-<Base title={weapon.name} vt="weapon" place={`Арсенал · ${category.name} · ${weapon.name}`} era={era.id} noPhoto description={`${weapon.name} (${weapon.country}, ${weapon.year}): ${text.summary}`}>
+<Base title={weapon.name} vt="weapon" place={`Арсенал · ${category.name} · ${weapon.name}`} era={era.id} photoUrl={photo.url} noPhoto={!photo.url} description={`${weapon.name} (${weapon.country}, ${weapon.year}): ${text.summary}`}>
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
       <a href="/">Главная</a><span>/</span>
@@ -72,6 +75,7 @@ const tocItems = [
         <span class="eyebrow">{category.name}</span>
         <h1>{weapon.name}</h1>
         <p class="lead">{text.summary}</p>
+        {carrierName && <p class="photo-note">На фоне носитель: {carrierName}. Свободного фото самого образца нет.</p>}
         <div class="chips">{classesOf(weapon).map((c) => <a class="chip" href={`/weapons/#${c.id}`}>{c.name}</a>)}</div>
       </div>
       <dl class="facts">
@@ -123,9 +127,9 @@ const tocItems = [
       <div class="wrap">
         <div class="section-head">
           <h2>Профиль полёта</h2>
-          <p class="lead">Меняйте условия пуска и положение точки встречи. В режиме сравнения можно добавить другие ракеты этого класса. <a href="/flight/">Все ракеты и сводная таблица</a>.</p>
+          <p class="lead">Меняйте условия пуска и положение точки встречи. При выборе версии во вкладках модификаций ниже график перестраивается под неё. В режиме сравнения можно добавить другие ракеты этого класса. <a href="/flight/">Все ракеты и сводная таблица</a>.</p>
         </div>
-        <FlightLab group={flight.group} initial={weapon.id} summary={false} />
+        <FlightLab group={flight.group} initial={weapon.id} summary={false} followMods />
       </div>
     </section>
   )}

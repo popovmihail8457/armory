@@ -13,8 +13,10 @@ const sectors = equipment
   .filter((item) => coverage[item.id]?.radar)
   .map((item) => ({ item, radar: coverage[item.id].radar! }))
   .sort((a, b) => b.radar.half - a.radar.half);
+import { bgForPage } from '../lib/bg';
+const pagePhoto = bgForPage('radar');
 ---
-<Base title="Радар: режимы работы" description="Анимации режимов работы бортового радиолокатора: обзор, сопровождение, захват, картографирование и АФАР.">
+<Base title="Радар: режимы работы" photoUrl={pagePhoto} noPhoto={!pagePhoto} description="Анимации режимов работы бортового радиолокатора: обзор, сопровождение, захват, картографирование и АФАР.">
   <section class="section">
     <div class="wrap">
       <div class="section-head">

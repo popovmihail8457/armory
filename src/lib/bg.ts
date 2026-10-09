@@ -84,3 +84,28 @@ export function bgForItem(id: string): string | undefined {
   const key = ITEM_PHOTO_KEYS[id];
   return key ? urlOf(bgManifest[key]) : undefined;
 }
+const weaponFound = import.meta.glob('../../public/bg/weapons/manifest.json', { eager: true, import: 'default' });
+export const weaponManifest = (Object.values(weaponFound)[0] ?? {}) as Record<string, BgEntry>;
+
+const pageFound = import.meta.glob('../../public/bg/pages/manifest.json', { eager: true, import: 'default' });
+export const pageManifest = (Object.values(pageFound)[0] ?? {}) as Record<string, BgEntry>;
+
+/** Фон служебной страницы (баллистика, полёт ракет, радар, защита, каталог вооружения). */
+export function bgForPage(key: string): string | undefined {
+  const entry = pageManifest[key];
+  return entry?.file ? `/bg/pages/${entry.file}` : undefined;
+}
+
+/**
+ * Фон образца вооружения: своё фото, а если его нет, фото первого носителя, у которого оно есть.
+ * carrier заполняется только во втором случае: страница подписывает, что на фоне носитель.
+ */
+export function bgForWeapon(weaponId: string, platforms: string[]): { url?: string; carrier?: string } {
+  const own = weaponManifest[weaponId];
+  if (own?.file) return { url: `/bg/weapons/${own.file}` };
+  for (const id of platforms) {
+    const url = bgForItem(id);
+    if (url) return { url, carrier: id };
+  }
+  return {};
+}

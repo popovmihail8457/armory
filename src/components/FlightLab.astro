@@ -7,20 +7,23 @@ interface Props {
   initial?: string;
   /** Показывать сводную таблицу по всем ракетам группы. */
   summary?: boolean;
+  /** Следить за вкладками модификаций на странице и перестраивать график под выбранную версию. */
+  followMods?: boolean;
 }
 
-const { group, initial, summary = true } = Astro.props;
+const { group, initial, summary = true, followMods = false } = Astro.props;
 const entries = flightEntries.filter((entry) => entry.group === group);
 const first = entries.find((entry) => entry.id === initial) ?? entries[0];
 const reference = flightKinds[first.kind].reference;
 const air = group === 'air';
 ---
-<section class="ball flight" data-flight data-entries={JSON.stringify(entries)} data-initial={first.id} data-air={String(air)}>
+<section class="ball flight" data-flight data-entries={JSON.stringify(entries)} data-initial={first.id} data-air={String(air)} data-follow={String(followMods && first.mods.some((mod) => mod.profile))}>
   <div class="ball-top">
     <div class="ball-field flight-pick">
       <span class="eyebrow">Ракета</span>
       <div class="ball-shells" role="group" aria-label="Ракеты"></div>
       <button type="button" class="ball-btn ball-compare" aria-pressed="false">Сравнение: выкл.</button>
+      {followMods && first.mods.filter((mod) => mod.profile).length > 1 && <button type="button" class="ball-btn flight-versions" aria-pressed="false">Сравнить версии</button>}
     </div>
     <div class="ball-field">
       {air && (
@@ -76,6 +79,7 @@ const air = group === 'air';
         <span class="eyebrow ball-type"></span>
         <h3 class="radar-title ball-name"></h3>
       </div>
+      <p class="flight-modnote" hidden></p>
       <p class="radar-text flight-verdict"></p>
       <dl class="radar-readout">
         <div><dt>Время полёта</dt><dd class="num r-time">-</dd></div>
@@ -119,7 +123,8 @@ const air = group === 'air';
 <script>
   import { fly, type FlightProfile, type FlightResult, type FlightPoint, type FlightScenario } from '../lib/missileFlight';
 
-  interface Entry { id: string; name: string; kindLabel: string; rangeKm: number; speedKmh?: number; profile: FlightProfile }
+  interface ModEntry { name: string; profile: FlightProfile | null; rangeKm?: number; speedKmh?: number }
+  interface Entry { id: string; name: string; kindLabel: string; rangeKm: number; speedKmh?: number; profile: FlightProfile; mods?: ModEntry[] }
   type View = 'alt' | 'speed-time' | 'speed-dist';
 
   const SERIES = ['#3987e5', '#d95926', '#199e70', '#c98500', '#d7d6cd'];
@@ -167,6 +172,35 @@ const air = group === 'air';
     let time = 0;
     let playing = 0;
     let series: { entry: Entry; result: FlightResult; color: string }[] = [];
+    const ownId = root.dataset.initial ?? entries[0].id;
+    const own = entries.find((e) => e.id === ownId)!;
+    const follow = root.dataset.follow === 'true';
+    const versionsBtn = root.querySelector<HTMLButtonElement>('.flight-versions');
+    const modNote = $('.flight-modnote');
+    /** Выбранная версия своей ракеты: подменяет профиль записи каталога. */
+    let ownView: Entry | null = null;
+    let versionMode = false;
+    const asEntry = (mod: ModEntry): Entry => ({ ...own, name: mod.name, profile: mod.profile!, rangeKm: mod.rangeKm ?? own.rangeKm, speedKmh: mod.speedKmh });
+    const resolve = (id: string): Entry => (id === ownId && ownView ? ownView : entries.find((e) => e.id === id)!);
+    const versionEntries = (): Entry[] => (own.mods ?? []).filter((mod) => mod.profile).slice(-MAX_COMPARE).map(asEntry);
+    const shown = (): Entry[] => (versionMode ? versionEntries() : selected.map(resolve));
+
+    function followMod(index: number) {
+      const mods = own.mods ?? [];
+      const picked = mods[index];
+      if (!picked) return;
+      const fallback = picked.profile ? picked : [...mods.slice(0, index)].reverse().find((mod) => mod.profile) ?? mods.slice(index).find((mod) => mod.profile);
+      if (!fallback) return;
+      ownView = asEntry(fallback);
+      modNote.hidden = false;
+      modNote.textContent = picked.profile
+        ? `График построен для версии ${picked.name}.`
+        : `Отдельных открытых данных по версии ${picked.name} нет, показана ${fallback.name}.`;
+      stop();
+      time = 0;
+      fitDistance();
+      update();
+    }
 
     const sliderLabel = (key: string, value: number) => {
       if (key === 'launchSpeed') return `${fmt(value * 3.6)} км/ч`;
@@ -183,7 +217,7 @@ const air = group === 'air';
 
     function fitDistance() {
       const input = sliders.find((slider) => slider.dataset.key === 'distance')!;
-      const longest = Math.max(...selected.map((id) => entries.find((e) => e.id === id)!.rangeKm));
+      const longest = Math.max(...shown().map((entry) => entry.rangeKm));
       const max = Math.max(4000, Math.ceil((longest * 1300) / 500) * 500);
       input.max = String(max);
       input.step = String(max > 60000 ? 1000 : max > 12000 ? 500 : 100);
@@ -192,10 +226,7 @@ const air = group === 'air';
     }
 
     function compute() {
-      series = selected.map((id, i) => {
-        const entry = entries.find((e) => e.id === id)!;
-        return { entry, color: SERIES[i % SERIES.length], result: fly(entry.profile, scenario) };
-      });
+      series = shown().map((entry, i) => ({ entry, color: SERIES[i % SERIES.length], result: fly(entry.profile, scenario) }));
       time = Math.min(time, series[0].result.time);
     }
 
@@ -208,6 +239,7 @@ const air = group === 'air';
         button.title = entry.kindLabel;
         button.textContent = entry.name;
         button.addEventListener('click', () => {
+          if (versionMode) setVersionMode(false);
           if (!compare) selected = [entry.id];
           else if (selected.includes(entry.id)) selected = selected.length > 1 ? selected.filter((s) => s !== entry.id) : selected;
           else if (selected.length < MAX_COMPARE) selected = [...selected, entry.id];
@@ -394,6 +426,13 @@ const air = group === 'air';
       playing = requestAnimationFrame(frame);
     }
 
+    function setVersionMode(on: boolean) {
+      versionMode = on;
+      versionsBtn?.setAttribute('aria-pressed', String(on));
+      if (versionsBtn) versionsBtn.textContent = on ? 'Версии: на графике' : 'Сравнить версии';
+    }
+    versionsBtn?.addEventListener('click', () => { setVersionMode(!versionMode); stop(); time = 0; fitDistance(); update(); });
+    if (follow) document.addEventListener('modselect', (event) => followMod((event as CustomEvent<{ index: number }>).detail.index));
     sliders.forEach((input) => input.addEventListener('input', () => { stop(); update(); }));
     compareBtn.addEventListener('click', () => {
       compare = !compare;
@@ -419,7 +458,7 @@ const air = group === 'air';
     if (!air) { scenario.launchAlt = 0; scenario.launchSpeed = 20; }
     renderButtons();
     fitDistance();
-    const start = entries.find((e) => e.id === selected[0])!;
+    const start = resolve(selected[0]);
     const distanceInput = sliders.find((slider) => slider.dataset.key === 'distance')!;
     distanceInput.value = String(Math.round((start.rangeKm * 500) / Number(distanceInput.step)) * Number(distanceInput.step));
     update();

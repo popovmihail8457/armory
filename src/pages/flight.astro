@@ -5,8 +5,10 @@ import { flightEntries } from '../data/weapons/flight';
 
 const airCount = flightEntries.filter((entry) => entry.group === 'air').length;
 const groundCount = flightEntries.filter((entry) => entry.group === 'ground').length;
+import { bgForPage } from '../lib/bg';
+const pagePhoto = bgForPage('flight');
 ---
-<Base title="Полёт ракет" era="post" noPhoto description="Профили полёта ракет воздух-воздух и зенитных ракет: высота, скорость и время в зависимости от условий пуска.">
+<Base title="Полёт ракет" era="post" photoUrl={pagePhoto} noPhoto={!pagePhoto} description="Профили полёта ракет воздух-воздух и зенитных ракет: высота, скорость и время в зависимости от условий пуска.">
   <div class="wrap">
     <nav class="crumbs" aria-label="Навигация">
       <a href="/">Главная</a><span>/</span>

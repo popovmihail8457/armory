@@ -3,13 +3,20 @@ import Base from '../layouts/Base.astro';
 import { metrics } from '../data/taxonomy';
 import { equipment } from '../data/equipment';
 import { eras, domains, groups } from '../data/taxonomy';
-import { bgManifest, itemManifest } from '../lib/bg';
+import { bgManifest, itemManifest, weaponManifest, pageManifest } from '../lib/bg';
+import { weapons } from '../data/weapons/data';
 import { videos } from '../data/videos';
 
 const videoRows = Object.entries(videos).flatMap(([id, list]) => list.map((clip) => ({ name: equipment.find((item) => item.id === id)?.name ?? id, clip })));
 const itemPhotoRows = Object.entries(itemManifest)
   .filter(([, entry]) => entry.file)
   .map(([id, entry]) => ({ name: equipment.find((item) => item.id === id)?.name ?? id, title: (entry.title ?? '').replace(/^File:/, ''), author: entry.author ?? 'не указан', license: entry.license ?? '', page: entry.page }));
+const creditRows = (manifest: typeof itemManifest, nameOf: (id: string) => string) => Object.entries(manifest)
+  .filter(([, entry]) => entry.file)
+  .map(([id, entry]) => ({ name: nameOf(id), title: (entry.title ?? '').replace(/^File:/, ''), author: entry.author || 'не указан', license: entry.license ?? '', page: entry.page }));
+const weaponPhotoRows = creditRows(weaponManifest, (id) => weapons.find((weapon) => weapon.id === id)?.name ?? id);
+const pageNames: Record<string, string> = { ballistics: 'Баллистика снарядов', flight: 'Полёт ракет', radar: 'Радар', defense: 'Системы защиты', weapons: 'Каталог вооружения' };
+const pagePhotoRows = creditRows(pageManifest, (id) => pageNames[id] ?? id);
 const photoRows = Object.entries(bgManifest)
   .filter(([, entry]) => entry.file)
   .map(([key, entry]) => {
@@ -62,6 +69,15 @@ const photoRows = Object.entries(bgManifest)
         <p>На странице модели показывается только её собственное фото. Если подходящего свободного снимка нет, страница остаётся без фото.</p>
         <ul>
           {itemPhotoRows.map((row) => (<li>{row.name}: <a href={row.page} rel="noopener" target="_blank">{row.title}</a>. Автор: {row.author}. Лицензия: {row.license}.</li>))}
+        </ul>
+        <h3>Фотографии вооружения</h3>
+        <p>Если свободного фото образца нет, на его странице показывается фото носителя с подписью об этом.</p>
+        <ul>
+          {weaponPhotoRows.map((row) => (<li>{row.name}: <a href={row.page} rel="noopener" target="_blank">{row.title}</a>. Автор: {row.author}. Лицензия: {row.license}.</li>))}
+        </ul>
+        <h3>Фоны служебных страниц</h3>
+        <ul>
+          {pagePhotoRows.map((row) => (<li>{row.name}: <a href={row.page} rel="noopener" target="_blank">{row.title}</a>. Автор: {row.author}. Лицензия: {row.license}.</li>))}
         </ul>
         <h2>Видео</h2>
         <p>Ролики на страницах техники встраиваются ссылкой на файлы Wikimedia Commons и находятся в общественном достоянии или опубликованы под лицензией CC0. В проект они не скачиваются, а при отсутствии подходящего ролика показывается фото.</p>
