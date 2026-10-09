@@ -23,11 +23,13 @@ SITE_URL=https://ваш-домен npm run build
 В PowerShell: `$env:SITE_URL = "https://ваш-домен"; npm run build`.
 Содержимое папки `dist/` загружается на хостинг целиком. В сборке есть `robots.txt` и `sitemap-index.xml`.
 
-### GitHub Pages
+### Cloudflare
 
-Автосборка описана в `.github/workflows/deploy.yml`: при каждом push в `main` сайт собирается и публикуется на `https://popovmihail8457.github.io/armory/`. Один раз включите Settings, Pages, Source: GitHub Actions.
+Сайт опубликован на Cloudflare (воркер `armory`, настройки в `wrangler.jsonc`): каждый push в `main` собирается автоматически командой `npm run build`. В настройках сборки Cloudflare задана переменная `SITE_URL` с адресом сайта.
 
-Сайт лежит в подпапке `/armory`, поэтому после сборки запускается `scripts/prefix-base.mjs`: он добавляет префикс ко всем внутренним ссылкам (`BASE_PATH=/armory`). Для хостинга в корне домена `BASE_PATH` не задавайте.
+### Хостинг в подпапке
+
+Если сайт нужно положить в подпапку (например GitHub Pages вида `имя.github.io/репозиторий/`), после сборки запустите `BASE_PATH=/репозиторий node scripts/prefix-base.mjs`: скрипт добавит префикс ко всем внутренним ссылкам. Для хостинга в корне домена `BASE_PATH` не задавайте.
 
 ## Данные и фото
 
