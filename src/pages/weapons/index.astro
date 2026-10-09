@@ -33,7 +33,7 @@ const pagePhoto = bgForPage('weapons');
     const items = weaponsOfCategory(category.id);
     const key = category.metrics[0];
     return (
-      <section class="section" id={category.id}>
+      <section class="section lazy-section" id={category.id}>
         <div class="wrap">
           <div class="section-head">
             <h2>{category.name}</h2>

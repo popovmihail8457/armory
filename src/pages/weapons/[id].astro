@@ -40,6 +40,9 @@ const specRows = category.metrics
     return { metric, value, share: (value / max) * 100, rank: rankInCategory(weapon, metric) };
   });
 const others = peers.filter((p) => p.id !== weapon.id);
+/** Ближайшие по году образцы категории: полный список есть в каталоге. */
+const NEAREST_LIMIT = 24;
+const nearest = [...others].sort((a, b) => Math.abs(a.year - weapon.year) - Math.abs(b.year - weapon.year)).slice(0, NEAREST_LIMIT).sort((a, b) => a.year - b.year);
 const mods = weaponMods[weapon.id] ?? [];
 const cost = weaponCosts[weapon.id];
 const shellGuns = gunsOfWeapon(weapon.id);
@@ -254,9 +257,9 @@ const tocItems = [
             <WeaponScatter items={peers} metric={metric} highlight={weapon.id} />
           ))}
         </div>
-        <h3 style="margin: 32px 0 12px;">Другие образцы категории</h3>
+        <h3 style="margin: 32px 0 12px;">Другие образцы категории{others.length > nearest.length ? `: ${nearest.length} ближайших по году из ${others.length}` : ""}</h3>
         <div class="cards">
-          {others.map((o) => (
+          {nearest.map((o) => (
             <a class="card" href={weaponUrl(o)} style={`--c:var(--era-${eraOf(o.year).id})`}>
               <span class="stripe"></span>
               <h3>{o.name}</h3>

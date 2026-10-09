@@ -19,6 +19,7 @@ interface Props {
 
 const { title, description = 'Справочник военной техники с 1947 года до наших дней: флот, авиация и наземная техника.', era, domain, group, noPhoto = false, photoUrl, vt, place } = Astro.props;
 const photo = photoUrl ?? (noPhoto ? undefined : bgFor(era, domain, group));
+const photoMobile = photo?.replace(/\.jpg$/, '-m.jpg');
 const activeEra = eras.find((item) => item.id === era);
 const eraLabel = activeEra ? `${activeEra.from}–${activeEra.to === 2026 ? 'н. в.' : activeEra.to}` : '';
 const pathname = Astro.url.pathname;
@@ -32,11 +33,13 @@ const fullTitle = title === 'Арсенал' ? 'Арсенал: справочн
     <meta name="description" content={description} />
     <title>{fullTitle}</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    {photo && <link rel="preload" as="image" href={photoMobile} media="(max-width: 720px)" fetchpriority="high" />}
+    {photo && <link rel="preload" as="image" href={photo} media="(min-width: 721px)" fetchpriority="high" />}
     <script is:inline>document.documentElement.classList.add('js');</script>
   </head>
   <body>
     <div class="bg" data-era={era ?? 'none'} data-photo={photo ? 'on' : 'off'} aria-hidden="true">
-      {photo && <div class="bg-photo" style={`background-image:url('${photo}')`}></div>}
+      {photo && <div class="bg-photo" style={`--photo:url('${photo}');--photo-m:url('${photoMobile}')`}></div>}
       <div class="bg-glow"></div>
       <div class="bg-pattern"></div>
       {eraLabel && <div class="bg-year num">{eraLabel}</div>}
@@ -77,7 +80,7 @@ const fullTitle = title === 'Арсенал' ? 'Арсенал: справочн
     <script is:inline>
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         let ticking = false;
-        const root = document.documentElement;
+        const root = document.querySelector('.bg') ?? document.documentElement;
         const update = () => {
           root.style.setProperty('--py', String(window.scrollY));
           ticking = false;
