@@ -14,7 +14,7 @@ const used = weapons
   .filter((weapon) => weapon.year >= conflict.weaponYears[0] && weapon.year <= conflict.weaponYears[1] && weapon.platforms.some((id) => allItems.has(id)))
   .sort((a, b) => a.year - b.year);
 const small = weapons
-  .filter((weapon) => weapon.year >= conflict.weaponYears[0] && weapon.year <= conflict.weaponYears[1] && weapon.platforms.length === 0 && ['guns', 'rockets'].includes(weapon.category) && ['СССР', 'США', 'Китай'].includes(weapon.country))
+  .filter((weapon) => weapon.year >= conflict.weaponYears[0] && weapon.year <= conflict.weaponYears[1] && weapon.platforms.length === 0 && ['infantry', 'artillery', 'other'].includes(weaponCategories.find((category) => category.id === weapon.category)?.group ?? '') && ['СССР', 'США', 'Китай'].includes(weapon.country))
   .sort((a, b) => a.year - b.year);
 const categoryName = (id: string) => weaponCategories.find((category) => category.id === id)?.name ?? id;
 ---

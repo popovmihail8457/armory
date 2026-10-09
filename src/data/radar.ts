@@ -52,7 +52,7 @@ export const aircraftRadar: Record<string, AircraftRadar> = {
   'f-4': { name: 'AN/APQ-120 (поздние серии)', antenna: 'mechanical' },
   'f-15': { name: 'AN/APG-63', antenna: 'mechanical' },
   'su-27': { name: 'Н001 «Меч»', antenna: 'mechanical' },
-  'eurofighter': { name: 'CAPTOR-M', antenna: 'mechanical' },
+  'eurofighter': { name: 'CAPTOR-E', antenna: 'aesa' },
   'f-22': { name: 'AN/APG-77', antenna: 'aesa' },
   'f-35a': { name: 'AN/APG-81', antenna: 'aesa' },
   'su-57': { name: 'Н036 «Белка»', antenna: 'aesa' },

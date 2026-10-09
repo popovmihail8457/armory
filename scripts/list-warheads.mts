@@ -10,7 +10,7 @@ import { tmpdir } from 'node:os';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', 'src', 'data', 'weapons');
 const work = join(tmpdir(), 'armory-warheads');
 mkdirSync(work, { recursive: true });
-for (const file of ['types.ts', 'data.ts', 'catalog-extra.ts', 'warheads.ts']) {
+for (const file of ['types.ts', 'data.ts', 'catalog-extra.ts', 'warheads.ts', 'classes.ts']) {
   writeFileSync(join(work, file), readFileSync(join(root, file), 'utf8').replace(/from '(\.[^']*)'/g, "from '$1.ts'"));
 }
 const { weapons } = await import(pathToFileURL(join(work, 'data.ts')).href);

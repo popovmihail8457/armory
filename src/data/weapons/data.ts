@@ -1,3 +1,4 @@
+import { reclass } from './classes';
 import type { WeaponCategoryId, WeaponData } from './types';
 import { extraWeapons } from './catalog-extra';
 
@@ -780,6 +781,7 @@ const NEW_PLATFORMS: Record<string, string[]> = {
 
 export const weapons: WeaponData[] = [...base, ...extraWeapons].map((weapon) => ({
   ...weapon,
+  category: reclass(weapon),
   platforms: [...new Set([...weapon.platforms, ...(EXTRA_PLATFORMS[weapon.id] ?? []), ...(MORE_PLATFORMS[weapon.id] ?? []), ...(GAP_PLATFORMS[weapon.id] ?? []), ...(NEW_PLATFORMS[weapon.id] ?? [])])],
   also: ALSO[weapon.id],
 }));

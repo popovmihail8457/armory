@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import WeaponScatter from '../../components/WeaponScatter.astro';
 import TrajectoryDemo from '../../components/TrajectoryDemo.astro';
+import { trajectoryOf } from '../../data/trajectory';
 import ModTabs from '../../components/ModTabs.astro';
 import { weaponMods } from '../../data/weapons/mods';
 import { weaponCosts } from '../../data/weapons/costs';
@@ -43,6 +44,7 @@ const others = peers.filter((p) => p.id !== weapon.id);
 /** Ближайшие по году образцы категории: полный список есть в каталоге. */
 const NEAREST_LIMIT = 24;
 const nearest = [...others].sort((a, b) => Math.abs(a.year - weapon.year) - Math.abs(b.year - weapon.year)).slice(0, NEAREST_LIMIT).sort((a, b) => a.year - b.year);
+const trajectory = trajectoryOf(weapon, category.scene);
 const mods = weaponMods[weapon.id] ?? [];
 const cost = weaponCosts[weapon.id];
 const shellGuns = gunsOfWeapon(weapon.id);
@@ -107,7 +109,7 @@ const tocItems = [
         <h2>Принцип работы</h2>
       </div>
       <p class="principle lead">{text.principle}</p>
-      {category.scene && <div style="margin-top: 28px;"><TrajectoryDemo only={[category.scene]} initial={category.scene} /></div>}
+      {trajectory && <div style="margin-top: 28px;"><TrajectoryDemo only={[trajectory]} initial={trajectory} /></div>}
     </div>
   </section>
 

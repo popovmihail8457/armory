@@ -122,6 +122,9 @@ const EXTRA: Record<string, WarheadScene | null> = {
   'betab-500': 'penetrator', 'durandal': 'penetrator', 'gbu-27': 'penetrator', 'gbu-24': 'penetrator', 'as-30l': 'penetrator', 'agm-142': 'penetrator', 'agm-130': 'penetrator', 'kh-47': 'penetrator',
   // ракеты «воздух-поверхность» с фугасной или осколочно-фугасной боевой частью
   'agm-12': 'blast', 'kh-23': 'blast', 'kh-25': 'blast', 'kh-15': 'blast', 'martel': 'frag', 'kh-28': 'frag', 'agm-78': 'frag',
+  // лёгкие ракеты и боеприпасы «воздух-поверхность»: боевая часть рассчитана на технику, а не на здания
+  'agm-114': 'shaped', 'jagm': 'tandem', 'hj-10': 'tandem', 'pars3-lr': 'tandem', 'umtas': 'tandem', 'brimstone': 'tandem',
+  'agm-176': 'frag', 'mam-l': 'frag', 'mam-t': 'frag', 'cirit': 'frag', 'apkws': 'frag', 'kab-20': 'frag', 'blue-arrow-7': 'frag', 'gbu-44': 'frag',
   // только ядерное оснащение: сцена не показывается
   'agm-28': null, 'agm-69': null, 'asmp': null, 'honest-john': null, 'pershing-1a': null, 'pershing-2-missile': null, 'subroc': null,
   // перехват прямым попаданием
@@ -141,10 +144,15 @@ function byCategory(weapon: WeaponData): WarheadScene | null {
     case 'abm': return 'kinetic';
     case 'atgm': return 'shaped';
     case 'air-sea': case 'sea-sea': case 'ground-sea': case 'cruise': return 'penetrator';
-    case 'agm': case 'guided-bombs': case 'bombs': case 'ground-ground': case 'sea-surface': return 'blast';
+    case 'guided-bombs': case 'bombs': case 'ground-ground': case 'sea-surface': return 'blast';
+    case 'agm': return 'penetrator';
+    case 'light-agm': case 'manpads': case 'mortars': case 'grenade-launchers': return 'frag';
+    case 'at-launchers': return 'shaped';
+    case 'rifles': case 'snipers': case 'smg': case 'mg': return null;
+    case 'tank-guns': return 'kinetic';
     case 'rockets': return 'frag';
     case 'torpedo': case 'asw': return null;
-    case 'guns':
+    case 'guns': case 'howitzers': case 'autocannons': case 'naval-guns': case 'aircraft-guns':
       if (SMALL_ARM.test(weapon.type) && !/пушк/i.test(weapon.type)) return null;
       if (/танков|противотанков/i.test(weapon.type)) return 'kinetic';
       return FRAG_GUN.test(weapon.type) ? 'frag' : 'kinetic';

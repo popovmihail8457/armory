@@ -40,7 +40,7 @@ const start = scenes.some((scene) => scene.id === initial) ? initial : scenes[0]
 </section>
 
 <script>
-  type Id = 'ballistic' | 'sam' | 'cruise' | 'seaskim' | 'aam' | 'atgm' | 'torpedo' | 'strike';
+  type Id = 'ballistic' | 'quasi' | 'sam' | 'cruise' | 'seaskim' | 'aam' | 'atgm' | 'torpedo' | 'strike' | 'agm' | 'arm' | 'laser' | 'bullet' | 'lob' | 'mortar' | 'direct' | 'artillery' | 'tankshot' | 'burst' | 'navalfire';
   interface Info { id: Id; name: string; short: string; text: string; readout: [string, string, string] }
   type Pt = [number, number];
 
@@ -138,8 +138,8 @@ const start = scenes.some((scene) => scene.id === initial) ? initial : scenes[0]
     };
 
     // ===== баллистическая траектория =====
-    function sceneBallistic(time: number) {
-      const T = 8.5, k = Math.floor(time / T), s = time % T, quasi = k % 2 === 1;
+    function sceneBallistic(time: number, quasi: boolean) {
+      const T = 8.5, s = time % T;
       const x0 = 80, x1 = 640, apex = quasi ? 175 : 305;
       const pt = (u: number): Pt => {
         const x = x0 + (x1 - x0) * u; let y = G - 4 * apex * u * (1 - u);
@@ -372,10 +372,210 @@ const start = scenes.some((scene) => scene.id === initial) ? initial : scenes[0]
       tag('сброс с самолёта');
     }
 
+    // ===== общие сцены выстрела по дуге: пуля, граната, мина, РПГ, орудие, танк, корабль =====
+    interface Shot {
+      sea?: boolean;
+      shooter: 'soldier' | 'launcher' | 'gun' | 'tank' | 'ship';
+      target: 'soldier' | 'tank' | 'building' | 'ship';
+      x0: number; y0: number; x1: number; y1: number; apex: number; delay: number; dur: number;
+      shield?: 'wall' | 'hill';
+      sight?: boolean;
+      flame?: [number, number];
+      sabot?: boolean;
+      backblast?: boolean;
+      apexLabel?: boolean;
+      labels: [string, string, string];
+      cap: string;
+      tag: string;
+    }
+    const SHOTS: Record<string, Shot> = {
+      bullet: { shooter: 'soldier', target: 'soldier', x0: 96, y0: G - 40, x1: 600, y1: G - 40, apex: 34, delay: 0.6, dur: 1.0, sight: true,
+        labels: ['вылет вдоль оси канала ствола', 'выше линии прицеливания', 'пересекает линию у цели'], cap: 'Ствол направлен чуть выше линии прицеливания, потому что пуля падает. Превышение преувеличено', tag: 'пуля' },
+      lob: { shooter: 'soldier', target: 'soldier', x0: 110, y0: G - 40, x1: 480, y1: G - 12, apex: 130, delay: 0.6, dur: 2.2, shield: 'wall', apexLabel: true,
+        labels: ['выстрел с малой скоростью', 'крутая дуга', 'падает сверху'], cap: 'Граната перелетает стену и падает на стрелка за ней', tag: 'гранатомёт' },
+      mortar: { shooter: 'gun', target: 'soldier', x0: 110, y0: G - 20, x1: 600, y1: G - 12, apex: 330, delay: 0.6, dur: 3.6, shield: 'hill', apexLabel: true,
+        labels: ['большой угол возвышения', 'апогей', 'почти отвесное падение'], cap: 'Мина поднимается над холмом и падает за ним: прямой выстрел сюда не дотянется', tag: 'миномёт' },
+      direct: { shooter: 'launcher', target: 'tank', x0: 120, y0: G - 48, x1: 540, y1: G - 28, apex: 12, delay: 0.6, dur: 1.5, flame: [0.1, 0.95], backblast: true,
+        labels: ['стартовый заряд выбрасывает гранату', 'включился реактивный двигатель', 'кумулятивная струя по броне'], cap: 'Двигатель включается после выхода из трубы, поэтому позади стрелка остаётся опасная зона', tag: 'гранатомёт' },
+      artillery: { shooter: 'gun', target: 'building', x0: 100, y0: G - 26, x1: 610, y1: G - 12, apex: 230, delay: 0.6, dur: 3.4, apexLabel: true,
+        labels: ['выстрел зарядом', 'дуга полёта', 'разрыв у цели'], cap: 'Угол возвышения задаёт дугу: чем он больше, тем круче снаряд падает на цель', tag: 'орудие' },
+      tankshot: { shooter: 'tank', target: 'tank', x0: 150, y0: G - 40, x1: 560, y1: G - 36, apex: 6, delay: 0.6, dur: 0.8, sabot: true,
+        labels: ['разгон в стволе', 'поддон отделяется', 'сердечник бьёт в броню'], cap: 'Сердечник летит по почти прямой линии, поддон отлетает в сторону сразу за дульным срезом', tag: 'танковая пушка' },
+      navalfire: { sea: true, shooter: 'ship', target: 'ship', x0: 130, y0: G - 30, x1: 560, y1: G - 12, apex: 150, delay: 0.6, dur: 3.2, apexLabel: true,
+        labels: ['расчёт упреждения по курсу', 'дуга полёта', 'попадание в цель'], cap: 'Вычислитель учитывает качку, курс и скорость обоих кораблей', tag: 'корабельное орудие' },
+    };
+
+    function drawFigure(kind: string, x: number, dir: number, armed: boolean) {
+      ctx.save(); ctx.translate(x, 0); ctx.scale(dir, 1); ctx.fillStyle = '#a2a299'; ctx.strokeStyle = '#a2a299'; ctx.lineWidth = 3;
+      if (kind === 'soldier' || kind === 'launcher') {
+        dot(0, G - 56, 6, '#c3c2b7');
+        line(0, G - 50, 0, G - 22, '#a2a299', 5); line(0, G - 22, -8, G, '#a2a299', 4); line(0, G - 22, 8, G, '#a2a299', 4);
+        if (armed) line(2, G - 44, kind === 'launcher' ? 34 : 26, G - 50, '#6f6f68', kind === 'launcher' ? 6 : 3);
+        if (armed && kind === 'launcher') line(-26, G - 46, 34, G - 52, '#8a8a82', 7);
+      } else if (kind === 'gun') {
+        dot(-14, G - 8, 8, '#555'); dot(14, G - 8, 8, '#555'); ctx.fillRect(-16, G - 22, 32, 8);
+        line(0, G - 20, 46, G - 44, '#c3c2b7', 5);
+      } else if (kind === 'tank') {
+        ctx.fillRect(-46, G - 24, 92, 20); ctx.fillRect(-20, G - 40, 40, 16);
+        if (armed) line(18, G - 34, 62, G - 36, '#c3c2b7', 5);
+        for (let i = -3; i <= 3; i++) dot(i * 12, G - 3, 5, '#555');
+      } else if (kind === 'ship') {
+        ctx.beginPath(); ctx.moveTo(-70, G - 14); ctx.lineTo(70, G - 14); ctx.lineTo(54, G + 4); ctx.lineTo(-62, G + 4); ctx.closePath(); ctx.fill();
+        ctx.fillRect(-18, G - 36, 40, 22);
+        dot(-40, G - 20, 7, '#8a8a82');
+        if (armed) line(-40, G - 22, 0, G - 40, '#c3c2b7', 4);
+      } else if (kind === 'building') {
+        ctx.fillRect(-34, G - 90, 68, 90); ctx.fillStyle = '#242421';
+        for (let r = 0; r < 4; r++) for (let c = -1; c <= 1; c += 2) ctx.fillRect(c * 14 - 7, G - 80 + r * 20, 14, 10);
+      }
+      ctx.restore();
+    }
+
+    function sceneShot(time: number, c: Shot) {
+      const T = c.delay + c.dur + 1.8, s = time % T, u = clamp((s - c.delay) / c.dur, 0, 1);
+      if (c.sea) {
+        ctx.fillStyle = '#1f2a33'; ctx.fillRect(0, G - 8, W, H - G + 8);
+        polyline(Array.from({ length: Math.floor(W / 6) + 1 }, (_, i): Pt => [i * 6, G - 8 + Math.sin(i * 6 * 0.05 + time * 2) * 2.5]), 'rgba(255,255,255,0.25)', 1);
+      } else ground();
+      if (c.shield === 'wall') { ctx.fillStyle = '#6f6f68'; ctx.fillRect(290, G - 70, 18, 70); }
+      if (c.shield === 'hill') { ctx.fillStyle = '#2d2d29'; ctx.beginPath(); ctx.moveTo(250, G); ctx.quadraticCurveTo(350, G - 190, 450, G); ctx.fill(); }
+      drawFigure(c.shooter, c.x0 - (c.shooter === 'soldier' ? 0 : c.shooter === 'launcher' ? 0 : 0), 1, true);
+      drawFigure(c.target, c.x1, -1, false);
+      const pt = (v: number): Pt => [c.x0 + (c.x1 - c.x0) * v, c.y0 + (c.y1 - c.y0) * v - 4 * c.apex * v * (1 - v)];
+      if (c.sight) { line(c.x0, c.y0, c.x1, c.y1, faint, 1, 0.7, [6, 5]); text('линия прицеливания', (c.x0 + c.x1) / 2, c.y0 + 22, faint, 12, 'center'); }
+      ctx.save(); ctx.setLineDash([3, 5]); polyline(Array.from({ length: 61 }, (_, i) => pt(i / 60)), dim, 1); ctx.restore();
+      if (s > c.delay) {
+        const n = Math.floor(u * 90);
+        for (let i = 1; i <= n; i++) { const a = pt((i - 1) / 90), b = pt(i / 90); line(a[0], a[1], b[0], b[1], i / 90 < 0.15 ? accent : ink, 2.2, 0.9); }
+      }
+      if (s > c.delay && s < c.delay + 0.25) burst(c.x0 + 30, c.y0, (s - c.delay) / 0.25, accent);
+      if (c.backblast && s > c.delay && s < c.delay + 0.6) cone(c.x0 - 20, c.y0, Math.PI, 0.35, 90, accent, 0.35 * (1 - (s - c.delay) / 0.6));
+      if (u > 0 && u < 1) {
+        const [mx, my] = pt(u), [nx, ny] = pt(Math.min(1, u + 0.01));
+        const h = Math.atan2(ny - my, nx - mx);
+        if (c.flame && u > c.flame[0] && u < c.flame[1]) { ctx.save(); ctx.translate(mx, my); ctx.rotate(h + Math.PI); ctx.fillStyle = accent; ctx.beginPath(); ctx.moveTo(0, -3); ctx.lineTo(14 + Math.random() * 8, 0); ctx.lineTo(0, 3); ctx.fill(); ctx.restore(); }
+        if (c.sabot && u > 0.05 && u < 0.35) { const k = (u - 0.05) / 0.3; dot(mx - 8, my - 6 - k * 24, 2.5, faint); dot(mx - 8, my + 6 + k * 24, 2.5, faint); dot(mx - 14, my - k * 30, 2.5, faint); }
+        dot(mx, my, c.sabot ? 3 : c.shooter === 'soldier' ? 3 : 5, ink);
+        const label = u < 0.12 ? c.labels[0] : u < 0.8 ? c.labels[1] : c.labels[2];
+        text(label, clamp(mx + 14, 20, W - 260), clamp(my - 16, 54, G - 8), accent, 13);
+      } else if (u >= 1) {
+        const k = (s - c.delay - c.dur) / 0.9;
+        if (c.sea) { ring(c.x1, G - 10, 8 + k * 30, ink, 2, 1 - k); burst(c.x1, G - 24, k, accent); } else burst(c.x1, G - 20, k, accent);
+      }
+      if (c.apexLabel) { const [ax, ay] = pt(0.5); text('вершина дуги', ax, ay - 12, faint, 12, 'center'); }
+      caption(c.cap); tag(c.tag);
+    }
+
+    // ===== ракета «воздух-поверхность» и противорадиолокационная =====
+    function sceneAirStrike(time: number, arm: boolean) {
+      const T = 9.5, s = time % T, tx = 590, ty = G - 16;
+      ground();
+      if (arm) {
+        line(tx, G, tx, G - 54, '#8a8a82', 4); ctx.fillStyle = '#a2a299'; ctx.beginPath(); ctx.arc(tx, G - 58, 18, Math.PI * 0.95, Math.PI * 1.95); ctx.fill();
+        if (s < 3.4) for (let i = 0; i < 3; i++) ring(tx - 10, G - 66, 12 + (((time * 70) + i * 60) % 180), blue, 1.5, 0.45 - ((((time * 70) + i * 60) % 180) / 180) * 0.4);
+        text(s < 3.4 ? 'радиолокатор излучает' : 'радиолокатор выключен', tx, G + 24, s < 3.4 ? blue : faint, 12, 'center');
+      } else {
+        ctx.fillStyle = '#a2a299'; ctx.fillRect(tx - 34, G - 24, 68, 20); ctx.fillRect(tx - 16, G - 38, 32, 14); line(tx + 14, G - 32, tx + 44, G - 34, '#a2a299', 4);
+        text('цель', tx, G + 24, faint, 12, 'center');
+      }
+      const ax = 50 + 38 * s, ay = 120;
+      sidePlane(ax, ay, 1.3);
+      const rel = 1.0, dur = 4.0, v = clamp((s - rel) / dur, 0, 1);
+      if (s > rel) {
+        const rx = 50 + 38 * rel + 26, ry = 128;
+        const p = (q: number): Pt => [rx + (tx - rx) * q, ry + (ty - ry) * q * q * (arm ? 1 : 1)];
+        ctx.save(); ctx.setLineDash([3, 5]); polyline(Array.from({ length: 41 }, (_, i) => p(i / 40)), dim, 1); ctx.restore();
+        polyline(Array.from({ length: Math.floor(v * 80) + 1 }, (_, i) => p(i / 80)), accent, 2, 0.85);
+        if (v < 1) {
+          const [mx, my] = p(v), [nx, ny] = p(Math.min(1, v + 0.01));
+          const h = Math.atan2(ny - my, nx - mx);
+          missile(mx, my, h, v < 0.3);
+          if (v > 0.45) cone(mx, my, h, 0.22, 110, arm ? blue : accent, 0.16);
+          const label = v < 0.3 ? 'разгон' : v < 0.45 ? 'полёт по автопилоту' : arm ? (s < 3.4 ? 'головка наведена на излучение' : 'излучения нет: полёт по запомненным координатам') : 'головка ищет цель и захватывает её';
+          text(label, clamp(mx - 10, 20, W - 400), clamp(my - 18, 54, G - 8), accent, 13);
+        } else burst(tx, ty - 8, (s - rel - dur) / 0.9);
+      }
+      caption(arm ? 'Ракета идёт на излучение радиолокатора и помнит его место, если станцию выключили' : 'Ракета снижается к цели и захватывает её собственной головкой');
+      tag(arm ? 'противорадиолокационная ракета' : 'ракета «воздух-поверхность»');
+    }
+
+    // ===== лёгкий управляемый боеприпас с лазерной подсветкой =====
+    function sceneLaser(time: number) {
+      const T = 9, s = time % T, tx = 560, ty = G - 28;
+      ground();
+      ctx.fillStyle = '#a2a299'; ctx.fillRect(tx - 36, G - 24, 72, 20); ctx.fillRect(tx - 18, G - 38, 36, 14); line(tx + 16, G - 32, tx + 46, G - 34, '#a2a299', 4);
+      [-26, 0, 26].forEach((d) => dot(tx + d, G - 3, 5, '#555'));
+      const ux = 150 + Math.sin(time * 0.6) * 10, uy = 96 + Math.sin(time * 1.1) * 4;
+      line(ux - 26, uy, ux + 26, uy, ink, 3); line(ux, uy, ux, uy + 8, ink, 5); dot(ux, uy + 10, 4, accent);
+      ctx.save(); ctx.strokeStyle = '#d95926'; ctx.lineWidth = 1.5; ctx.globalAlpha = 0.5 + 0.3 * Math.sin(time * 14); ctx.setLineDash([2, 3]);
+      ctx.beginPath(); ctx.moveTo(ux, uy + 12); ctx.lineTo(tx, ty); ctx.stroke(); ctx.restore();
+      ring(tx, ty, 8 + Math.sin(time * 9) * 2, '#d95926', 2, 0.9);
+      text('лазерное пятно', tx, ty - 26, '#d95926', 12, 'center'); text('беспилотник подсвечивает цель', ux, uy - 22, faint, 12, 'center');
+      const rel = 1.2, dur = 3.0, v = clamp((s - rel) / dur, 0, 1);
+      if (s > rel) {
+        const sx = ux + 8, sy = uy + 14;
+        const p = (q: number): Pt => [sx + (tx - sx) * q, sy + (ty - sy) * Math.pow(q, 1.7)];
+        polyline(Array.from({ length: Math.floor(v * 70) + 1 }, (_, i) => p(i / 70)), accent, 2, 0.85);
+        if (v < 1) {
+          const [mx, my] = p(v), [nx, ny] = p(Math.min(1, v + 0.01));
+          missile(mx, my, Math.atan2(ny - my, nx - mx), v < 0.15);
+          cone(mx, my, Math.atan2(ty - my, tx - mx), 0.18, 90, '#d95926', 0.18);
+          text(v < 0.15 ? 'пуск малой ракеты' : 'головка ловит отражённый лазерный сигнал', clamp(mx - 40, 20, W - 400), clamp(my - 20, 54, G - 8), accent, 13);
+        } else burst(tx, ty - 6, (s - rel - dur) / 0.8);
+      }
+      caption('Малая ракета ведётся по лазерному пятну на технику, сооружения она не разрушает');
+      tag('лёгкая управляемая ракета');
+    }
+
+    // ===== зенитная пушка: сопровождение, упреждение и очередь =====
+    let bullets: { x: number; y: number; vx: number; vy: number }[] = [];
+    function sceneBurst(time: number, dt: number) {
+      const T = 8.5, s = time % T, gx = 150, gy = G - 24, V = 420, FIRE_FROM = 1.6, FIRE_TO = 5.2;
+      if (s < dt + 0.001 || !flag('bInit')) { S.bInit = true; bullets = []; S.boom = -1; S.bx = 0; S.by = 0; S.acc = 0; }
+      const alive = num('boom') < 0;
+      const planeAt = (q: number): Pt => [760 - 88 * q, 150 + Math.sin(q * 0.55) * 14];
+      const [px, py] = planeAt(s);
+      let lead: Pt = [px, py];
+      for (let i = 0; i < 8; i++) { const t = Math.hypot(lead[0] - gx, lead[1] - gy) / V; lead = planeAt(s + t); }
+      const aim = Math.atan2(lead[1] - gy, lead[0] - gx);
+      ground();
+      ctx.fillStyle = '#8a8a82'; ctx.fillRect(gx - 22, gy + 4, 44, 14); dot(gx - 14, G - 3, 5, '#555'); dot(gx + 14, G - 3, 5, '#555');
+      line(gx, gy, gx + Math.cos(aim) * 46, gy + Math.sin(aim) * 46, '#c3c2b7', 5);
+      ctx.fillStyle = '#8a8a82'; ctx.fillRect(gx - 90, G - 18, 26, 14); line(gx - 77, G - 18, gx - 77, G - 38, ink, 3); dot(gx - 77, G - 40, 5, ink);
+      text('радар', gx - 77, G + 22, faint, 12, 'center'); text('орудие', gx, G + 22, faint, 12, 'center');
+      if (alive) {
+        ctx.save(); ctx.translate(px, py); ctx.scale(-1, 1); sidePlane(0, 0, 1.2); ctx.restore();
+        if (s > 0.5) line(gx - 77, G - 40, px, py, green, 1, 0.5, [4, 4]);
+        if (s > 0.9) { ring(lead[0], lead[1], 12, accent, 1.5, 0.8); line(px, py, lead[0], lead[1], accent, 1, 0.6, [3, 3]); }
+      }
+      if (s > FIRE_FROM && s < FIRE_TO && alive) {
+        S.acc = num('acc') + dt;
+        while (num('acc') > 0.08) { S.acc = num('acc') - 0.08; bullets.push({ x: gx + Math.cos(aim) * 46, y: gy + Math.sin(aim) * 46, vx: Math.cos(aim) * V, vy: Math.sin(aim) * V }); }
+        if (Math.floor(time * 20) % 2 === 0) dot(gx + Math.cos(aim) * 52, gy + Math.sin(aim) * 52, 5, accent, 0.9);
+      }
+      bullets = bullets.filter((b) => b.x < W + 20 && b.y < G && b.y > -20);
+      bullets.forEach((b) => {
+        b.x += b.vx * dt; b.y += b.vy * dt;
+        line(b.x - b.vx * 0.03, b.y - b.vy * 0.03, b.x, b.y, accent, 2, 0.9);
+        if (alive && num('boom') < 0 && Math.hypot(b.x - px, b.y - py) < 14) { S.boom = s; S.bx = px; S.by = py; }
+      });
+      if (num('boom') >= 0) burst(num('bx'), num('by'), (s - num('boom')) / 0.8);
+      const phase = s < 0.5 ? 'поиск цели' : s < FIRE_FROM ? 'сопровождение и расчёт упреждения' : s < FIRE_TO && alive ? 'очередь по точке упреждения' : alive ? 'цель прошла' : 'цель поражена';
+      text(phase, W - 16, 50, accent, 13, 'right');
+      caption('Пушка стреляет не в самолёт, а в точку, где он окажется к моменту подхода снарядов');
+      tag('зенитная пушка');
+    }
+
     function frame(dt: number) {
       ctx.fillStyle = '#1a1a19'; ctx.fillRect(0, 0, W, H);
       switch (current) {
-        case 'ballistic': sceneBallistic(t); break;
+        case 'ballistic': sceneBallistic(t, false); break;
+        case 'quasi': sceneBallistic(t, true); break;
+        case 'agm': sceneAirStrike(t, false); break;
+        case 'arm': sceneAirStrike(t, true); break;
+        case 'laser': sceneLaser(t); break;
+        case 'burst': sceneBurst(t, dt); break;
+        case 'bullet': case 'lob': case 'mortar': case 'direct': case 'artillery': case 'tankshot': case 'navalfire': sceneShot(t, SHOTS[current]); break;
         case 'sam': sceneSam(t, dt); break;
         case 'cruise': sceneCruise(t); break;
         case 'seaskim': sceneSea(t); break;

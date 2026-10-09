@@ -1,11 +1,16 @@
 export type WeaponCategoryId =
   | 'aam' | 'sam' | 'agm' | 'arm' | 'air-sea' | 'sea-air' | 'sea-sea' | 'sea-surface'
   | 'ground-ground' | 'ground-sea' | 'abm' | 'guided-bombs' | 'bombs' | 'cruise'
-  | 'atgm' | 'rockets' | 'guns' | 'torpedo' | 'asw';
+  | 'atgm' | 'rockets' | 'guns' | 'torpedo' | 'asw'
+  | 'light-agm' | 'manpads'
+  | 'rifles' | 'snipers' | 'smg' | 'mg' | 'grenade-launchers' | 'at-launchers' | 'mortars'
+  | 'howitzers' | 'tank-guns' | 'autocannons' | 'aircraft-guns' | 'naval-guns';
 
 export type WeaponMetricId = 'range' | 'speed' | 'mass' | 'warhead' | 'length' | 'diameter' | 'rpm' | 'muzzle';
 
-export type TrajectoryScene = 'ballistic' | 'sam' | 'cruise' | 'seaskim' | 'aam' | 'atgm' | 'torpedo' | 'strike';
+export type TrajectoryScene =
+  | 'ballistic' | 'quasi' | 'sam' | 'cruise' | 'seaskim' | 'aam' | 'atgm' | 'torpedo' | 'strike'
+  | 'agm' | 'arm' | 'laser' | 'bullet' | 'lob' | 'mortar' | 'direct' | 'artillery' | 'tankshot' | 'burst' | 'navalfire';
 
 export type WarheadScene = 'frag' | 'shaped' | 'tandem' | 'kinetic' | 'blast' | 'penetrator' | 'cluster';
 
@@ -14,7 +19,7 @@ export interface WeaponCategory {
   /** Короткая подпись схемы, например «Воздух-воздух» */
   name: string;
   /** Группа в меню: ракеты по схеме применения, бомбы, ствольное оружие и т.д. */
-  group: 'missiles' | 'bombs' | 'other';
+  group: 'missiles' | 'guided-light' | 'bombs' | 'infantry' | 'artillery' | 'other';
   lead: string;
   metrics: WeaponMetricId[];
   scene?: TrajectoryScene;

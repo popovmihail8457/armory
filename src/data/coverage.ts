@@ -36,7 +36,7 @@ export const coverage: Record<string, AircraftCoverage> = {
     maws: { name: 'AN/AAQ-37 DAS', half: 180, sphere: true, note: 'Шесть датчиков образуют полную сферу обзора' },
   },
   'eurofighter': {
-    radar: { name: 'CAPTOR-M', half: 70, note: 'Механическое сканирование антенной' },
+    radar: { name: 'CAPTOR-E', half: 100, note: 'Радиолокатор с активной фазированной решёткой и подвижным приводом: сектор обзора 100° x 100° в каждую сторону. Ранние серии (Tranche 1 и 2) несут механический CAPTOR-M с обзором ≈±70°' },
     rwr: { name: 'DASS', half: 180, note: 'Круговой обзор' },
   },
   'su-27': {
