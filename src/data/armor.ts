@@ -100,6 +100,14 @@ export const armorOf: Record<string, ArmorSchemeId> = {
   'bmp-1': 'light', 'm113': 'light', 'btr-152': 'light', 'btr-40': 'light', 'btr-50': 'light', 'btr-60': 'light', 'btr-70': 'light', 'btr-80': 'light', 'btr-82a': 'light', 'bmp-2': 'light', 'bmp-3': 'light', 'bmd-4m': 'light', 'lvtp-5': 'light', 'vab': 'light', 'fuchs': 'light', 'lav-25': 'light', 'pt-76': 'light', 'm41': 'light', 'm551': 'light', 'm109': 'light', '2s3': 'light', '2s1': 'light', '2s19': 'light', 'pzh-2000': 'light', 'as-90': 'light', 'k9': 'light', 'krab': 'light', 'caesar': 'light', 'archer': 'light', 'zsu-57-2': 'light', 'm42': 'light', 'm163': 'light',
   // light-addon
   'm2-bradley': 'light-addon', 'marder': 'light-addon', 'warrior': 'light-addon', 'cv90': 'light-addon', 'puma': 'light-addon', 'stryker': 'light-addon', 'patria-amv': 'light-addon', 'boxer': 'light-addon', 'k21': 'light-addon',
+  // партия 4: танки
+  'type-90': 'composite', 'k1': 'composite', 'arjun': 'composite', 'al-khalid': 'composite', 'leopard-2a5': 'composite', 'ariete': 'composite',
+  't-84': 'composite-era', 't-72b3': 'composite-era', 't-80bvm': 'composite-era', 'type-15': 'composite-era',
+  // партия 4: бронеавтомобили, БМП и БТР
+  't-15': 'modular-aps', 'kurganets-25': 'modular-aps', 'boomerang': 'light-addon', 'btr-90': 'light', 'tigr': 'light', 'ajax': 'light-addon', 'lynx': 'light-addon',
+  'dardo': 'light-addon', 'freccia': 'light-addon', 'type-96': 'light', 'zbd-04': 'light-addon', 'zbl-09': 'light-addon', 'm-atv': 'light-addon',
+  // партия 4: самоходная артиллерия
+  '2s35': 'light', '2s9': 'light', '2s31': 'light', '2s25': 'light', '2s5': 'light', 'plz-05': 'light', 'g6': 'light', 'firtina': 'light',
 };
 
 export const STOP_BELOW = 0.15;

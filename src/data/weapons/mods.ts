@@ -1,3 +1,4 @@
+import { extraMods } from './mods-extra';
 export interface WeaponMod {
   name: string;
   /** Год или период, если известен */
@@ -8,7 +9,7 @@ export interface WeaponMod {
   diff: string;
 }
 
-export const weaponMods: Record<string, WeaponMod[]> = {
+const baseMods: Record<string, WeaponMod[]> = {
   'aim-9': [
     { name: 'AIM-9B', years: '1956', summary: 'Первая серийная версия.', diff: 'Неохлаждаемая головка работала только по догону цели. Дальность была небольшой, а ракета надёжно захватывала только горячие сопла.' },
     { name: 'AIM-9D / AIM-9E', years: '1960-е', summary: 'Версии флота и ВВС с охлаждаемой головкой.', diff: 'Охлаждение головки повысило чувствительность. Увеличились дальность и точность по сравнению с AIM-9B.' },
@@ -565,3 +566,5 @@ export const weaponMods: Record<string, WeaponMod[]> = {
     { name: '9М120-1', years: '2000-е', summary: 'Версия с двумя каналами наведения.', diff: 'Добавлено наведение по лазерному лучу.' },
   ],
 };
+
+export const weaponMods: Record<string, WeaponMod[]> = { ...baseMods, ...extraMods };

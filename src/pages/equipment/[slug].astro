@@ -390,7 +390,7 @@ const tocItems = [
       )}
       <p class="notice" style="margin-top: 32px;">
         Значения округлены и приведены по открытым источникам. Подробности: <a href="/sources/">источники и методика</a>.
-        Страница модели в Википедии: <a href={`https://en.wikipedia.org/wiki/${item.wiki}`} rel="noopener" target="_blank">открыть</a>.
+        {item.wiki && <>Страница модели в Википедии: <a href={`https://en.wikipedia.org/wiki/${item.wiki}`} rel="noopener" target="_blank">открыть</a>.</>}
       </p>
     </div>
   </section>
